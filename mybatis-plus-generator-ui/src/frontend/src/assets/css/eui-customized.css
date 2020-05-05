@@ -1,0 +1,90 @@
+.el-form-item .el-form-item__content {
+  line-height: 36px;
+}
+
+.el-form--label-top .el-form-item__label {
+  line-height: 16px;
+  padding: 0;
+  color: #999399;
+}
+
+
+.el-form .el-input {
+  max-width: 300px;
+  height: 36px;
+}
+
+.el-form {
+  width: 90%;
+}
+
+.el-form-item__content .el-select {
+  width: 300px;
+}
+
+.el-upload input[type=file]{
+  display: none;
+}
+
+/*左边固定布局的滚动条start*/
+	.table-misalignment-hack .el-table .el-table__fixed{
+		overflow-x: auto;
+	}
+	/*整个滑块*/
+	.table-misalignment-hack .el-table .el-table__fixed::-webkit-scrollbar{ 
+		height: 16px;
+    width: 1px; 
+    background:#f1f1f1; 
+} 
+/*滑块*/
+.table-misalignment-hack .el-table .el-table__fixed::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+      height: 0px;
+      width: 100%;
+      background: #F1F1F1;
+    }
+/*轨道*/
+.table-misalignment-hack .el-table .el-table__fixed::-webkit-scrollbar-track{
+    	background: #f1f1f1;
+    	height: 10px;
+    }
+.table-misalignment-hack .el-table .el-table__fixed tr:last-child td{
+	  margin-bottom: 30px; 
+    display: block; 
+    height: 45px; 
+}
+/*左边固定布局的滚动条end*/
+
+/*右边固定布局的滚动条start*/
+	.table-misalignment-hack .el-table .el-table__fixed-right{
+		overflow-x: scroll;
+	}
+	/*整个滑块*/
+	.table-misalignment-hack .el-table .el-table__fixed-right::-webkit-scrollbar{ 
+		height: 16px;
+    width: 1px; 
+    background:#f1f1f1; 
+} 
+.table-misalignment-hack .el-table .el-table__fixed-right tr:last-child td{
+    height: 60px;
+}
+.table-misalignment-hack .el-table .el-table__fixed-right tr:last-child td .cell{
+	margin-bottom: 15px;
+}
+/*右边固定布局的滚动条end*/
+
+/*固定布局里面中间内容的滚动条*/
+.el-table--scrollable-y .el-table__body-wrapper::-webkit-scrollbar{
+		height: 15px;
+    width: 0px; 
+    background: #f1f1f1;
+}
+.el-table--scrollable-y .el-table__body-wrapper::-webkit-scrollbar-thumb{
+		height: 15px;
+    width: 0px; 
+    background:#c1c1c1;
+}
+
+/*表格没有数据时 提示文字暂无数据居中显示*/
+.el-table .el-table__empty-block{
+	width: 100%!important;
+}

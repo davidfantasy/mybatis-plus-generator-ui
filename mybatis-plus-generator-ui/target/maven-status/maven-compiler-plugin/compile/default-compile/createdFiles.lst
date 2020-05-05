@@ -1,0 +1,16 @@
+com\github\davidfantasy\mybatisplus\generatorui\configurer\WebConfigurer$MyErrorPageRegistrar.class
+com\github\davidfantasy\mybatisplus\generatorui\configurer\WebConfigurer$1.class
+com\github\davidfantasy\mybatisplus\generatorui\ProjectPathResolver.class
+com\github\davidfantasy\mybatisplus\generatorui\core\ResultGenerator.class
+com\github\davidfantasy\mybatisplus\generatorui\GeneratorConfig.class
+com\github\davidfantasy\mybatisplus\generatorui\TemplateVaribleConfig.class
+com\github\davidfantasy\mybatisplus\generatorui\GeneratorConfig$GeneratorConfigBuilder.class
+com\github\davidfantasy\mybatisplus\generatorui\configurer\WebControllerAdvice.class
+com\github\davidfantasy\mybatisplus\generatorui\configurer\WebConfigurer.class
+com\github\davidfantasy\mybatisplus\generatorui\util\JsonUtil.class
+com\github\davidfantasy\mybatisplus\generatorui\core\ServiceResult.class
+com\github\davidfantasy\mybatisplus\generatorui\core\ServiceException.class
+com\github\davidfantasy\mybatisplus\generatorui\core\Result.class
+com\github\davidfantasy\mybatisplus\generatorui\core\ProjectConstant.class
+com\github\davidfantasy\mybatisplus\generatorui\MybatisPlusToolsApplication.class
+com\github\davidfantasy\mybatisplus\generatorui\core\ResultCode.class
