@@ -1,4 +1,4 @@
-# mybatis-plus-tools
+# mybatis-plus-generator-ui
  提供交互式的Web UI用于生成兼容mybatis-plus框架的相关功能代码，包括Entity,Mapper,Mappmer.xml,Service,Controller等
  ，可以自定义模板以及各类输出参数。
  
@@ -29,5 +29,9 @@ public class GeberatorUIServer {
 
 }
 ~~~
-GeneratorConfig的可配置参数可参考源码
-3. 运行该启动类，启动一个Generator Server,然后访问http://localhost:8068,即可进入到管理界面。
+**GeneratorConfig**的可配置参数可参考源码
+
+3. 运行该启动类，启动一个Generator Server。然后访问 [http://localhost:8068](http://localhost:8068) 即可进入到管理界面。根据需要可以对模板和生成文件进行设置即可:
+![table列表](https://github.com/davidfantasy/mybatis-plus-generator-ui/blob/master/imgs/table-list.png)
+![文件配置](https://github.com/davidfantasy/mybatis-plus-generator-ui/blob/master/imgs/output-config.png)
+![策略配置](https://github.com/davidfantasy/mybatis-plus-generator-ui/blob/master/imgs/strategy.png)
