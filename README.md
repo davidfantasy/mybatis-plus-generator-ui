@@ -32,6 +32,9 @@ public class GeberatorUIServer {
 **GeneratorConfig**的可配置参数可参考源码
 
 3. 运行该启动类，启动一个Generator Server。然后访问 [http://localhost:8068](http://localhost:8068) 即可进入到管理界面。根据需要可以对模板和生成文件进行设置即可:
-![table列表](https://github.com/davidfantasy/mybatis-plus-generator-ui/blob/master/imgs/table-list.png)
-![文件配置](https://github.com/davidfantasy/mybatis-plus-generator-ui/blob/master/imgs/output-config.png)
-![策略配置](https://github.com/davidfantasy/mybatis-plus-generator-ui/blob/master/imgs/strategy.png)
+
+![table列表](https://s1.ax1x.com/2020/05/26/tiEUBj.png)
+
+![文件配置](https://s1.ax1x.com/2020/05/26/tiElNt.png)
+
+![策略配置](https://s1.ax1x.com/2020/05/26/tiAxcF.png)
