@@ -1,0 +1,31 @@
+{
+  "name": "code-generator-ui",
+  "version": "1.0.0",
+  "description": "mybatis-plus代码生成器UI端",
+  "author": "david",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "node build.js",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
+  },
+  "dependencies": {
+    "axios": "^0.19.1",
+    "element-ui": "~2.13.0",
+    "file-saver": "^2.0.2",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "nuxt": "~2.11.0",
+    "vue-property-decorator": "^8.3.0"
+  },
+  "devDependencies": {
+    "babel-plugin-component": "^1.1.1",
+    "colors": "^1.3.3",
+    "cross-env": "^5.2.0",
+    "eslint-config-prettier": "^3.1.0",
+    "eslint-plugin-prettier": "2.6.2",
+    "http-proxy-middleware": "^0.19.0",
+    "node-sass": "^4.10.0",
+    "nodemon": "^1.11.0",
+    "sass-loader": "^7.1.0"
+  }
+}

@@ -25,3 +25,9 @@ hs_err_pid*
 target
 .idea
 *.iml
+
+.vscode
+.nuxt
+*.lock
+node_modules
+src/main/resources/static/*

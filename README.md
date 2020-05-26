@@ -1,2 +1,33 @@
 # mybatis-plus-tools
- 提供交互式的UI用于生成mybatis-plus相关的功能代码
+ 提供交互式的Web UI用于生成兼容mybatis-plus框架的相关功能代码，包括Entity,Mapper,Mappmer.xml,Service,Controller等
+ ，可以自定义模板以及各类输出参数。
+ 
+# 使用方法
+1. 引入maven的相关依赖，注意scope只需要写test就可以了
+~~~xml
+ <dependency>
+    <groupId>com.github.davidfantasy</groupId>
+    <artifactId>mybatis-plus-generator-ui</artifactId>
+    <version>1.0.1</version>
+    <scope>test</scope>
+ </dependency>
+~~~
+2. 在项目的test目录新建一个启动类，代码示例如下：
+~~~java
+public class GeberatorUIServer {
+
+    public static void main(String[] args) {
+        GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://192.168.1.211:3306/example")
+                .userName("root")
+                .password("root")
+                .driverClassName("com.mysql.cj.jdbc.Driver")
+                .basePackage("com.github.davidfantasy.mybatisplustools.example")
+                .port(8068)
+                .build();
+        MybatisPlusToolsApplication.run(config);
+    }
+
+}
+~~~
+GeneratorConfig的可配置参数可参考源码
+3. 运行该启动类，启动一个Generator Server,然后访问http://localhost:8068,即可进入到管理界面。
