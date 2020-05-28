@@ -1,11 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <groupId>com.github.davidfantasy</groupId>
     <artifactId>mybatis-plus-generator-ui</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>mybatis-plus-generator-ui</name>
+    <description>mybatis-plus code generator with UI</description>
+    <url>https://github.com/davidfantasy/mybatis-plus-generator-ui</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>davidfantasy</name>
+            <email>davidfantasy8@163.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/davidfantasy/mybatis-plus-generator-ui</url>
+        <connection>scm:git:https://github.com/davidfantasy/mybatis-plus-generator-ui.git</connection>
+        <developerConnection>scm:git:https://github.com/davidfantasy/mybatis-plus-generator-ui.git
+        </developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
     <properties>
         <java.version>1.8</java.version>

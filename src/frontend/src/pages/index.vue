@@ -26,6 +26,12 @@
                 输出配置
               </router-link>
             </li>
+            <li class="nav-item">
+              <a href="https://github.com/davidfantasy/mybatis-plus-generator-ui" class="nav-link">
+                <i class="fa fa-github"></i>
+                GitHub
+              </a>
+            </li>
           </ul>
         </div>
       </div>
