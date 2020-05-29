@@ -13,7 +13,6 @@
             <template slot-scope="scope">
               <a href="javascript:;" @click="download(scope.row.fileType, scope.row.templateName)">
                 <i class="fa fa-paperclip"></i>
-                {{ scope.row.templateName }}
               </a>
             </template>
           </el-table-column>
@@ -62,6 +61,7 @@
                 ></help-tip>
               </el-form-item>
               <el-form-item label="文件模板" prop="templateName">
+                {{uplaodFileList}}
                 <a
                   href="javascript:;"
                   @click="download(form.fileType, form.templateName)"
@@ -180,6 +180,7 @@ export default {
     },
     addNew() {
       this.showEditForm = true;
+      this.clearForm();
     },
     beforeTemplateUpload(file) {
       let tempArray = file.name.split(".");
@@ -240,6 +241,7 @@ export default {
         this.$message.success("模板文件上传成功");
         this.form.templateName = res.data.templateName;
         this.form.templatePath = res.data.templatePath;
+        this.$refs.upload.clearFiles();
       } else {
         this.$message.error("模板文件上传失败");
       }
