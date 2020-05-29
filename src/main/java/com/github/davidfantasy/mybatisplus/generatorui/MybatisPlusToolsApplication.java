@@ -23,13 +23,12 @@ public class MybatisPlusToolsApplication {
     }
 
     public static void run(GeneratorConfig generatorConfig) {
-        List<String> properties = Lists.newArrayList();
         if (Strings.isNullOrEmpty(generatorConfig.getJdbcUrl())) {
             throw new IllegalArgumentException("jdbcUrl必须要设置");
         }
         MybatisPlusToolsApplication.generatorConfig = generatorConfig;
-        new SpringApplicationBuilder().sources(MybatisPlusToolsApplication.class)
-                .properties(properties.toArray(new String[properties.size()]))
+        new SpringApplicationBuilder()
+                .sources(MybatisPlusToolsApplication.class)
                 .run(new String[0]);
     }
 
