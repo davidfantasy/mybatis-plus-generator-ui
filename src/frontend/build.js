@@ -4,7 +4,7 @@ var path = require("path");
 var _ = require("lodash");
 const colors = require('colors');
 
-let distPath = path.resolve('../main/resources/static')
+let distPath = path.resolve('../main/resources/generator-ui')
 let staticPath = path.resolve('./src/static')
 let necessaryFiles = ["_nuxt", "index.html"];
 
