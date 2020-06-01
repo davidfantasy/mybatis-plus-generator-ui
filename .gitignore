@@ -30,4 +30,4 @@ target
 .nuxt
 *.lock
 node_modules
-src/main/resources/static/*
+src/main/resources/generator-ui/*

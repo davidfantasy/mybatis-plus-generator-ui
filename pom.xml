@@ -4,7 +4,7 @@
 
     <groupId>com.github.davidfantasy</groupId>
     <artifactId>mybatis-plus-generator-ui</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <modelVersion>4.0.0</modelVersion>
 
     <name>mybatis-plus-generator-ui</name>
@@ -85,7 +85,11 @@
             <artifactId>guava</artifactId>
             <version>22.0</version>
         </dependency>
-
+        <!--for test-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

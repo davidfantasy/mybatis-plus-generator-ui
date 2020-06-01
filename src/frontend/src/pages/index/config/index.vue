@@ -13,6 +13,7 @@
             <template slot-scope="scope">
               <a href="javascript:;" @click="download(scope.row.fileType, scope.row.templateName)">
                 <i class="fa fa-paperclip"></i>
+                {{scope.row.templateName}}
               </a>
             </template>
           </el-table-column>
@@ -61,7 +62,6 @@
                 ></help-tip>
               </el-form-item>
               <el-form-item label="文件模板" prop="templateName">
-                {{uplaodFileList}}
                 <a
                   href="javascript:;"
                   @click="download(form.fileType, form.templateName)"
