@@ -53,12 +53,12 @@ public class GeberatorUIServer {
 ![代码生成选项](https://gitee.com/davidfantasy/mybatis-plus-generator-ui/raw/master/imgs/generator-options.png)
 
 ## Q&A
-Q:支持哪些类型的数据库？
+**Q:支持哪些类型的数据库？**
 
 A:支持几乎所有主流的数据库，具体可参考mybatis-plus-generator框架的文档。需要自行引入数据库的driver包，并在
 GeneratorConfig中指定driverClassName。
 
-Q:怎么自定义模板参数？
+**Q:怎么自定义模板参数？**
 
 A:在GeneratorConfig中自定义TemplateVaribleInjecter，返回需要在模板中使用的参数，例如：
 ```java
@@ -73,7 +73,7 @@ A:在GeneratorConfig中自定义TemplateVaribleInjecter，返回需要在模板�
 ```
 后面会考虑在页面上添加直接修改自定义参数的功能。
 
-Q:怎么自定义输出文件名，还有数据库字段名称的转换规则？
+**Q:怎么自定义输出文件名，还有数据库字段名称的转换规则？**
 
 A:在GeneratorConfig中自定义NameConverter，可以定义各类输出文件，entity，还有数据库字段名的转换规则，默认的转换规则是下划线转驼峰。
 NameConverter有一个默认的实现类，DefaultNameConverter，也可以重新覆盖该类中需要自定义的方法，例如：
@@ -92,6 +92,6 @@ GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://192.168
                 .port(8068)
                 .build();
 ```
-Q:保存的配置是存储到什么地方的？
+**Q:保存的配置是存储到什么地方的？**
 
 A:所有的用户保存的配置是按照basePackage分组保存到user.home目录的.mybatis-plus-generator-ui中的，不同项目的配置不会互相影响。
