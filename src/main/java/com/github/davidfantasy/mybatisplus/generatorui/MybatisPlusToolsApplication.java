@@ -1,5 +1,7 @@
 package com.github.davidfantasy.mybatisplus.generatorui;
 
+import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import com.github.davidfantasy.mybatisplus.generatorui.mbp.TemplateVaribleInjecter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.util.ResourceUtils;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
