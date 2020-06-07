@@ -22,6 +22,10 @@ fs.rmdir(distPath, function (error) {
                 necessaryFiles.push(filename);
             });
             console.log(colors.yellow(necessaryFiles));
+            if (!fsExistsSync(distPath)){
+                console.log("文件不存在");
+                return;
+            }
             let distFiles = fs.readdirSync(distPath);
             //删除自动生成的不必要的静态文件
             distFiles.forEach(function (filename) {
@@ -41,6 +45,19 @@ fs.rmdir(distPath, function (error) {
         }
     });
 })
+/**
+ * 文件是否存在检验
+ * @param path
+ * @returns {boolean}
+ */
+function fsExistsSync(path) {
+    try{
+        fs.accessSync(path,fs.F_OK);
+    }catch(e){
+        return false;
+    }
+    return true;
+}
 
 function deleteFolder(path) {
     var files = [];
