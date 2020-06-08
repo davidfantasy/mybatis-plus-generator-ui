@@ -49,7 +49,7 @@ public class GeneratorConfig {
     /**
      * 数据库时间类型与java class的对应策略
      */
-    private DateType dateType = DateType.TIME_PACK;
+    private DateType dateType = DateType.ONLY_DATE;
 
     /**
      * 开启 ActiveRecord 模式
