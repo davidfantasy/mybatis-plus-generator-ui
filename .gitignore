@@ -31,3 +31,8 @@ target
 *.lock
 node_modules
 src/main/resources/generator-ui/*
+*.settings
+.classpath
+.project
+*static
+
