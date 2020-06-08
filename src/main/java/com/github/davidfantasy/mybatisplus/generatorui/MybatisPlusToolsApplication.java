@@ -44,13 +44,23 @@ public class MybatisPlusToolsApplication {
     private static GeneratorConfig generatorConfig;
 
     public static void main(String[] args) {
-        GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://192.168.1.211:3306/cimc-user-center")
-                .userName("root")
-                .password("root")
-                .port(8068)
-                .driverClassName("com.mysql.cj.jdbc.Driver")
-                .basePackage("com.github.davidfantasy.mybatisplus.generatorui.example")
+
+
+        String jdbUrl = "jdbc:mysql://223.223.223.175:3307/ops_platform?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&allowMultiQueries=true";
+        GeneratorConfig config = GeneratorConfig.builder().jdbcUrl(jdbUrl)
+                .userName("dbadmin")
+                .password("dz@db123")
+                .driverClassName("com.mysql.jdbc.Driver")
+                .basePackage("com.hzzh.ops")
+                .port(8069)
                 .build();
+//        GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://192.168.1.211:3306/cimc-user-center")
+//                .userName("root")
+//                .password("root")
+//                .port(8068)
+//                .driverClassName("com.mysql.cj.jdbc.Driver")
+//                .basePackage("com.github.davidfantasy.mybatisplus.generatorui.example")
+//                .build();
         run(config);
     }
 
@@ -60,7 +70,8 @@ public class MybatisPlusToolsApplication {
         }
         MybatisPlusToolsApplication.generatorConfig = generatorConfig;
         Map<String, Object> props = Maps.newHashMap();
-        props.put("spring.resources.static-locations", "classpath:/generator-ui/");
+        props.put("spring.mvc.static-path-pattern", "/static/**");
+        props.put("spring.resources.static-locations", "classpath:/static");
         new SpringApplicationBuilder()
                 .properties(props)
                 .sources(MybatisPlusToolsApplication.class)
