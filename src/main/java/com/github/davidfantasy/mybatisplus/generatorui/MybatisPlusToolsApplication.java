@@ -1,15 +1,10 @@
 package com.github.davidfantasy.mybatisplus.generatorui;
 
-import com.baomidou.mybatisplus.generator.config.po.TableInfo;
-import com.github.davidfantasy.mybatisplus.generatorui.mbp.TemplateVaribleInjecter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
 import org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.reactive.function.client.WebClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.*;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -18,9 +13,7 @@ import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerF
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.util.ResourceUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -43,16 +36,19 @@ public class MybatisPlusToolsApplication {
 
     private static GeneratorConfig generatorConfig;
 
-    public static void main(String[] args) {
-        GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://192.168.1.211:3306/cimc-user-center")
-                .userName("root")
-                .password("root")
-                .port(8068)
-                .driverClassName("com.mysql.cj.jdbc.Driver")
-                .basePackage("com.github.davidfantasy.mybatisplus.generatorui.example")
-                .build();
-        run(config);
-    }
+    /**
+     * 如需本地调试，需在POM中添加对应的数据库驱动，并手动编译前端代码
+     * public static void main(String[] args) {
+     * GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://192.168.1.211:3306/example")
+     * .userName("xxxx")
+     * .password("xxxx")
+     * .port(8068)
+     * .driverClassName("com.mysql.cj.jdbc.Driver")
+     * .basePackage("com.github.davidfantasy.mybatisplus.generatorui.example")
+     * .build();
+     * run(config);
+     * }
+     **/
 
     public static void run(GeneratorConfig generatorConfig) {
         if (Strings.isNullOrEmpty(generatorConfig.getJdbcUrl())) {
