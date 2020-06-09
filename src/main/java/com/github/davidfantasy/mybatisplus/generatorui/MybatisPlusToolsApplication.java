@@ -44,33 +44,13 @@ public class MybatisPlusToolsApplication {
     private static GeneratorConfig generatorConfig;
 
     public static void main(String[] args) {
-
-
-//        String jdbUrl = "jdbc:mysql://223.223.223.175:3307/ops_platform?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&allowMultiQueries=true";
-//        GeneratorConfig config = GeneratorConfig.builder().jdbcUrl(jdbUrl)
-//                .userName("dbadmin")
-//                .password("dz@db123")
-//                .driverClassName("com.mysql.jdbc.Driver")
-//                .basePackage("com.hzzh.ops")
-//                .port(8069)
-//                .build();
-//        GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://192.168.1.211:3306/cimc-user-center")
-//                .userName("root")
-//                .password("root")
-//                .port(8068)
-//                .driverClassName("com.mysql.cj.jdbc.Driver")
-//                .basePackage("com.github.davidfantasy.mybatisplus.generatorui.example")
-//                .build();
-        String JDBC = "jdbc:mysql://39.98.60.130:3306/managedate?characterEncoding=utf8&useSSL=false&&allowPublicKeyRetrieval=true";
-        String userName = "cms";
-        String password = "123";
-        GeneratorConfig config = GeneratorConfig.builder()
-                .jdbcUrl(JDBC)
-                .userName(userName)
-                .password(password)
+        GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://192.168.1.211:3306/cimc-user-center")
+                .userName("root")
+                .password("root")
+                .port(8068)
                 .driverClassName("com.mysql.cj.jdbc.Driver")
-                .basePackage("com.HBC.example")
-                .port(8069).build();
+                .basePackage("com.github.davidfantasy.mybatisplus.generatorui.example")
+                .build();
         run(config);
     }
 
