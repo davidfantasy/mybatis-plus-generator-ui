@@ -11,6 +11,10 @@ let necessaryFiles = ["_nuxt", "index.html"];
 fs.rmdir(distPath, function (error) {
     console.log(colors.green('已清理static目录'));
     console.log('开始build前端资源');
+    if (!fs.existsSync(distPath)) {
+        console.log(colors.yellow("目标文件夹不存在，已自动创建：" + distPath));
+        fs.mkdirSync(distPath);
+    }
     exec("nuxt build", function (err, sto) {
         if (err != null) {
             console.error(colors.red('前端资源编译错误'));
