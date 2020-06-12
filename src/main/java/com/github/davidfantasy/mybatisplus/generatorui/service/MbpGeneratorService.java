@@ -12,7 +12,10 @@ import com.github.davidfantasy.mybatisplus.generatorui.dto.UserConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.BeetlTemplateEngine;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.NameConverter;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.TableInjectionConfig;
+import com.github.davidfantasy.mybatisplus.generatorui.strategy.ControllerStrategy;
+import com.github.davidfantasy.mybatisplus.generatorui.strategy.EntityStrategy;
 import com.github.davidfantasy.mybatisplus.generatorui.util.PathUtil;
+import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,8 +128,13 @@ public class MbpGeneratorService {
     private StrategyConfig getCurrentStrategy(UserConfig userConfig) {
         //生成策略配置
         StrategyConfig strategy = new StrategyConfig();
+        EntityStrategy entityStrategy = userConfig.getEntityStrategy();
+        //单独设置class属性，否则为空时复制属性会报错
+        if (!Strings.isNullOrEmpty(entityStrategy.getSuperEntityClass())) {
+            strategy.setSuperEntityClass(entityStrategy.getSuperEntityClass());
+        }
         BeanUtils.copyProperties(userConfig.getControllerStrategy(), strategy);
-        BeanUtils.copyProperties(userConfig.getEntityStrategy(), strategy);
+        BeanUtils.copyProperties(entityStrategy, strategy, "superEntityClass");
         BeanUtils.copyProperties(userConfig.getMapperStrategy(), strategy);
         BeanUtils.copyProperties(userConfig.getMapperXmlStrategy(), strategy);
         BeanUtils.copyProperties(userConfig.getServiceImplStrategy(), strategy);
