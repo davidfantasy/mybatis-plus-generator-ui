@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.regex.Pattern;
 
 import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.OUTPUT_LOCATION_RESAOURCES_PREFIX;
@@ -25,9 +27,10 @@ public class ProjectPathResolver {
 
     private Pattern packagePattern = Pattern.compile("[a-zA-Z]+[0-9a-zA-Z_]*(\\.[a-zA-Z]+[0-9a-zA-Z_]*)*");
 
-    public ProjectPathResolver(String basePackage) {
+    public ProjectPathResolver(String basePackage)  {
         this.basePackage = basePackage;
         String curentThreadPath = Thread.currentThread().getContextClassLoader().getResource(".").getPath();
+        curentThreadPath = getUTF8String(curentThreadPath);
         String[] paths = curentThreadPath.split("/");
         StringBuilder temp = new StringBuilder();
         for (int i = 0; i < paths.length; i++) {
@@ -40,6 +43,20 @@ public class ProjectPathResolver {
         baseProjectPath = temp.toString();
         sourcePath = new File(baseProjectPath + "src/main/java").toString();
         resourcePath = new File(baseProjectPath + "src/main/resources").toString();
+    }
+
+    /**
+     * 中文文件夹UTF8编码
+     * @param basePath
+     * @return
+     */
+    private String getUTF8String(String basePath){
+        try {
+            basePath = URLDecoder.decode(basePath,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return basePath;
     }
 
     /**
