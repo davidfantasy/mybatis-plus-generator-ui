@@ -2,6 +2,8 @@ package com.github.davidfantasy.mybatisplus.generatorui;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
+import com.github.davidfantasy.mybatisplus.generatorui.mbp.BeetlTemplateEngine;
+import com.github.davidfantasy.mybatisplus.generatorui.service.UserConfigStore;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +28,7 @@ public class ApplicationConfigure {
         ds.setJdbcUrl(config.getJdbcUrl());
         ds.setUsername(config.getUserName());
         ds.setPassword(config.getPassword());
-        ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        ds.setDriverClassName(config.getDriverClassName());
         return ds;
     }
 
@@ -41,9 +43,12 @@ public class ApplicationConfigure {
     }
 
     @Bean
-    public JdbcTemplate createJdbcTemplate(DataSource dataSource) {
+    public JdbcTemplate dbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 
-
+    @Bean
+    public BeetlTemplateEngine beetlTemplateEngine(UserConfigStore userConfigStore) {
+        return new BeetlTemplateEngine(userConfigStore.getTemplateStoreDir());
+    }
 }

@@ -1,6 +1,5 @@
 package com.github.davidfantasy.mybatisplus.generatorui.mbp;
 
-import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
@@ -10,12 +9,13 @@ import org.beetl.core.resource.CompositeResourceLoader;
 import org.beetl.core.resource.FileResourceLoader;
 import org.beetl.core.resource.StartsWithMatcher;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.*;
+import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.RESOURCE_PREFIX_CLASSPATH;
+import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.RESOURCE_PREFIX_FILE;
 
 /**
  * 对原模板引擎进行改造，使其支持file和classpath两类加载模式
@@ -28,11 +28,6 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
 
     public BeetlTemplateEngine(String templateStoreDir) {
         this.templateStoreDir = templateStoreDir;
-    }
-
-    @Override
-    public AbstractTemplateEngine init(ConfigBuilder configBuilder) {
-        super.init(configBuilder);
         try {
             logger.info("模板根目录为：" + templateStoreDir);
             ClasspathResourceLoader classpathResourceLoader = new ClasspathResourceLoader();
@@ -45,7 +40,6 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
-        return this;
     }
 
     @Override
@@ -65,6 +59,21 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
     @Override
     public String templateFilePath(String filePath) {
         return filePath;
+    }
+
+    public String write2String(Map<String, Object> objectMap, String templatePath) {
+        if (templatePath.startsWith(RESOURCE_PREFIX_FILE)) {
+            templatePath = templatePath.replace(templateStoreDir, "");
+        }
+        Template template = groupTemplate.getTemplate(templatePath);
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();) {
+            template.binding(objectMap);
+            template.renderTo(baos);
+            return baos.toString("utf-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
 }

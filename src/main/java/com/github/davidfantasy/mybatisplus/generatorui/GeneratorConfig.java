@@ -49,7 +49,7 @@ public class GeneratorConfig {
     /**
      * 数据库时间类型与java class的对应策略
      */
-    private DateType dateType = DateType.ONLY_DATE;
+    private DateType dateType;
 
     /**
      * 开启 ActiveRecord 模式
@@ -61,6 +61,7 @@ public class GeneratorConfig {
      */
     private TemplateVaribleInjecter templateVaribleInjecter;
 
+
     /**
      * 自定义名称转换规则
      */
@@ -71,6 +72,13 @@ public class GeneratorConfig {
             nameConverter = new DefaultNameConverter();
         }
         return nameConverter;
+    }
+
+    public DateType getDateType() {
+        if (this.dateType == null) {
+            return DateType.ONLY_DATE;
+        }
+        return dateType;
     }
 
 

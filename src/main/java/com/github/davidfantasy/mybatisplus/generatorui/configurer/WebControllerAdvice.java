@@ -32,7 +32,7 @@ public class WebControllerAdvice {
             result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
         } else {
             result.setCode(ResultCode.INTERNAL_SERVER_ERROR).setMessage("系统发生内部错误，请联系管理员");
-            log.error("系统发生内部错误", e);
+            log.error("系统发生内部错误，请查看控制台日志了解详情", e);
         }
         return result;
     }

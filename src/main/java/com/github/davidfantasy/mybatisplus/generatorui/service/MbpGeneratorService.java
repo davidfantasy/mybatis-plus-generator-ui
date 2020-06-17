@@ -44,6 +44,9 @@ public class MbpGeneratorService {
     @Autowired
     private ProjectPathResolver projectPathResolver;
 
+    @Autowired
+    private BeetlTemplateEngine beetlTemplateEngine;
+
     @PostConstruct
     public void initGenerator() {
         this.mpg = new AutoGenerator();
@@ -61,8 +64,9 @@ public class MbpGeneratorService {
         mpg.setTemplate(templateConfig);
         GlobalConfig gc = new GlobalConfig();
         gc.setOpen(false);
+        gc.setDateType(generatorConfig.getDateType());
         mpg.setGlobalConfig(gc);
-        mpg.setTemplateEngine(new BeetlTemplateEngine(userConfigStore.getTemplateStoreDir()));
+        mpg.setTemplateEngine(beetlTemplateEngine);
     }
 
     public void genCodeBatch(GenSetting genSetting, List<String> tables) {

@@ -14,17 +14,26 @@
         <div class="collapse navbar-collapse order-3" id="navbarCollapse">
           <!-- Left navbar links -->
           <ul class="navbar-nav">
-            <li class="nav-item">
-              <router-link to="/table" class="nav-link">
-                <i class="fa fa-table"></i>
-                数据表浏览
-              </router-link>
+            <li class="nav-item dropdown">
+              <a
+                id="tableMenuDropdown"
+                href="#"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                class="nav-link dropdown-toggle"
+              >Table代码生成</a>
+              <ul aria-labelledby="tableMenuDropdown" class="dropdown-menu border-0 shadow">
+                <li>
+                  <router-link to="/table" class="dropdown-item">Table查询</router-link>
+                </li>
+                <li>
+                  <router-link to="/config" class="dropdown-item">输出配置</router-link>
+                </li>
+              </ul>
             </li>
             <li class="nav-item">
-              <router-link to="/config" class="nav-link">
-                <i class="fa fa-cog"></i>
-                输出配置
-              </router-link>
+              <router-link to="/sql" class="nav-link">SQL代码生成</router-link>
             </li>
             <li class="nav-item">
               <a href="https://github.com/davidfantasy/mybatis-plus-generator-ui" class="nav-link">

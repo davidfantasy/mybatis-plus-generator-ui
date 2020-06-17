@@ -21,7 +21,7 @@ public class DefaultNameConverter implements NameConverter {
         if (Strings.isNullOrEmpty(fieldName)) {
             return "";
         }
-        return StrUtil.toCamelCase(fieldName);
+        return StrUtil.toCamelCase(fieldName.toLowerCase());
     }
 
     @Override
