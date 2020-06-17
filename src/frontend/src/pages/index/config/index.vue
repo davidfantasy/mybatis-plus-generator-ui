@@ -53,7 +53,7 @@
                 prop="fileType"
                 placeholder="用于标识该类生成文件，如：服务接口,Controller等"
               >
-                <el-input v-model="form.fileType" :readonly="form.builtIn"></el-input>
+                <el-input v-model="form.fileType" :readonly="form.fileType"></el-input>
               </el-form-item>
               <el-form-item label="包名" prop="outputLocation" placeholder="例如：org.example.entity">
                 <el-input v-model="form.outputLocation"></el-input>

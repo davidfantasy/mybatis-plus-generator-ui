@@ -93,6 +93,8 @@ public class OutputFileInfoService {
         //替换原来的配置
         if (saveFileInfo.isBuiltIn()) {
             Collections.replaceAll(fileInfos, saveFileInfo, saveFileInfo);
+        } else if (fileInfos.contains(saveFileInfo)) {
+            Collections.replaceAll(fileInfos, saveFileInfo, saveFileInfo);
         } else {
             fileInfos.add(saveFileInfo);
         }
