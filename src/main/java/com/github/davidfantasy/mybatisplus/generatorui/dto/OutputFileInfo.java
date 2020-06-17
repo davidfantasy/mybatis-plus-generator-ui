@@ -10,6 +10,10 @@ import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.*;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OutputFileInfo {
+    /**
+     * 输出文件信息索引
+     */
+    private Long index;
 
     private String fileType;
 
@@ -21,7 +25,9 @@ public class OutputFileInfo {
     private String templateName;
 
     private String templatePath;
-
+    /**
+     * 是否内置
+     */
     private boolean builtIn;
 
     @JsonIgnore
