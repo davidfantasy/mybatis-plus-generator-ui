@@ -1,6 +1,6 @@
 ## mybatis-plus-generator-ui
  提供交互式的Web UI用于生成兼容mybatis-plus框架的相关功能代码，包括Entity,Mapper,Mappmer.xml,Service,Controller等
- ，可以自定义模板以及各类输出参数。
+ ，可以自定义模板以及各类输出参数，也可通过SQL查询语句直接生成代码。
  
 ## 使用方法
 
@@ -10,10 +10,17 @@
  <dependency>
     <groupId>com.github.davidfantasy</groupId>
     <artifactId>mybatis-plus-generator-ui</artifactId>
-    <version>1.0.4</version>
+    <version>1.1.0</version>
     <scope>test</scope>
  </dependency>
 ```
+**注意**：由于本项目引入了mybatis-plus-generator依赖，会间接依赖于mybatis-plus，请尽量使用与当前业务项目中引入mybatis-plus版本兼容的mybatis-plus-generator-ui版本，
+否则可能出现依赖冲突的问题，mybatis-plus-generator-ui与mybatis-plus版本对照表如下：
+
+| mybatis-plus-generator-ui版本| mybatis-plus版本                                                                                             |
+| :------------------------- | :-------- 
+| 1.0.X | 3.3.1 
+| 1.1.X | 3.3.2 
 
 2.  在项目的test目录新建一个启动类，代码示例如下：
 
@@ -51,6 +58,13 @@ public class GeberatorUIServer {
 3. **代码生成选项**：将每次生成代码时可能变动的内容加入到代码生成选项中，方便调整每次的生成策略，比如：是否覆盖原文件，生成文件的种类等等：
 
 ![代码生成选项](https://gitee.com/davidfantasy/mybatis-plus-generator-ui/raw/master/imgs/generator-options.png)
+
+4. **SQL结果集自动生成代码**：通过输入查询SQL，自动在Mapper.xml中生成查询方法，DTO对象和ResultMap（结果集映射配置）
+
+![SQL编辑](https://gitee.com/davidfantasy/mybatis-plus-generator-ui/raw/master/imgs/SQL-edit.png)
+
+![SQL代码生成选项](https://gitee.com/davidfantasy/mybatis-plus-generator-ui/raw/master/imgs/SQL-generator-options.png)
+
 
 ## 常见问题
 **Q:支持哪些类型的数据库？**
