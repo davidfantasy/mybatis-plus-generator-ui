@@ -17,10 +17,10 @@
 **注意**：由于本项目引入了mybatis-plus-generator依赖，会间接依赖于mybatis-plus，请尽量使用与当前业务项目中引入mybatis-plus版本兼容的mybatis-plus-generator-ui版本，
 否则可能出现依赖冲突的问题，mybatis-plus-generator-ui与mybatis-plus版本对照表如下：
 
-| mybatis-plus-generator-ui版本| mybatis-plus版本                                                                                             |
-| :------------------------- | :-------- 
-| 1.0.X | 3.3.1 
-| 1.1.X | 3.3.2 
+| mybatis-plus-generator-ui版本 | mybatis-plus版本 |
+| :---------------------------- | :--------------- |
+| 1.0.X                         | 3.3.1            |
+| 1.1.X                         | 3.3.2            |
 
 2.  在项目的test目录新建一个启动类，代码示例如下：
 
@@ -67,6 +67,16 @@ public class GeberatorUIServer {
 
 
 ## 常见问题
+
+**Q:下载源码中怎么直接运行？**
+
+**不建议直接下载源码运行**，该项目是设计为直接嵌入到对应的业务项目中使用，可以自动识别项目路径等环境变量。如需采用源码运行，需要另行编译src\frontend中的静态资源（源码中不包含已编译的页面），在src\frontend文件夹中执行：
+~~~shell
+yarn install
+yarn run build
+~~~
+然后修改src\test\java\TestApplication中数据库的相关配置，并运行。
+
 **Q:支持哪些类型的数据库？**
 
 支持几乎所有主流的数据库，具体可参考mybatis-plus-generator框架的文档。需要自行引入数据库的driver包，并在
@@ -109,3 +119,4 @@ GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://192.168
 **Q:保存的配置是存储到什么地方的？**
 
 所有的用户保存的配置是按照basePackage分组保存到user.home目录的.mybatis-plus-generator-ui中的，不同项目的配置不会互相影响。
+
