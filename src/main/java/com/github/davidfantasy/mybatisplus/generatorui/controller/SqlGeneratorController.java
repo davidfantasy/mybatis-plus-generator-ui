@@ -25,9 +25,9 @@ public class SqlGeneratorController {
     }
 
 
-    @PostMapping("/gen-dto-file")
-    public Result genDtoFileFromSQL(@RequestBody GenDtoFromSqlReq params) throws Exception {
-        sqlGeneratorService.genDtoFileFromSQL(params);
+    @PostMapping("/gen-mapper-method")
+    public Result genMapperMethodFromSQL(@RequestBody GenDtoFromSqlReq params) throws Exception {
+        sqlGeneratorService.genMapperMethod(params);
         return ResultGenerator.genSuccessResult();
     }
 

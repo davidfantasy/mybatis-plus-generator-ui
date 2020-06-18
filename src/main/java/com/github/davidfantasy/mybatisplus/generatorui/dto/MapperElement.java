@@ -15,4 +15,6 @@ public class MapperElement {
 
     private ElementPosition location;
 
+    private boolean existed;
+
 }

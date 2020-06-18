@@ -9,6 +9,7 @@ import com.github.davidfantasy.mybatisplus.generatorui.ProjectPathResolver;
 import com.github.davidfantasy.mybatisplus.generatorui.common.ServiceException;
 import com.github.davidfantasy.mybatisplus.generatorui.dto.*;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.BeetlTemplateEngine;
+import com.github.davidfantasy.mybatisplus.generatorui.util.SqlFormatUtils;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -56,7 +57,7 @@ public class SqlGeneratorService {
     private MapperXmlParser mapperXmlParser;
 
 
-    public void genDtoFileFromSQL(GenDtoFromSqlReq params) throws Exception {
+    public void genMapperMethod(GenDtoFromSqlReq params) throws Exception {
         if (Strings.isNullOrEmpty(params.getSql())) {
             throw new ServiceException("数据源SQL不能为空");
         }
@@ -64,9 +65,18 @@ public class SqlGeneratorService {
         if (!decodedSql.trim().toLowerCase().startsWith("select")) {
             throw new ServiceException("只能通过查询语句生成DTO对象，请检查SQL");
         }
+        boolean genDto = !Strings.isNullOrEmpty(params.getConfig().getFullPackage());
+        if (genDto) {
+            genDtoFileFromSQL(decodedSql, params.getConfig());
+        }
+        genMapperElementsFromSql(decodedSql, params.getConfig(), genDto);
+    }
+
+
+    public void genDtoFileFromSQL(String sql, GenDtoConfig config) throws Exception {
         SqlRowSet rowSet = null;
         try {
-            rowSet = jdbcTemplate.queryForRowSet(decodedSql);
+            rowSet = jdbcTemplate.queryForRowSet(sql);
         } catch (Exception e) {
             log.error("执行SQL发生错误", e);
             throw new ServiceException("执行SQL发生错误：" + e.getMessage());
@@ -85,20 +95,20 @@ public class SqlGeneratorService {
             String colType = metaData.getColumnTypeName(i);
             IColumnType columnType = dataSourceConfig.getTypeConvert().processTypeConvert(mbpConfig, metaData.getColumnTypeName(i));
             resultField.setJavaType(columnType.getType());
-            params.getConfig().addImportPackage(columnType.getPkg());
+            config.addImportPackage(columnType.getPkg());
             resultField.setPropertyName(generatorConfig.getAvailableNameConverter().propertyNameConvert(resultField.getColumnName()));
             fields.add(resultField);
         }
-        params.getConfig().setFields(fields);
-        params.getConfig().setCreateDate(DateUtil.format(new Date(), "yyyy-MM-dd"));
-        if (Strings.isNullOrEmpty(params.getConfig().getMapperLocation())) {
-            params.getConfig().setComment(params.getConfig().getMapperLocation() + "的查询结果集，该代码由mybatis-plus-generator-ui自动生成");
-        }else{
-            params.getConfig().setComment("该代码由mybatis-plus-generator-ui自动生成");
+        config.setFields(fields);
+        config.setCreateDate(DateUtil.format(new Date(), "yyyy-MM-dd"));
+        if (Strings.isNullOrEmpty(config.getMapperLocation())) {
+            config.setComment(config.getMapperLocation() + "的查询结果集，该代码由mybatis-plus-generator-ui自动生成");
+        } else {
+            config.setComment("该代码由mybatis-plus-generator-ui自动生成");
         }
         Map<String, Object> tplParams = Maps.newHashMap();
-        tplParams.put("config", params.getConfig());
-        String outputPath = projectPathResolver.convertPackageToPath(params.getConfig().getFullPackage()) + DOT_JAVA;
+        tplParams.put("config", config);
+        String outputPath = projectPathResolver.convertPackageToPath(config.getFullPackage()) + DOT_JAVA;
         File file = new File(outputPath);
         if (!file.exists()) {
             file.getParentFile().mkdirs();
@@ -106,30 +116,43 @@ public class SqlGeneratorService {
         }
         beetlTemplateEngine.writer(tplParams, "classpath:templates/dto.btl", outputPath);
         log.info("DTO已成功生成，输出位置为:" + outputPath);
-        //生成mapper中的方法和ResultMap
-        if (!Strings.isNullOrEmpty(params.getConfig().getMapperLocation())) {
-            genMapperElementsFromSql(decodedSql, params.getConfig());
-        }
+
     }
 
-    public void genMapperElementsFromSql(String sql, GenDtoConfig config) throws IOException, DocumentException {
+    public void genMapperElementsFromSql(String sql, GenDtoConfig config, boolean genResultMap) throws IOException, DocumentException {
+        List<MapperElement> elements = Lists.newArrayList();
+        if (genResultMap) {
+            elements.add(createResultMapElement(config));
+        }
+        elements.add(createMapperMethodElement(sql, config));
+        String mapperPath = projectPathResolver.convertPackageToPath(config.getMapperPackage()) + DOT_XML;
+        mapperXmlParser.addElementInMapper(mapperPath, elements.toArray(new MapperElement[]{}));
+        log.info("ResultMap和Mapper方法已生成，输出位置为:" + mapperPath);
+    }
+
+    public MapperElement createResultMapElement(GenDtoConfig config) {
         Map<String, Object> tplParams = Maps.newHashMap();
         tplParams.put("config", config);
-        tplParams.put("elementType", "select");
-        tplParams.put("sql", sql);
         String resultMapStr = beetlTemplateEngine.write2String(tplParams, "classpath:templates/resultMap.btl");
-        String queryEleStr = beetlTemplateEngine.write2String(tplParams, "classpath:templates/mapperMethods.btl");
         MapperElement resultMapEle = MapperElement.builder().id(config.getDtoName() + "Map")
-                .comment(config.getMapperElementId() + "的结果映射配置，由mybatis-plus-generator-ui自动生成")
+                .comment("Author:" + config.getAuthor() + "，Date:" + DateUtil.format(new Date(), "yyyy-MM-dd") + "，" + config.getMapperElementId() + "的结果映射配置，由mybatis-plus-generator-ui自动生成")
                 .content(resultMapStr)
                 .location(ElementPosition.FIRST).build();
-        MapperElement queryEle = MapperElement.builder().id(config.getMapperElementId())
-                .comment("由mybatis-plus-generator-ui自动生成")
-                .content(queryEleStr)
+        return resultMapEle;
+    }
+
+    public MapperElement createMapperMethodElement(String sql, GenDtoConfig config) {
+        Map<String, Object> tplParams = Maps.newHashMap();
+        String dbType = dataSourceConfig.getDbType().getDb();
+        tplParams.put("config", config);
+        tplParams.put("elementType", "select");
+        tplParams.put("sql", SqlFormatUtils.format(sql, dbType));
+        String methodEleStr = beetlTemplateEngine.write2String(tplParams, "classpath:templates/mapperMethods.btl");
+        MapperElement methodEle = MapperElement.builder().id(config.getMapperElementId())
+                .comment("Author:" + config.getAuthor() + "，Date:" + DateUtil.format(new Date(), "yyyy-MM-dd") + ",由mybatis-plus-generator-ui自动生成")
+                .content(methodEleStr)
                 .location(ElementPosition.LAST).build();
-        String mapperPath = projectPathResolver.convertPackageToPath(config.getMapperPackage()) + DOT_XML;
-        mapperXmlParser.addElementInMapper(mapperPath, resultMapEle, queryEle);
-        log.info("ResultMap和Mapper方法已生成，输出位置为:" + mapperPath);
+        return methodEle;
     }
 
 }

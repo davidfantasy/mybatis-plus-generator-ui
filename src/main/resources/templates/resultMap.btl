@@ -1,6 +1,3 @@
-  <!-- ${config.mapperElementId}查询映射结果 -->
-    <resultMap id="${config.dtoName}Map" type="${config.fullPackage}">
-<% for(field in config.fields){ %>
-        <result column="${field.columnName}" property="${field.propertyName}" />
-<% } %>
-    </resultMap>
+<resultMap id="${config.dtoName}Map" type="${config.fullPackage}">
+<% for(field in config.fields){ %><result column="${field.columnName}" property="${field.propertyName}" /><% } %>
+</resultMap>

@@ -12,10 +12,7 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -51,6 +48,7 @@ public class MapperXmlParser {
                     if (!Strings.isNullOrEmpty(newEle.getId())
                             && newEle.getId().equals(oldEle.attributeValue("id"))) {
                         equals = true;
+                        newEle.setExisted(true);
                     }
                 }
                 if (!equals) {
@@ -64,13 +62,21 @@ public class MapperXmlParser {
             Element newEle = DocumentHelper.parseText(ele.getContent().trim()).getRootElement();
             if (ele.getLocation().equals(ElementPosition.FIRST)) {
                 newNodes.add(0, newEle);
-                newNodes.add(0, new DOMComment(ele.getComment()));
+                //仅在首次添加时才添加注释，避免注释重复添加
+                if (!ele.isExisted()) {
+                    newNodes.add(0, new DOMComment(ele.getComment()));
+                }
             } else {
-                newNodes.add(new DOMComment(ele.getComment()));
+                //仅在首次添加时才添加注释，避免注释重复添加
+                if (!ele.isExisted()) {
+                    newNodes.add(new DOMComment(ele.getComment()));
+                }
                 newNodes.add(newEle);
             }
         }
         doc.getRootElement().setContent(newNodes);
+        format.setTrimText(false);
+        format.setNewLineAfterDeclaration(false);
         XMLWriter writer = new XMLWriter(new FileWriter(mapperFile), format);
         writer.write(doc);
         writer.flush();

@@ -1,23 +1,239 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.github.davidfantasy.mybatisplus.generatorui.example.mapper.UserMapper">
-  <resultMap id="UserDtoMap" type="com.github.davidfantasy.mybatisplus.generatorui.example.dto.UserDto"> 
-    <result column="id" property="id"/>  
-    <result column="account" property="account"/>  
-    <result column="password" property="password"/>  
-    <result column="name" property="name"/>  
-    <result column="department" property="department"/>  
-    <result column="status" property="status"/>  
-    <result column="phone" property="phone"/>  
-    <result column="function" property="function"/>  
-    <result column="job" property="job"/>  
-    <result column="email" property="email"/>  
-    <result column="creator" property="creator"/>  
-    <result column="createdtime" property="createdtime"/>  
-    <result column="inheritance" property="inheritance"/>  
-    <result column="update_by" property="updateBy"/>  
-    <result column="update_time" property="updateTime"/> 
-  </resultMap>  
-  <select id="selectUser" resultMap="UserDtoMap">select * from t_user</select>
+<mapper namespace="com.iot.cimc.adminportal.dao.CusomerMapper">
+  <!--Author:david，Date:2020-06-18，selectUser的结果映射配置，由mybatis-plus-generator-ui自动生成-->
+  <resultMap id="UserDtoMap" type="com.github.davidfantasy.mybatisplus.generatorui.example.dto.UserDto">
+ 
+    <result column="id" property="id"/>
+    <result column="parent_id" property="parentId"/>
+    <result column="company" property="company"/>
+    <result column="industry" property="industry"/>
+    <result column="address" property="address"/>
+    <result column="recycle_address" property="recycleAddress"/>
+    <result column="level" property="level"/>
+    <result column="product_line" property="productLine"/>
+    <result column="lat" property="lat"/>
+    <result column="lng" property="lng"/>
+    <result column="status" property="status"/>
+    <result column="contact" property="contact"/>
+    <result column="mail_address" property="mailAddress"/>
+    <result column="city" property="city"/>
+    <result column="remark" property="remark"/>
+    <result column="company_short" property="companyShort"/>
+    <result column="box_type" property="boxType"/>
+    <result column="invoice_info" property="invoiceInfo"/>
+    <result column="creator" property="creator"/>
+    <result column="create_time" property="createTime"/>
+    <result column="general_remark" property="generalRemark"/>
+    <result column="province" property="province"/>
+    <result column="is_reconciliation" property="isReconciliation"/>
+    <result column="overdue_mode" property="overdueMode"/>
+    <result column="charge_type" property="chargeType"/>
+
+  </resultMap>
+   
+  <resultMap id="BaseResultMap" type="com.iot.cimc.adminportal.model.Cusomer">
+     
+    <!--
+      WARNING - @mbg.generated
+    -->
+     
+    <id column="id" jdbcType="INTEGER" property="id"/>
+     
+    <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+     
+    <result column="company" jdbcType="VARCHAR" property="company"/>
+     
+    <result column="industry" jdbcType="VARCHAR" property="industry"/>
+     
+    <result column="address" jdbcType="VARCHAR" property="address"/>
+     
+    <result column="contact" jdbcType="LONGVARCHAR" property="contact"/>
+     
+    <result column="level" jdbcType="INTEGER" property="level"/>
+     
+    <result column="product_line" jdbcType="VARCHAR" property="productLine"/>
+     
+    <result column="recycle_address" jdbcType="LONGVARCHAR" property="recycleAddress"/>
+     
+    <result column="lat" jdbcType="DOUBLE" property="lat"/>
+     
+    <result column="lng" jdbcType="DOUBLE" property="lng"/>
+     
+    <result column="status" jdbcType="INTEGER" property="status"/>
+     
+    <result column="mail_address" jdbcType="LONGVARCHAR" property="mailAddress"/>
+     
+    <result column="city" jdbcType="VARCHAR" property="city"/>
+     
+    <result column="company_short" jdbcType="VARCHAR" property="companyShort"/>
+     
+    <result column="box_type" jdbcType="VARCHAR" property="boxType"/>
+     
+    <result column="charge_type" jdbcType="INTEGER" property="chargeType"/>
+     
+    <result column="downstream_customers" jdbcType="VARCHAR" property="downstreamCustomers"/>
+     
+    <result column="invoice_info" jdbcType="VARCHAR" property="invoiceInfo"/>
+     
+    <result column="creator" jdbcType="VARCHAR" property="creator"/>
+     
+    <result column="customer_creator" jdbcType="VARCHAR" property="customerCreator"/>
+     
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+     
+    <result column="general_remark" jdbcType="VARCHAR" property="generalRemark"/>
+     
+    <result column="charge_type" jdbcType="VARCHAR" property="chargeType"/>
+     
+    <result column="overdue_mode" jdbcType="VARCHAR" property="overdueMode"/>
+     
+    <result column="users" jdbcType="VARCHAR" property="users"/>
+  
+  </resultMap>
+
+   
+  <select id="findCusomerById" resultMap="BaseResultMap">
+    SELECT t1.*,t2.`password` FROM t_cusomer t1 LEFT JOIN t_cusomer_user t2 ON t1.id = t2.customer_id
+    WHERE t1.id = #{x};
+  </select>
+   
+  <select id="findAllSecondToFirstCustomer" resultType="int">
+     
+    <!--SELECT t1.customer_id FROM t_customer_relation t1 WHERE JSON_CONTAINS(JSON_EXTRACT(t1.downstream_customers,
+    '$[*].customerId'),concat(#{customerId},''))-->
+    SELECT customer_id FROM t_downstream_customer WHERE downstream_customer_id = #{customerId}
+  
+  </select>
+   
+  <select id="findAllSecondCustomer" resultMap="BaseResultMap">
+    SELECT DISTINCTROW t2.* FROM t_downstream_customer t1 LEFT JOIN t_cusomer t2 ON t1.downstream_customer_id =
+    t2.id ORDER BY t2.id
+  </select>
+   
+  <select id="findAllSecondCustomerById" resultType="String">
+    SELECT DISTINCT downstream_customer_id FROM t_downstream_customer WHERE customer_id = #{customerId}
+  </select>
+
+   
+  <select id="findFristCustomer" resultMap="BaseResultMap">
+    SELECT t2.*,t1.overdue_mode,t1.charge_type FROM t_customer_relation t1 JOIN t_cusomer
+    t2 ON t1.customer_id = t2.id
+    where 1=1
+     
+    <if test="customerId !=null and customerId !=''">
+      and t1.customer_id = #{customerId}
+    </if>
+  
+  </select>
+
+   
+  <select id="findFCustomersWithUsers" resultMap="BaseResultMap">
+    SELECT t2.*,GROUP_CONCAT(DISTINCT CONCAT(t4.`department`,'split',t4.`name`) SEPARATOR ',') users
+    FROM t_customer_relation t1
+    JOIN t_cusomer t2 ON t1.customer_id = t2.id
+    LEFT JOIN (
+    SELECT * FROM t_user_external_permissions
+    UNION ALL
+    SELECT 0 id,c.account,b.`id` permission,1 TYPE
+    FROM t_cusomer b
+    RIGHT JOIN
+    (
+    SELECT a.`account`,a.`permission` FROM `t_user_external_permissions` a WHERE a.`type` = 2 AND a.account IN (
+    SELECT x1.`account` FROM t_user_external_permissions x1
+    GROUP BY x1.`account` HAVING SUM(IF(x1.type=1,1,0))=0 AND SUM(IF(x1.`type`=2,1,0))&gt;0
+    )
+    ) c ON b.`product_line` = c.permission
+    )t3 ON t3.`type`=1 AND t3.`permission`=t2.`id`
+    LEFT JOIN t_user t4 ON t3.`account` = t4.`account` AND t4.`status` = 1
+    GROUP BY t2.`id`
+  </select>
+
+   
+  <select id="getProductLineByCustomerId" resultType="String">
+    SELECT product_line FROM t_cusomer where id = #{customerId}
+  </select>
+
+   
+  <select id="findList" resultMap="BaseResultMap">
+    SELECT t.`id`,
+    MAX(t.`parent_id`) parent_id,
+    MAX(t.`company`) company,
+    MAX(t.`industry`) industry,
+    MAX(t.`address`) address,
+    MAX(t.`recycle_address`) recycle_addres,
+    MAX(t.`level`) level,
+    MAX(t.`product_line`) product_line,
+    MAX(t.`lat`) lat,
+    MAX(t.`lng`) lng,
+    MAX(t.`status`) status,
+    MAX(t.`contact`) contact,
+    MAX(t.`mail_address`) mail_address,
+    MAX(t.`city`) city,
+    MAX(t.`remark`) remark,
+    MAX(t.`company_short`) company_short,
+    MAX(t.`box_type`) box_type,
+    MAX(t.`invoice_info`) invoice_info,
+    MAX(t.`creator`) creator,
+    MAX(t.`create_time`) create_time,
+    MAX(t.`general_remark`) general_remark,
+    MAX(t.`province`) province,
+    GROUP_CONCAT(t1.`name`) users
+    FROM `t_cusomer` t
+    LEFT JOIN (
+    SELECT x1.`type`,x1.`permission`,x3.* FROM `t_user_external_permissions` x1
+    JOIN `t_user` x3 ON x1.`account` = x3.`account` AND x3.`status`=1
+    WHERE x1.`account` IN (
+    SELECT x2.`account` FROM `t_user_external_permissions` x2 WHERE `permission`='xiaoshou'
+    )
+    ) t1 ON t1.`type`=1 AND t1.`permission` = t.`id`
+     
+    <where>
+       
+      <if test="createTimeS != null">
+        AND t.`create_time` &gt;= #{createTimeS}
+      </if>
+       
+      <if test="createTimeE != null">
+        AND t.`create_time` &lt;= #{createTimeE}
+      </if>
+       
+      <if test="company != null">
+        AND t.`company` like CONCAT('%',#{company},'%')
+      </if>
+       
+      <if test="productLine != null">
+        AND t.`product_line` = #{productLine}
+      </if>
+       
+      <if test="productLines !=null and productLines.size()&gt;0">
+        and t.`product_line` IN
+         
+        <foreach item="item" index="index" collection="productLines" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      
+      </if>
+       
+      <if test="industry != null">
+        AND t.`industry` like CONCAT('%',#{industry},'%')
+      </if>
+    
+    </where>
+    GROUP BY t.`id`
+     
+    <if test="saleman != null">
+      HAVING users LIKE CONCAT('%',#{saleman},'%')
+    </if>
+    order by create_time desc
+  
+  </select>
+
+ 
+  <!--Author:david，Date:2020-06-18,由mybatis-plus-generator-ui自动生成-->
+  <select id="selectUser" resultMap="UserDtoMap">
+    SELECT t2.*, t1.overdue_mode, t1.charge_type
+FROM t_customer_relation t1
+	JOIN t_cusomer t2 ON t1.customer_id = t2.id
+</select>
 </mapper>

@@ -58,7 +58,7 @@ public class GenDtoConfig {
             return "";
         }
         String pkg = mapperLocation.substring(0, mapperLocation.lastIndexOf("."));
-        if (!Strings.isNullOrEmpty(mapperLocationPrefix)) {
+        if (!Strings.isNullOrEmpty(mapperLocationPrefix) && !"java".equals("mapperLocationPrefix")) {
             pkg = mapperLocationPrefix + ":" + pkg;
         }
         return pkg;
