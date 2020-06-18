@@ -53,7 +53,7 @@
                 prop="fileType"
                 placeholder="用于标识该类生成文件，如：服务接口,Controller等"
               >
-                <el-input v-model="form.fileType" :readonly="form.fileType"></el-input>
+                <el-input v-model="form.fileType" :readonly="isUpdate"></el-input>
               </el-form-item>
               <el-form-item label="包名" prop="outputLocation" placeholder="例如：org.example.entity">
                 <el-input v-model="form.outputLocation"></el-input>
@@ -127,6 +127,7 @@ export default {
   data() {
     return {
       activeName: "base",
+      isUpdate: false,
       uplaodFileList: [],
       uploadParams: {
         fileType: ""
@@ -163,6 +164,7 @@ export default {
   methods: {
     editFileInfo(fileInfo) {
       this.form = fileInfo;
+      this.isUpdate = true;
       this.uploadParams.fileType = this.form.fileType;
       this.showEditForm = true;
     },
@@ -180,6 +182,7 @@ export default {
     },
     addNew() {
       this.showEditForm = true;
+      this.isUpdate = false;
       this.clearForm();
     },
     beforeTemplateUpload(file) {
