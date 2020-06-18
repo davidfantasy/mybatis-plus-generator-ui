@@ -27,8 +27,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.baomidou.mybatisplus.core.toolkit.StringPool.DOT_JAVA;
-import static com.baomidou.mybatisplus.core.toolkit.StringPool.DOT_XML;
+import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.DOT_JAVA;
+import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.DOT_XML;
+
 
 @Service
 @Slf4j

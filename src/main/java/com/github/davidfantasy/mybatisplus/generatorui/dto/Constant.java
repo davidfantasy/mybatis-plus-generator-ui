@@ -2,6 +2,10 @@ package com.github.davidfantasy.mybatisplus.generatorui.dto;
 
 public class Constant {
 
+    public final static String DOT_JAVA = ".java";
+
+    public final static String DOT_XML = ".xml";
+
     public final static String CONFIG_HOME = ".mybatis-plus-generator-ui";
 
     public final static String TEMPLATE_STORE_DIR = "template";

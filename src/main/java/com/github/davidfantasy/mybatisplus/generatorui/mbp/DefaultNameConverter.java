@@ -1,9 +1,11 @@
 package com.github.davidfantasy.mybatisplus.generatorui.mbp;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.github.davidfantasy.mybatisplus.generatorui.dto.Constant;
 import com.google.common.base.Strings;
+
+import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.DOT_JAVA;
+import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.DOT_XML;
 
 public class DefaultNameConverter implements NameConverter {
 
@@ -27,17 +29,17 @@ public class DefaultNameConverter implements NameConverter {
     @Override
     public String outputFileNameConvert(String fileType, String entityName) {
         if (fileType.equals(Constant.FILE_TYPE_ENTITY)) {
-            return entityName + StringPool.DOT_JAVA;
+            return entityName + DOT_JAVA;
         } else if (fileType.equals(Constant.FILE_TYPE_MAPPER)) {
-            return entityName + "Mapper" + StringPool.DOT_JAVA;
+            return entityName + "Mapper" + DOT_JAVA;
         } else if (fileType.equals(Constant.FILE_TYPE_MAPPER_XML)) {
-            return entityName + "Mapper" + StringPool.DOT_XML;
+            return entityName + "Mapper" + DOT_XML;
         } else if (fileType.equals(Constant.FILE_TYPE_SERVICE)) {
-            return "I" + entityName + "Service" + StringPool.DOT_JAVA;
+            return "I" + entityName + "Service" + DOT_JAVA;
         } else if (fileType.equals(Constant.FILE_TYPE_SERVICEIMPL)) {
-            return entityName + "ServiceImpl" + StringPool.DOT_JAVA;
+            return entityName + "ServiceImpl" + DOT_JAVA;
         } else if (fileType.equals(Constant.FILE_TYPE_CONTROLLER)) {
-            return entityName + "Controller" + StringPool.DOT_JAVA;
+            return entityName + "Controller" + DOT_JAVA;
         }
         return entityName + fileType;
     }
