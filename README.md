@@ -1,5 +1,5 @@
 ## mybatis-plus-generator-ui
- 提供交互式的Web UI用于生成兼容mybatis-plus框架的相关功能代码，包括Entity,Mapper,Mappmer.xml,Service,Controller等
+ 提供交互式的Web UI用于生成兼容mybatis-plus框架的相关功能代码，包括Entity,Mapper,Mapper.xml,Service,Controller等
  ，可以自定义模板以及各类输出参数，也可通过SQL查询语句直接生成代码。
  
 ## 使用方法
