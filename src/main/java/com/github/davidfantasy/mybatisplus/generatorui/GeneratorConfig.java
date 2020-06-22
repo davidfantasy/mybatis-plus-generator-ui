@@ -27,6 +27,11 @@ public class GeneratorConfig {
     private String jdbcUrl;
 
     /**
+     * 数据库schema,POSTGRE_SQL,ORACLE,DB2类型的数据库需要指定
+     */
+    private String schemaName;
+
+    /**
      * 数据库用户名
      */
     private String userName;

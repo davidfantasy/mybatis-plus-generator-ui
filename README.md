@@ -32,6 +32,8 @@ public class GeberatorUIServer {
                 .userName("root")
                 .password("root")
                 .driverClassName("com.mysql.cj.jdbc.Driver")
+                 //数据库schema，POSTGRE_SQL,ORACLE,DB2类型的数据库需要指定
+                .schemaName("myBusiness")
                 .basePackage("com.github.davidfantasy.mybatisplustools.example")
                 .port(8068)
                 .build();

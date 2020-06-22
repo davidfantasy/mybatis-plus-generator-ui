@@ -39,6 +39,7 @@ public class ApplicationConfigure {
         dataSourceConfig.setDriverName(config.getDriverClassName());
         dataSourceConfig.setUsername(config.getUserName());
         dataSourceConfig.setPassword(config.getPassword());
+        dataSourceConfig.setSchemaName(config.getSchemaName());
         return dataSourceConfig;
     }
 
