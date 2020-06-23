@@ -15,7 +15,7 @@ public class DefaultNameConverter implements NameConverter {
             return "";
         }
         tableName = tableName.substring(tableName.indexOf("_") + 1, tableName.length());
-        return StrUtil.upperFirst(StrUtil.toCamelCase(tableName));
+        return StrUtil.upperFirst(StrUtil.toCamelCase(tableName.toLowerCase()));
     }
 
     @Override
