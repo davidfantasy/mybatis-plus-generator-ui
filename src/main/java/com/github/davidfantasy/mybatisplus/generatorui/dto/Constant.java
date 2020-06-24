@@ -14,7 +14,9 @@ public class Constant {
 
     public final static String RESOURCE_PREFIX_FILE = "file:";
 
-    public final static String OUTPUT_LOCATION_RESAOURCES_PREFIX = "resources:";
+    public final static String PACKAGE_RESOURCES_PREFIX = "resources:";
+
+    public final static String PACKAGE_JAVA_PREFIX = "java:";
 
     public final static String FILE_TYPE_ENTITY = "Entity";
 

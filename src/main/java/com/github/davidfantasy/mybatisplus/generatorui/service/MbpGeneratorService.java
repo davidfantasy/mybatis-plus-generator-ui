@@ -94,11 +94,11 @@ public class MbpGeneratorService {
         //设置java代码的包名
         PackageConfig pc = new PackageConfig();
         pc.setParent(null);
-        pc.setController(PathUtil.joinPackage(userConfig.getControllerInfo().getOutputLocation(), genSetting.getModuleName()));
-        pc.setEntity(PathUtil.joinPackage(userConfig.getEntityInfo().getOutputLocation(), genSetting.getModuleName()));
-        pc.setMapper(PathUtil.joinPackage(userConfig.getMapperInfo().getOutputLocation(), genSetting.getModuleName()));
-        pc.setService(PathUtil.joinPackage(userConfig.getServiceInfo().getOutputLocation(), genSetting.getModuleName()));
-        pc.setServiceImpl(PathUtil.joinPackage(userConfig.getServiceImplInfo().getOutputLocation(), genSetting.getModuleName()));
+        pc.setController(PathUtil.joinPackage(userConfig.getControllerInfo().getOutputPackage(), genSetting.getModuleName()));
+        pc.setEntity(PathUtil.joinPackage(userConfig.getEntityInfo().getOutputPackage(), genSetting.getModuleName()));
+        pc.setMapper(PathUtil.joinPackage(userConfig.getMapperInfo().getOutputPackage(), genSetting.getModuleName()));
+        pc.setService(PathUtil.joinPackage(userConfig.getServiceInfo().getOutputPackage(), genSetting.getModuleName()));
+        pc.setServiceImpl(PathUtil.joinPackage(userConfig.getServiceImplInfo().getOutputPackage(), genSetting.getModuleName()));
         mpg.setPackageInfo(pc);
         for (String table : tables) {
             genCode(mpg, genSetting, userConfig, table);

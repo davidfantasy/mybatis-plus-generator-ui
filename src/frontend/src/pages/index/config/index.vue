@@ -55,10 +55,20 @@
               >
                 <el-input v-model="form.fileType" :readonly="isUpdate"></el-input>
               </el-form-item>
-              <el-form-item label="包名" prop="outputLocation" placeholder="例如：org.example.entity">
-                <el-input v-model="form.outputLocation"></el-input>
+              <el-form-item label="包名" prop="outputLocationPkg" placeholder="例如：org.example.entity">
+                <el-input v-model="form.outputLocationPkg" placeholder="org.example.entity">
+                  <el-select
+                    v-model="form.outputLocationPrefix"
+                    style="width:110px;"
+                    slot="prepend"
+                    placeholder="请选择源码目录"
+                  >
+                    <el-option label="java" value="java"></el-option>
+                    <el-option label="resources" value="resources"></el-option>
+                  </el-select>
+                </el-input>
                 <help-tip
-                  content="如需保存到resources目录中，可使用resources:前缀，例如resources:example.mapper将保存到/resources/example/mapper目录中"
+                  content="生成的文件所输出的位置，选择不同的源码目录，会影响输出位置的根目录。例如选择resources，将会以resources作为包的根目录:example.mapper将保存到/resources/example/mapper目录中"
                 ></help-tip>
               </el-form-item>
               <el-form-item label="文件模板" prop="templateName">
@@ -135,6 +145,8 @@ export default {
       form: {
         fileType: "",
         packageName: "",
+        outputLocationPkg: "",
+        outputLocationPrefix: "",
         outputLocation: "",
         templateName: "",
         templatePath: "",
@@ -144,8 +156,8 @@ export default {
         fileType: [
           { required: true, message: "请输入文件类型", trigger: "change" }
         ],
-        outputLocation: [
-          { required: true, message: "请输入保存路径", trigger: "change" }
+        outputLocationPkg: [
+          { required: true, message: "请输入保存文件的包名", trigger: "change" }
         ],
         templateName: [
           { required: true, message: "请上传文件模板", trigger: "change" }
@@ -163,9 +175,26 @@ export default {
   },
   methods: {
     editFileInfo(fileInfo) {
-      this.form = fileInfo;
+      this.form = Object.assign(this.form, fileInfo);
       this.isUpdate = true;
       this.uploadParams.fileType = this.form.fileType;
+      if (this.form.outputLocation) {
+        if (this.form.outputLocation.indexOf(":") !== -1) {
+          let temp = this.form.outputLocation.split(":");
+          this.form.outputLocationPrefix = temp[0];
+          this.form.outputLocationPkg = temp[1];
+        } else {
+          this.form.outputLocationPkg = this.form.outputLocation;
+        }
+      }
+      //mapper.xml文件默认根目录为resources，其它默认为java
+      if (!this.form.outputLocationPrefix) {
+        if (this.form.fileType === "Mapper.xml") {
+          this.form.outputLocationPrefix = "resources";
+        } else {
+          this.form.outputLocationPrefix = "java";
+        }
+      }
       this.showEditForm = true;
     },
     getFileInfos() {
@@ -175,6 +204,8 @@ export default {
     },
     clearForm() {
       this.form.fileType = "";
+      this.form.outputLocationPrefix = "";
+      this.form.outputLocationPkg = "";
       this.form.outputLocation = "";
       this.form.templateName = "";
       this.form.templatePath = "";
@@ -202,6 +233,8 @@ export default {
     onSubmit() {
       this.$refs["editForm"].validate(valid => {
         if (valid) {
+          this.form.outputLocation =
+            this.form.outputLocationPrefix + ":" + this.form.outputLocationPkg;
           axios.post("/api/output-file-info/save", this.form).then(res => {
             this.$message.success("信息保存成功");
             this.clearForm();

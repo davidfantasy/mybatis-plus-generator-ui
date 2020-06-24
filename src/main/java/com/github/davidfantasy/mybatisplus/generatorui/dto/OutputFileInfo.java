@@ -2,6 +2,7 @@ package com.github.davidfantasy.mybatisplus.generatorui.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.github.davidfantasy.mybatisplus.generatorui.common.ServiceException;
 import com.google.common.base.Strings;
 import lombok.Data;
 
@@ -23,6 +24,18 @@ public class OutputFileInfo {
     private String templatePath;
 
     private boolean builtIn;
+
+    public String getOutputPackage() {
+        if (Strings.isNullOrEmpty(outputLocation)) {
+            return "";
+        }
+        if (outputLocation.startsWith(PACKAGE_RESOURCES_PREFIX)) {
+            return outputLocation.replaceFirst(PACKAGE_RESOURCES_PREFIX, "");
+        } else if (outputLocation.startsWith(PACKAGE_JAVA_PREFIX)) {
+            return outputLocation.replaceFirst(PACKAGE_JAVA_PREFIX, "");
+        }
+        return outputLocation;
+    }
 
     @JsonIgnore
     public String getAvailableTemplatePath() {

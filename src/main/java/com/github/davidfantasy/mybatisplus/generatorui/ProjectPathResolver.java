@@ -11,7 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.regex.Pattern;
 
-import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.OUTPUT_LOCATION_RESAOURCES_PREFIX;
+import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.*;
 
 @Getter
 @Slf4j
@@ -27,7 +27,7 @@ public class ProjectPathResolver {
 
     private Pattern packagePattern = Pattern.compile("[a-zA-Z]+[0-9a-zA-Z_]*(\\.[a-zA-Z]+[0-9a-zA-Z_]*)*");
 
-    public ProjectPathResolver(String basePackage)  {
+    public ProjectPathResolver(String basePackage) {
         this.basePackage = basePackage;
         String curentThreadPath = Thread.currentThread().getContextClassLoader().getResource(".").getPath();
         curentThreadPath = getUTF8String(curentThreadPath);
@@ -47,12 +47,13 @@ public class ProjectPathResolver {
 
     /**
      * 中文文件夹UTF8编码
+     *
      * @param basePath
      * @return
      */
-    private String getUTF8String(String basePath){
+    private String getUTF8String(String basePath) {
         try {
-            basePath = URLDecoder.decode(basePath,"UTF-8");
+            basePath = URLDecoder.decode(basePath, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -67,9 +68,12 @@ public class ProjectPathResolver {
             throw new ServiceException("包名为空");
         }
         boolean isResourceFile = false;
-        if (packageName.startsWith(OUTPUT_LOCATION_RESAOURCES_PREFIX)) {
-            packageName = packageName.replaceFirst(OUTPUT_LOCATION_RESAOURCES_PREFIX, "");
+        if (packageName.startsWith(PACKAGE_RESOURCES_PREFIX)) {
+            packageName = packageName.replaceFirst(PACKAGE_RESOURCES_PREFIX, "");
             isResourceFile = true;
+        } else if (packageName.startsWith(PACKAGE_JAVA_PREFIX)) {
+            packageName = packageName.replaceFirst(PACKAGE_JAVA_PREFIX, "");
+            isResourceFile = false;
         }
         if (!packagePattern.matcher(packageName).matches()) {
             throw new ServiceException("不是合法的包名：" + packageName);
@@ -106,7 +110,7 @@ public class ProjectPathResolver {
     }
 
     public String resolveMapperXmlPackage() {
-        return OUTPUT_LOCATION_RESAOURCES_PREFIX + "mapper";
+        return PACKAGE_RESOURCES_PREFIX + "mapper";
     }
 
 }
