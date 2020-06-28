@@ -54,13 +54,11 @@ public class MbpGeneratorService {
         // 配置模板
         TemplateConfig templateConfig = new TemplateConfig();
         //不使用默认的配置,所有的文件都改为自定义生成
-        templateConfig.setController(null);
-        templateConfig.setEntity(null);
-        templateConfig.setEntityKt(null);
-        templateConfig.setMapper(null);
-        templateConfig.setServiceImpl(null);
-        templateConfig.setService(null);
-        templateConfig.setXml(null);
+        templateConfig.disable(TemplateType.CONTROLLER,
+                TemplateType.ENTITY,
+                TemplateType.MAPPER,
+                TemplateType.SERVICE,
+                TemplateType.XML);
         mpg.setTemplate(templateConfig);
         GlobalConfig gc = new GlobalConfig();
         gc.setOpen(false);
