@@ -1,6 +1,7 @@
 package com.github.davidfantasy.mybatisplus.generatorui.sqlparser;
 
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.BinaryExpression;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
@@ -31,6 +32,7 @@ public class WhereParser extends ExpressionVisitorAdapter {
 
     @Override
     public void visit(AndExpression expr) {
+
         parseLogicOperator(expr, "AND");
     }
 
@@ -97,8 +99,8 @@ public class WhereParser extends ExpressionVisitorAdapter {
 
     private void parseLogicOperator(BinaryExpression binaryExpression, String operator) {
         binaryExpression.getLeftExpression().accept(this);
-        binaryExpression.getRightExpression().accept(this);
         currentLogicOp = operator;
+        binaryExpression.getRightExpression().accept(this);
     }
 
     private void parseComparisonOperator(ComparisonOperator operator) {
@@ -109,6 +111,7 @@ public class WhereParser extends ExpressionVisitorAdapter {
         if (ConditionExpr.isDynamicParam(between.getBetweenExpressionStart().toString())
                 || ConditionExpr.isDynamicParam(between.getBetweenExpressionEnd().toString())) {
             ConditionExpr condition = new ConditionExpr();
+            condition.setLogicOperator(currentLogicOp);
             condition.setLeftExpr(between.getLeftExpression().toString());
             condition.setOperator("between");
             condition.setRightExpr(between.getBetweenExpressionStart().toString());

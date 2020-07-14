@@ -23,6 +23,11 @@
         content="生成的Mapper方法所在的Mapper.xml的包名，以及节点ID，例如：com.example.ExampleMapper.selectDatas，其中selectDatas为节点ID。选择java或resources会在对应的源码根目录中去查找资源"
       ></help-tip>
     </el-form-item>
+    <el-form-item label="开启动态SQL增强">
+      <el-switch v-model="form.enableParseDynamicParams"></el-switch>
+      <help-tip content="开启后，会自动将特定的where条件转换为mybatis的动态SQL"></help-tip>
+      <a href="javascript:;" @click="showDynamicParamsDemo=true">查看示例</a>
+    </el-form-item>
     <el-form-item label="同时生成DTO对象及ResultMapper">
       <el-switch v-model="form.enableDTO"></el-switch>
       <help-tip content="开启后，可根据SQL查询结果自动生成DTO对象和ResultMapper（结果集映射表）"></help-tip>
@@ -34,28 +39,37 @@
     <el-form-item v-if="form.enableDTO" label="DTO是否启用Lombok注解">
       <el-switch v-model="form.enableLombok"></el-switch>
     </el-form-item>
-    <el-form-item v-if="form.enableDTO" label="DTO是否生成swagger2注解">
-      <el-switch v-model="form.enableSwagger2"></el-switch>
-    </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">生成代码</el-button>
     </el-form-item>
+    <el-dialog
+      :modal="false"
+      title="动态SQL增强示例"
+      :visible.sync="showDynamicParamsDemo"
+      width="80%"
+      top="5vh"
+    >
+      <dynamic-sql-demo></dynamic-sql-demo>
+    </el-dialog>
   </el-form>
 </template>
 <script>
 import axios from "axios";
 import _ from "lodash";
 import HelpTip from "@/components/HelpTip";
+import DynamicSqlDemo from "@/components/DynamicSqlDemo";
 export default {
   props: ["sql"],
   components: {
+    DynamicSqlDemo,
     HelpTip
   },
   data() {
     return {
+      showDynamicParamsDemo: false,
       form: {
+        enableParseDynamicParams: true,
         enableLombok: false,
-        enableSwagger2: false,
         author: "",
         fullPackage: "",
         enableDTO: true,

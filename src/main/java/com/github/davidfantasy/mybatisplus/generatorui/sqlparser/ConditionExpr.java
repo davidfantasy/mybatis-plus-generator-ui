@@ -26,6 +26,7 @@ public class ConditionExpr {
 
     private String operator;
 
+    //如果operator是between，会存在middleOperator和endExpr
     private String middleOperator;
 
     private String endExpr;
@@ -70,5 +71,8 @@ public class ConditionExpr {
     public static boolean isDynamicParam(String content) {
         return DYNAMIC_PARAM_PATTERN.matcher(content).find();
     }
+
+
+
 
 }

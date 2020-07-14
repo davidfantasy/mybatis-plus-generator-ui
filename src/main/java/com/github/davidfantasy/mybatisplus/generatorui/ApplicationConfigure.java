@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.BeetlTemplateEngine;
 import com.github.davidfantasy.mybatisplus.generatorui.service.UserConfigStore;
+import com.github.davidfantasy.mybatisplus.generatorui.sqlparser.DynamicParamSqlEnhancer;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,5 +52,10 @@ public class ApplicationConfigure {
     @Bean
     public BeetlTemplateEngine beetlTemplateEngine(UserConfigStore userConfigStore) {
         return new BeetlTemplateEngine(userConfigStore.getTemplateStoreDir());
+    }
+
+    @Bean
+    public DynamicParamSqlEnhancer dynamicParamSqlEnhancer(DataSourceConfig dsc) {
+        return new DynamicParamSqlEnhancer(dsc);
     }
 }

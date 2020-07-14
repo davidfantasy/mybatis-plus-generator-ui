@@ -9,6 +9,8 @@ import com.github.davidfantasy.mybatisplus.generatorui.ProjectPathResolver;
 import com.github.davidfantasy.mybatisplus.generatorui.common.ServiceException;
 import com.github.davidfantasy.mybatisplus.generatorui.dto.*;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.BeetlTemplateEngine;
+import com.github.davidfantasy.mybatisplus.generatorui.sqlparser.ConditionExpr;
+import com.github.davidfantasy.mybatisplus.generatorui.sqlparser.DynamicParamSqlEnhancer;
 import com.github.davidfantasy.mybatisplus.generatorui.util.SqlFormatUtils;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -56,6 +58,9 @@ public class SqlGeneratorService {
     @Autowired
     private MapperXmlParser mapperXmlParser;
 
+    @Autowired
+    private DynamicParamSqlEnhancer dynamicParamSqlEnhancer;
+
 
     public void genMapperMethod(GenDtoFromSqlReq params) throws Exception {
         if (Strings.isNullOrEmpty(params.getSql())) {
@@ -74,6 +79,7 @@ public class SqlGeneratorService {
 
 
     public void genDtoFileFromSQL(String sql, GenDtoConfig config) throws Exception {
+        sql = dynamicParamSqlEnhancer.clearIllegalStatements(sql);
         SqlRowSet rowSet = null;
         try {
             rowSet = jdbcTemplate.queryForRowSet(sql);
@@ -146,7 +152,10 @@ public class SqlGeneratorService {
         String dbType = dataSourceConfig.getDbType().getDb();
         tplParams.put("config", config);
         tplParams.put("elementType", "select");
-        tplParams.put("sql", SqlFormatUtils.format(sql, dbType));
+        if (config.getEnableParseDynamicParams()) {
+            sql = dynamicParamSqlEnhancer.enhanceDynamicConditions(sql);
+        }
+        tplParams.put("sql", sql);
         String methodEleStr = beetlTemplateEngine.write2String(tplParams, "classpath:templates/mapperMethods.btl");
         MapperElement methodEle = MapperElement.builder().id(config.getMapperElementId())
                 .comment("Author:" + config.getAuthor() + "，Date:" + DateUtil.format(new Date(), "yyyy-MM-dd") + ",由mybatis-plus-generator-ui自动生成")
@@ -154,5 +163,6 @@ public class SqlGeneratorService {
                 .location(ElementPosition.LAST).build();
         return methodEle;
     }
+
 
 }

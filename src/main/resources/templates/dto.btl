@@ -3,10 +3,6 @@ package ${config.pkg};
 <% for(pkg in config.importPackages){ %>
 import ${pkg};
 <% } %>
-<% if(config.enableSwagger2){ %>
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-<% } %>
 <% if(config.enableLombok){ %>
 import lombok.Data;
 import lombok.EqualsAndHashCode;

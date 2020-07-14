@@ -1,5 +1,7 @@
 <% if(elementType == 'select'){ %>
 <select id="${config.mapperElementId}" resultMap="${config.dtoName}Map">
-    ${sql}
+    <![CDATA[
+        ${sql}
+    ]]>
 </select>
 <% } %>

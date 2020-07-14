@@ -12,10 +12,13 @@ import java.util.List;
 @Data
 public class GenDtoConfig {
 
+    /**
+     * 是否解析SQL中的动态参数部分
+     */
+    private Boolean enableParseDynamicParams;
+
     private String fullPackage;
-
-    private Boolean enableSwagger2 = false;
-
+    
     private Boolean enableLombok = false;
 
     private String comment;

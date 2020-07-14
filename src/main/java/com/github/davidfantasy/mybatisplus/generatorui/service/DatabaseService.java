@@ -62,9 +62,7 @@ public class DatabaseService {
                 dataSourceConfig.setSchemaName(schema);
             }
             tablesSql = String.format(tablesSql, schema);
-        }
-        //oracle数据库表太多，出现最大游标错误
-        else if (DbType.ORACLE == dataSourceConfig.getDbType()) {
+        } else if (DbType.ORACLE == dataSourceConfig.getDbType()) {
             String schema = dataSourceConfig.getSchemaName();
             //oracle 默认 schema=username
             if (schema == null) {

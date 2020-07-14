@@ -75,8 +75,6 @@ public class MapperXmlParser {
             }
         }
         doc.getRootElement().setContent(newNodes);
-        format.setTrimText(false);
-        format.setNewLineAfterDeclaration(false);
         XMLWriter writer = new XMLWriter(new FileWriter(mapperFile), format);
         writer.write(doc);
         writer.flush();
