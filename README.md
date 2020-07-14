@@ -10,7 +10,7 @@
  <dependency>
     <groupId>com.github.davidfantasy</groupId>
     <artifactId>mybatis-plus-generator-ui</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <scope>test</scope>
  </dependency>
 ```
@@ -66,6 +66,10 @@ public class GeberatorUIServer {
 ![SQL编辑](https://gitee.com/davidfantasy/mybatis-plus-generator-ui/raw/master/imgs/SQL-edit.png)
 
 ![SQL代码生成选项](https://gitee.com/davidfantasy/mybatis-plus-generator-ui/raw/master/imgs/SQL-generator-options.png)
+
+5. **动态SQL增强**：自动识别含有mybatis动态参数的where条件，转换为mybatis的动态SQL条件
+
+![动态SQL增强](https://gitee.com/davidfantasy/mybatis-plus-generator-ui/raw/master/imgs/dynamicsql.png)
 
 
 ## 常见问题
