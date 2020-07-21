@@ -35,7 +35,6 @@ import java.util.Map;
 public class MybatisPlusToolsApplication {
 
     private static GeneratorConfig generatorConfig;
-    
 
     public static void run(GeneratorConfig generatorConfig) {
         if (Strings.isNullOrEmpty(generatorConfig.getJdbcUrl())) {

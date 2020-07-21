@@ -89,6 +89,21 @@ public class ProjectPathResolver {
         return path;
     }
 
+    public String convertPathToPackage(String path) {
+        if (path.startsWith(sourcePath)) {
+            path = path.replace(sourcePath, "");
+        } else if (path.startsWith(resourcePath)) {
+            path = path.replace(resourcePath, "");
+        } else {
+            throw new ServiceException("无法将该路径转换为包名：" + path);
+        }
+        String packageStr = path.replace(File.separator, ".");
+        if (packageStr.startsWith(".")) {
+            packageStr = packageStr.substring(1, packageStr.length());
+        }
+        return packageStr;
+    }
+
     public String resolveEntityPackage() {
         return PathUtil.joinPackage(basePackage, "entity");
     }

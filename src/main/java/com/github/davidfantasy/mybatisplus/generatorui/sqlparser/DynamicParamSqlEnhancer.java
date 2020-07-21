@@ -7,7 +7,6 @@ import com.github.davidfantasy.mybatisplus.generatorui.common.ServiceException;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.parser.CCJSqlParser;
-import net.sf.jsqlparser.parser.ParseException;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.select.Select;
 
@@ -44,9 +43,9 @@ public class DynamicParamSqlEnhancer {
             } else {
                 throw new ServiceException("只能处理SQL查询语句");
             }
-        } catch (ParseException e) {
+        } catch (Exception e) {
             log.error("解析SQL条件发生错误", e);
-            throw new ServiceException("解析SQL条件发生错误");
+            throw new ServiceException("解析SQL条件发生错误,请检查SQL语法");
         }
     }
 
