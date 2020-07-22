@@ -105,7 +105,7 @@ GeneratorConfig中指定driverClassName。
 
 **Q:怎么自定义输出文件名，还有数据库字段名称的转换规则？**
 
-在GeneratorConfig中自定义NameConverter，可以定义各类输出文件，entity，还有数据库字段名的转换规则，默认的转换规则是下划线转驼峰。
+在GeneratorConfig中自定义NameConverter接口，可以定义各类输出文件，entity，还有数据库字段名的转换规则，默认的转换规则是下划线转驼峰。
 NameConverter有一个默认的实现类，DefaultNameConverter，也可以重新覆盖该类中需要自定义的方法，例如：
 ```java
 GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://192.168.1.211:3306/cimc-user-center")
@@ -114,8 +114,19 @@ GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://192.168
                 .driverClassName("com.mysql.cj.jdbc.Driver")
                 .basePackage("example")
                 .nameConverter(new DefaultNameConverter(){
+                    //自定义表名与entity名称的转换规则
+                    @Override
+                    public String entityNameConvert(String tableName) {
+                        return null;
+                    }
+                    //自定义数据库字段名与entity,dto中属性名的转换规则
                     @Override
                     public String propertyNameConvert(String fieldName) {
+                        return null;
+                    }
+                    //自定义各类输出文件的文件名转换规则
+                    @Override
+                    public String outputFileNameConvert(String fileType, String entityName) {
                         return null;
                     }
                  })
