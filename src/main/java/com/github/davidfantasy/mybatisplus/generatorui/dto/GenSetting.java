@@ -3,7 +3,11 @@ package com.github.davidfantasy.mybatisplus.generatorui.dto;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
+/**
+ * 定义生成代码时每次可能发生变化的一些配置项目
+ */
 @Data
 public class GenSetting {
 
@@ -26,5 +30,10 @@ public class GenSetting {
      * 功能模块名
      */
     private String moduleName;
+
+    /**
+     * 临时模板参数，由用户自行输入的临时参数，用于控制生成文件的可选部分
+     */
+    private List<String> choosedControllerMethods;
 
 }

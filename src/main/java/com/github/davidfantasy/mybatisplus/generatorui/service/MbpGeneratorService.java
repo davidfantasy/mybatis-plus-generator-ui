@@ -69,7 +69,7 @@ public class MbpGeneratorService {
 
     public void genCodeBatch(GenSetting genSetting, List<String> tables) {
         //自定义参数配置
-        mpg.setCfg(new TableInjectionConfig(generatorConfig));
+        mpg.setCfg(new TableInjectionConfig(generatorConfig, genSetting));
         //生成策略配置
         UserConfig userConfig = userConfigStore.getDefaultUserConfig();
         BeanUtils.copyProperties(userConfig.getEntityStrategy(), mpg.getGlobalConfig());

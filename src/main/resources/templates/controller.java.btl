@@ -1,0 +1,98 @@
+package ${package.Controller};
+
+import org.springframework.web.bind.annotation.*;
+<% if(!restControllerStyle){ %>
+import org.springframework.stereotype.Controller;
+<% } %>
+<% if(isNotEmpty(superControllerClassPackage)){ %>
+import ${superControllerClassPackage};
+<% } %>
+<% if(isNotEmpty(cfg.controllerMethods.list)){  %>
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+<% } %>
+<% if(isNotEmpty(cfg.controllerMethods.hasMethod)){  %>
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import ${package.Service}.${table.serviceName};
+import ${package.Entity}.${table.entityName};
+import org.springframework.beans.factory.annotation.Autowired;
+<% } %>
+
+/**
+ * <p>
+ * ${table.comment!} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+<% if(restControllerStyle){ %>
+@RestController
+<% }else{ %>
+@Controller
+<% } %>
+@RequestMapping("<% if(isNotEmpty(package.ModuleName)){ %>/${package.ModuleName}<% } %>/<% if(isNotEmpty(controllerMappingHyphenStyle)){ %>${controllerMappingHyphen}<% }else{ %>${table.entityPath}<% } %>")
+<% if(kotlin){ %>
+class ${table.controllerName}<% if(isNotEmpty(superControllerClass)){ %> : ${superControllerClass}()<% } %>
+<% }else{ %>
+    <% if(isNotEmpty(superControllerClass)){ %>
+public class ${table.controllerName} extends ${superControllerClass} {
+    <% }else{ %>
+public class ${table.controllerName} {
+    <% } %>
+
+    <%
+       var serviceInstanceName = @cn.hutool.core.util.StrUtil.lowerFirst(table.serviceName);
+    %>
+
+    <% if(isNotEmpty(cfg.controllerMethods.hasMethod)){  %>
+    @Autowired
+    private ${table.serviceName} ${serviceInstanceName};
+    <% } %>
+
+    <% if(isNotEmpty(cfg.controllerMethods.list)){  %>
+    @GetMapping(value = "/")
+    public ResponseEntity<Page<${table.entityName}>> list(@RequestParam(required = false) Integer current, @RequestParam(required = false) Integer pageSize) {
+        if (current == null) {
+            current = 1;
+        }
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+        Page<${table.entityName}> aPage = ${serviceInstanceName}.page(new Page<>(current, pageSize));
+        return new ResponseEntity<>(aPage, HttpStatus.OK);
+    }
+    <% } %>
+
+    <% if(isNotEmpty(cfg.controllerMethods.getById)){ %>
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<${table.entityName}> getById(@PathVariable("id") String id) {
+        return new ResponseEntity<>(${serviceInstanceName}.getById(id), HttpStatus.OK);
+    }
+    <% } %>
+
+    <% if(isNotEmpty(cfg.controllerMethods.create)){ %>
+    @PostMapping(value = "/create")
+    public ResponseEntity<Object> create(@RequestBody ${table.entityName} params) {
+        ${serviceInstanceName}.save(params);
+        return new ResponseEntity<>("created successfully", HttpStatus.OK);
+    }
+    <% } %>
+
+    <% if(isNotEmpty(cfg.controllerMethods.delete)){ %>
+    @PostMapping(value = "/delete/{id}")
+    public ResponseEntity<Object> delete(@PathVariable("id") String id) {
+        ${serviceInstanceName}.removeById(id);
+        return new ResponseEntity<>("deleted successfully", HttpStatus.OK);
+    }
+    <% } %>
+
+    <% if(isNotEmpty(cfg.controllerMethods.update)){ %>
+    @PostMapping(value = "/update")
+    public ResponseEntity<Object> delete(@RequestBody ${table.entityName} params) {
+        ${serviceInstanceName}.updateById(params);
+        return new ResponseEntity<>("updated successfully", HttpStatus.OK);
+    }
+    <% } %>
+}
+<% } %>

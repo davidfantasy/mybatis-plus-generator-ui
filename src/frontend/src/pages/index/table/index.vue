@@ -23,7 +23,7 @@
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column type="index" width="50" label="序号"></el-table-column>
           <el-table-column sortable prop="name" label="table名称">
-            <template slot-scope="scope">{{scope.row.name}}</template>
+            <template slot-scope="scope">{{ scope.row.name }}</template>
           </el-table-column>
           <el-table-column prop="comment" label="table注释"></el-table-column>
         </el-table>
@@ -47,7 +47,17 @@
               v-for="file in userConfig.outputFiles"
               :label="file.fileType"
               :key="file.fileType"
-            >{{file.fileType}}</el-checkbox>
+            >{{ file.fileType }}</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="Controller中需要生成的方法" v-if="isControllerChecked">
+          <el-alert title="注意：如果更换了Controller的模板，以下选项可能不会生效，需自行在模板中实现" type="warning"></el-alert>
+          <el-checkbox-group v-model="genSetting.choosedControllerMethods">
+            <el-checkbox label="list" key="list">列表查询</el-checkbox>
+            <el-checkbox label="getById" key="getById">按ID查询</el-checkbox>
+            <el-checkbox label="create" key="create">新增</el-checkbox>
+            <el-checkbox label="update" key="update">修改</el-checkbox>
+            <el-checkbox label="delete" key="delete">删除</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="存在同名文件时是否覆盖">
@@ -68,7 +78,7 @@ import HelpTip from "@/components/HelpTip";
 export default {
   props: [],
   components: {
-    HelpTip
+    HelpTip,
   },
   data() {
     return {
@@ -80,14 +90,25 @@ export default {
         author: "",
         choosedOutputFiles: [],
         override: false,
-        moduleName: ""
+        moduleName: "",
+        choosedControllerMethods: [],
       },
       userConfig: {},
-      outputFileInfos: []
+      outputFileInfos: [],
     };
   },
   computed: {
-    queryTables: function() {
+    isControllerChecked: function () {
+      if (this.genSetting.choosedOutputFiles) {
+        if (this.genSetting.choosedOutputFiles.indexOf("Controller") !== -1) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      return false;
+    },
+    queryTables: function () {
       let tmp = [];
       this.tables.forEach((t, i) => {
         if (
@@ -99,23 +120,23 @@ export default {
         }
       });
       return tmp;
-    }
+    },
   },
-  mounted: function() {
+  mounted: function () {
     this.getAllTables();
     this.getUserConfig();
   },
   methods: {
     handleTableSelection(val) {
-      this.choosedTables = val.map(t => t.name);
+      this.choosedTables = val.map((t) => t.name);
     },
     getAllTables() {
-      axios.get("/api/db/tables").then(res => {
+      axios.get("/api/db/tables").then((res) => {
         this.tables = res;
       });
     },
     getUserConfig() {
-      axios.get("/api/output-file-info/user-config").then(res => {
+      axios.get("/api/output-file-info/user-config").then((res) => {
         this.userConfig = res;
       });
     },
@@ -126,7 +147,7 @@ export default {
       }
       //获取上一次的生成配置
       try {
-        let lastSetting = localStorage.getItem("gen-setting");
+        let lastSetting = sessionStorage.getItem("gen-setting");
         if (lastSetting) {
           _.assign(this.genSetting, JSON.parse(lastSetting));
           //清空部分一次性配置
@@ -145,21 +166,21 @@ export default {
           "'张数据表的业务代码吗?",
         "操作提示",
         {
-          type: "warning"
+          type: "warning",
         }
       ).then(() => {
         let setting = JSON.stringify(_.clone(this.genSetting));
-        localStorage.setItem("gen-setting", setting);
+        sessionStorage.setItem("gen-setting", setting);
         let params = {};
         params.genSetting = this.genSetting;
         params.tables = this.choosedTables;
         let aLoading = Loading.service();
         axios
           .post("/api/mbp-generator/gen-code", params)
-          .then(res => {
+          .then((res) => {
             this.$message({
               message: "业务代码已生成",
-              type: "success"
+              type: "success",
             });
             aLoading.close();
             this.showGenSettingDialog = false;
@@ -170,9 +191,8 @@ export default {
             aLoading.close();
           });
       });
-    }
-  }
+    },
+  },
 };
 </script>
-<style>
-</style>
+<style></style>
