@@ -29,8 +29,8 @@
         </el-table>
       </div>
     </div>
-    <el-dialog :visible.sync="showGenSettingDialog" title="输出配置">
-      <el-form label-width="180px">
+    <el-dialog :visible.sync="showGenSettingDialog" title="输出配置" width="70%" top="5vh">
+      <el-form label-width="220px">
         <el-form-item label="代码作者">
           <el-input v-model="genSetting.author" style="width:260px"></el-input>
         </el-form-item>
@@ -50,7 +50,7 @@
             >{{ file.fileType }}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
-        <el-form-item label="Controller中需要生成的方法" v-if="isControllerChecked">
+        <el-form-item label="需生成的Controller方法" v-if="isControllerChecked">
           <el-alert title="注意：如果更换了Controller的模板，以下选项可能不会生效，需自行在模板中实现" type="warning"></el-alert>
           <el-checkbox-group v-model="genSetting.choosedControllerMethods">
             <el-checkbox label="list" key="list">列表查询</el-checkbox>

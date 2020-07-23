@@ -1,7 +1,6 @@
 package com.github.davidfantasy.mybatisplus.generatorui;
 
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
-import com.github.davidfantasy.mybatisplus.generatorui.mbp.DefaultNameConverter;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.NameConverter;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.TemplateVaribleInjecter;
 import lombok.Builder;
@@ -74,7 +73,8 @@ public class GeneratorConfig {
 
     public NameConverter getAvailableNameConverter() {
         if (nameConverter == null) {
-            nameConverter = new DefaultNameConverter();
+            nameConverter = new NameConverter() {
+            };
         }
         return nameConverter;
     }

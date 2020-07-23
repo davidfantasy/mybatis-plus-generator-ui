@@ -99,6 +99,14 @@ public class MbpGeneratorService {
         pc.setServiceImpl(PathUtil.joinPackage(userConfig.getServiceImplInfo().getOutputPackage(), genSetting.getModuleName()));
         mpg.setPackageInfo(pc);
         for (String table : tables) {
+            //设置各类文件的名称
+            mpg.getGlobalConfig().setEntityName(nameConverter.entityNameConvert(table));
+            mpg.getGlobalConfig().setMapperName(nameConverter.mapperNameConvert(table));
+            mpg.getGlobalConfig().setXmlName(nameConverter.mapperXmlNameConvert(table));
+            mpg.getGlobalConfig().setServiceName(nameConverter.serviceNameConvert(table));
+            mpg.getGlobalConfig().setServiceImplName(nameConverter.serviceImplNameConvert(table));
+            mpg.getGlobalConfig().setControllerName(nameConverter.controllerNameConvert(table));
+
             genCode(mpg, genSetting, userConfig, table);
         }
     }
@@ -109,7 +117,7 @@ public class MbpGeneratorService {
         for (OutputFileInfo outputFileInfo : userConfig.getOutputFiles()) {
             if (genSetting.getChoosedOutputFiles().contains(outputFileInfo.getFileType())) {
                 NameConverter nameConverter = generatorConfig.getAvailableNameConverter();
-                String fileName = nameConverter.outputFileNameConvert(outputFileInfo.getFileType(), nameConverter.entityNameConvert(tableName));
+                String fileName = nameConverter.outputFileNameConvert(outputFileInfo.getFileType(), tableName);
                 String outputDir = projectPathResolver.convertPackageToPath(outputFileInfo.getOutputLocation());
                 String filePath = PathUtil.joinPath(outputDir, genSetting.getModuleName(), fileName);
                 focList.add(new FileOutConfig(outputFileInfo.getAvailableTemplatePath()) {

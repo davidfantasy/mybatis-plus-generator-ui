@@ -44,7 +44,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <el-dialog :visible.sync="showEditForm">
+      <el-dialog :visible.sync="showEditForm" width="70%" top="5vh">
         <el-tabs v-model="activeName">
           <el-tab-pane label="基本配置" name="base">
             <el-form ref="editForm" :rules="rules" :model="form" label-width="120px">
@@ -132,7 +132,7 @@ export default {
     ServiceStrategyForm,
     ServiceImplStrategyForm,
     ControllerStrategyForm,
-    HelpTip
+    HelpTip,
   },
   data() {
     return {
@@ -140,7 +140,7 @@ export default {
       isUpdate: false,
       uplaodFileList: [],
       uploadParams: {
-        fileType: ""
+        fileType: "",
       },
       form: {
         fileType: "",
@@ -150,27 +150,31 @@ export default {
         outputLocation: "",
         templateName: "",
         templatePath: "",
-        builtIn: false
+        builtIn: false,
       },
       rules: {
         fileType: [
-          { required: true, message: "请输入文件类型", trigger: "change" }
+          { required: true, message: "请输入文件类型", trigger: "change" },
         ],
         outputLocationPkg: [
-          { required: true, message: "请输入保存文件的包名", trigger: "change" }
+          {
+            required: true,
+            message: "请输入保存文件的包名",
+            trigger: "change",
+          },
         ],
         templateName: [
-          { required: true, message: "请上传文件模板", trigger: "change" }
-        ]
+          { required: true, message: "请上传文件模板", trigger: "change" },
+        ],
       },
       userConfig: {},
       showEditForm: false,
       searchKey: "",
       tables: [],
-      choosedTables: []
+      choosedTables: [],
     };
   },
-  mounted: function() {
+  mounted: function () {
     this.getFileInfos();
   },
   methods: {
@@ -198,7 +202,7 @@ export default {
       this.showEditForm = true;
     },
     getFileInfos() {
-      axios.get("/api/output-file-info/user-config").then(res => {
+      axios.get("/api/output-file-info/user-config").then((res) => {
         this.userConfig = res;
       });
     },
@@ -231,11 +235,11 @@ export default {
       return true;
     },
     onSubmit() {
-      this.$refs["editForm"].validate(valid => {
+      this.$refs["editForm"].validate((valid) => {
         if (valid) {
           this.form.outputLocation =
             this.form.outputLocationPrefix + ":" + this.form.outputLocationPkg;
-          axios.post("/api/output-file-info/save", this.form).then(res => {
+          axios.post("/api/output-file-info/save", this.form).then((res) => {
             this.$message.success("信息保存成功");
             this.clearForm();
             this.activeName = "base";
@@ -249,12 +253,12 @@ export default {
     },
     deleteFileInfo(fileInfo) {
       this.$confirm("确认删除?", "操作提示", {
-        type: "warning"
+        type: "warning",
       }).then(() => {
-        axios.post("/api/output-file-info/delete", fileInfo).then(res => {
+        axios.post("/api/output-file-info/delete", fileInfo).then((res) => {
           this.$message({
             message: "输出文件已删除",
-            type: "success"
+            type: "success",
           });
           this.getFileInfos();
         });
@@ -264,11 +268,11 @@ export default {
       axios
         .get("/api/template/download", {
           params: {
-            fileType: fileType
+            fileType: fileType,
           },
-          responseType: "blob"
+          responseType: "blob",
         })
-        .then(response => {
+        .then((response) => {
           FileSaver.saveAs(response, templateName);
         });
     },
@@ -281,8 +285,8 @@ export default {
       } else {
         this.$message.error("模板文件上传失败");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style></style>
