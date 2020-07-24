@@ -10,7 +10,7 @@
  <dependency>
     <groupId>com.github.davidfantasy</groupId>
     <artifactId>mybatis-plus-generator-ui</artifactId>
-    <version>1.1.4</version>
+    <version>1.2.0</version>
     <scope>test</scope>
  </dependency>
 ```
@@ -21,6 +21,7 @@
 | :---------------------------- | :--------------- |
 | 1.0.X                         | 3.3.1            |
 | 1.1.X                         | 3.3.2            |
+| 1.2.X                         | 3.3.2            |
 
 2.  在项目的test目录新建一个启动类，代码示例如下：
 
@@ -34,6 +35,23 @@ public class GeberatorUIServer {
                 .driverClassName("com.mysql.cj.jdbc.Driver")
                  //数据库schema，POSTGRE_SQL,ORACLE,DB2类型的数据库需要指定
                 .schemaName("myBusiness")
+                 //如果需要修改各类生成文件的默认命名规则，可自定义一个NameConverter实例，覆盖相应的名称转换方法：                
+                .nameConverter(new NameConverter() {
+                    /**
+                     * 自定义Service类文件的名称规则
+                     */
+                    @Override
+                    public String serviceNameConvert(String tableName) {
+                        return this.entityNameConvert(tableName) + "Service";
+                    }
+                    /**
+                     * 自定义Controller类文件的名称规则
+                     */
+                    @Override
+                    public String controllerNameConvert(String tableName) {
+                        return this.entityNameConvert(tableName) + "Action";
+                    }
+                })
                 .basePackage("com.github.davidfantasy.mybatisplustools.example")
                 .port(8068)
                 .build();
@@ -43,9 +61,10 @@ public class GeberatorUIServer {
 }
 ```
 
-**GeneratorConfig**包含一些基本的配置参数以及各个可扩展的接口，比如文件的定制或者自定义模板参数，这些都不太好通过UI进行操作。
+**GeneratorConfig**还包含一些基本的配置参数以及各个可扩展的接口，比如自定义模板参数，具体的说明可查看源码注释。
 
 3.  运行该启动类，启动一个Generator Server。然后访问 [http://localhost:8068](http://localhost:8068/) （端口是可配置的）即可进入到管理界面。
+
 ## 主要功能
 1. **数据表的查询和浏览**：可以直接浏览和查询配置的数据源的数据表信息，可选择一个或多个生成模板代码：
 
@@ -101,38 +120,7 @@ GeneratorConfig中指定driverClassName。
                     }
                 })
 ```
-后面会考虑在页面上添加直接修改自定义参数的功能。
 
-**Q:怎么自定义输出文件名，还有数据库字段名称的转换规则？**
-
-在GeneratorConfig中自定义NameConverter接口，可以定义各类输出文件，entity，还有数据库字段名的转换规则，默认的转换规则是下划线转驼峰。
-NameConverter有一个默认的实现类，DefaultNameConverter，也可以重新覆盖该类中需要自定义的方法，例如：
-```java
-GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://192.168.1.211:3306/cimc-user-center")
-                .userName("root")
-                .password("root")
-                .driverClassName("com.mysql.cj.jdbc.Driver")
-                .basePackage("example")
-                .nameConverter(new DefaultNameConverter(){
-                    //自定义表名与entity名称的转换规则
-                    @Override
-                    public String entityNameConvert(String tableName) {
-                        return null;
-                    }
-                    //自定义数据库字段名与entity,dto中属性名的转换规则
-                    @Override
-                    public String propertyNameConvert(String fieldName) {
-                        return null;
-                    }
-                    //自定义各类输出文件的文件名转换规则
-                    @Override
-                    public String outputFileNameConvert(String fileType, String entityName) {
-                        return null;
-                    }
-                 })
-                .port(8068)
-                .build();
-```
 **Q:保存的配置是存储到什么地方的？**
 
 所有的用户保存的配置是按照basePackage分组保存到user.home目录的.mybatis-plus-generator-ui中的，不同项目的配置不会互相影响。
