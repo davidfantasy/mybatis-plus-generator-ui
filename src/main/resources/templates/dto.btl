@@ -1,5 +1,4 @@
 package ${config.pkg};
-
 <% for(pkg in config.importPackages){ %>
 import ${pkg};
 <% } %>

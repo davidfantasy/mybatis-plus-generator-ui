@@ -18,7 +18,7 @@ public class GenDtoConfig {
     private Boolean enableParseDynamicParams;
 
     private String fullPackage;
-    
+
     private Boolean enableLombok = false;
 
     private String comment;
@@ -31,7 +31,7 @@ public class GenDtoConfig {
 
     private String mapperLocationPrefix;
 
-    private List<String> importPackages;
+    private List<String> importPackages = Lists.newArrayList();
 
     private List<SelectResultField> fields;
 

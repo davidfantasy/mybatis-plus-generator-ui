@@ -107,7 +107,7 @@ public class SqlGeneratorService {
         }
         config.setFields(fields);
         config.setCreateDate(DateUtil.format(new Date(), "yyyy-MM-dd"));
-        if (Strings.isNullOrEmpty(config.getMapperLocation())) {
+        if (!Strings.isNullOrEmpty(config.getMapperLocation())) {
             config.setComment(config.getMapperLocation() + "的查询结果集，该代码由mybatis-plus-generator-ui自动生成");
         } else {
             config.setComment("该代码由mybatis-plus-generator-ui自动生成");
