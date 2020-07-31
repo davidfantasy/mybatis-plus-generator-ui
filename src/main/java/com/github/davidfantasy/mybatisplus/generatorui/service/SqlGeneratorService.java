@@ -120,7 +120,7 @@ public class SqlGeneratorService {
             file.getParentFile().mkdirs();
             file.createNewFile();
         }
-        beetlTemplateEngine.writer(tplParams, "classpath:templates/dto.btl", outputPath);
+        beetlTemplateEngine.writer(tplParams, "classpath:codetpls/dto.btl", outputPath);
         log.info("DTO已成功生成，输出位置为:" + outputPath);
 
     }
@@ -139,7 +139,7 @@ public class SqlGeneratorService {
     public MapperElement createResultMapElement(GenDtoConfig config) {
         Map<String, Object> tplParams = Maps.newHashMap();
         tplParams.put("config", config);
-        String resultMapStr = beetlTemplateEngine.write2String(tplParams, "classpath:templates/resultMap.btl");
+        String resultMapStr = beetlTemplateEngine.write2String(tplParams, "classpath:codetpls/resultMap.btl");
         MapperElement resultMapEle = MapperElement.builder().id(config.getDtoName() + "Map")
                 .comment("Author:" + config.getAuthor() + "，Date:" + DateUtil.format(new Date(), "yyyy-MM-dd") + "，" + config.getMapperElementId() + "的结果映射配置，由mybatis-plus-generator-ui自动生成")
                 .content(resultMapStr)
@@ -156,7 +156,7 @@ public class SqlGeneratorService {
             sql = dynamicParamSqlEnhancer.enhanceDynamicConditions(sql);
         }
         tplParams.put("sql", sql);
-        String methodEleStr = beetlTemplateEngine.write2String(tplParams, "classpath:templates/mapperMethods.btl");
+        String methodEleStr = beetlTemplateEngine.write2String(tplParams, "classpath:codetpls/mapperMethods.btl");
         MapperElement methodEle = MapperElement.builder().id(config.getMapperElementId())
                 .comment("Author:" + config.getAuthor() + "，Date:" + DateUtil.format(new Date(), "yyyy-MM-dd") + ",由mybatis-plus-generator-ui自动生成")
                 .content(methodEleStr)

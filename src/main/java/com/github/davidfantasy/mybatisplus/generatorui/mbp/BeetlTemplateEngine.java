@@ -30,7 +30,7 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
         this.templateStoreDir = templateStoreDir;
         try {
             logger.info("模板根目录为：" + templateStoreDir);
-            ClasspathResourceLoader classpathResourceLoader = new ClasspathResourceLoader();
+            ClasspathResourceLoader classpathResourceLoader = new ClasspathResourceLoader(this.getClass().getClassLoader());
             FileResourceLoader fileResourceLoader = new FileResourceLoader(templateStoreDir);
             CompositeResourceLoader loader = new CompositeResourceLoader();
             loader.addResourceLoader(new StartsWithMatcher(RESOURCE_PREFIX_CLASSPATH).withoutPrefix(), classpathResourceLoader);

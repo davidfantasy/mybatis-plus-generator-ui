@@ -43,17 +43,17 @@ public class OutputFileInfo {
             return templatePath;
         }
         if (fileType.equals(FILE_TYPE_ENTITY)) {
-            return RESOURCE_PREFIX_CLASSPATH + "/templates/entity.java.btl";
+            return RESOURCE_PREFIX_CLASSPATH + "codetpls/entity.java.btl";
         } else if (fileType.equals(FILE_TYPE_MAPPER)) {
-            return RESOURCE_PREFIX_CLASSPATH + "/templates/mapper.java.btl";
+            return RESOURCE_PREFIX_CLASSPATH + "codetpls/mapper.java.btl";
         } else if (fileType.equals(FILE_TYPE_MAPPER_XML)) {
-            return RESOURCE_PREFIX_CLASSPATH + "/templates/mapper.xml.btl";
+            return RESOURCE_PREFIX_CLASSPATH + "codetpls/mapper.xml.btl";
         } else if (fileType.equals(FILE_TYPE_SERVICE)) {
-            return RESOURCE_PREFIX_CLASSPATH + "/templates/service.java.btl";
+            return RESOURCE_PREFIX_CLASSPATH + "codetpls/service.java.btl";
         } else if (fileType.equals(FILE_TYPE_SERVICEIMPL)) {
-            return RESOURCE_PREFIX_CLASSPATH + "/templates/serviceImpl.java.btl";
+            return RESOURCE_PREFIX_CLASSPATH + "codetpls/serviceImpl.java.btl";
         } else if (fileType.equals(FILE_TYPE_CONTROLLER)) {
-            return RESOURCE_PREFIX_CLASSPATH + "/templates/controller.java.btl";
+            return RESOURCE_PREFIX_CLASSPATH + "codetpls/controller.java.btl";
         }
         return "";
     }
