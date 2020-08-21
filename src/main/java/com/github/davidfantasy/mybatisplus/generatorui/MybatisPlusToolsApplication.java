@@ -57,6 +57,7 @@ public class MybatisPlusToolsApplication {
             } else {
                 factory.setPort(8080);
             }
+            factory.setContextPath("");
         };
     }
 
