@@ -14,15 +14,6 @@
     <scope>test</scope>
  </dependency>
 ```
-**注意**：由于本项目引入了mybatis-plus-generator依赖，会间接依赖于mybatis-plus，请尽量使用与当前业务项目中引入mybatis-plus版本兼容的mybatis-plus-generator-ui版本，
-否则可能出现依赖冲突的问题，mybatis-plus-generator-ui与mybatis-plus版本对照表如下：
-
-| mybatis-plus-generator-ui版本 | mybatis-plus版本 |
-| :---------------------------- | :--------------- |
-| 1.0.X                         | 3.3.1            |
-| 1.1.X                         | 3.3.2            |
-| 1.2.X                         | 3.3.2            |
-| 1.3.X                         | 3.3.2            |
 
 2.  在项目的test目录新建一个启动类，代码示例如下：
 
