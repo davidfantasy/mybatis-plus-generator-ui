@@ -12,7 +12,10 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -25,13 +28,14 @@ public class MapperXmlParser {
 
     private OutputFormat format = OutputFormat.createPrettyPrint();
 
+
     /**
      * 在Mapper文件中添加代码节点
      *
      * @param mapperPath mapper.xml所在的位置
      * @param elements   需要添加的节点内容
      */
-    public void addElementInMapper(String mapperPath, MapperElement... elements) throws IOException, DocumentException {
+    public String addElementInMapper(String mapperPath, MapperElement... elements) throws IOException, DocumentException {
         File mapperFile = new File(mapperPath);
         if (!mapperFile.exists()) {
             throw new ServiceException("XML文件不存在：" + mapperPath);
@@ -78,5 +82,18 @@ public class MapperXmlParser {
         XMLWriter writer = new XMLWriter(new FileWriter(mapperFile), format);
         writer.write(doc);
         writer.flush();
+        return doc.getRootElement().attributeValue("namespace");
     }
+
+    private Element getElementById(Document doc, String id) {
+        List<Element> elements = doc.getRootElement().elements();
+        for (Element ele : elements) {
+            if (id.equals(ele.attributeValue("id"))) {
+                return ele;
+            }
+        }
+        return null;
+    }
+
+
 }

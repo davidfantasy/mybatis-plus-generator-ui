@@ -137,4 +137,15 @@ public class OutputFileInfoService {
         userConfigStore.saveUserConfig(userConfig);
     }
 
+    public String getOutputPkgByFileType(String fileType) {
+        UserConfig userConfig = userConfigStore.getDefaultUserConfig();
+        List<OutputFileInfo> fileInfos = userConfig.getOutputFiles();
+        for (OutputFileInfo fileInfo : fileInfos) {
+            if (fileInfo.getFileType().equals(fileType)) {
+                return fileInfo.getOutputPackage();
+            }
+        }
+        return null;
+    }
+
 }

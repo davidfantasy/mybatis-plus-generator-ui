@@ -82,7 +82,7 @@ public class DynamicParamSqlEnhancer {
             tmp.append(" 1=1 ");
         }
         tmp.append("\n<if test=\"");
-        tmp.append(trimQuotes(condition.getLeftExpr()));
+        tmp.append(trimQuotes(condition.getParamNames().get(0)));
         tmp.append("!=null\">");
         tmp.append("\n ");
         if (!Strings.isNullOrEmpty(condition.getLogicOperator())) {

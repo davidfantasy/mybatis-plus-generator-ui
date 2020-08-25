@@ -23,17 +23,17 @@ public class ${config.dtoName} {
 <% /** -----------BEGIN 字段循环遍历----------- **/ %>
 <% for(field in config.fields){ %>
     <%/*字段定义*/%>
-    private ${field.javaType} ${field.propertyName};
+    private ${field.shortJavaType} ${field.propertyName};
 
 <% } %>
 <% /** -----------END 字段循环遍历----------- **/ %>
 <% if(!config.enableLombok){ %>
     <% for(field in config.fields){ %>
-    public ${field.javaType} ${field.getMethodName}() {
+    public ${field.shortJavaType} ${field.getMethodName}() {
         return ${field.propertyName};
     }
 
-    public void ${field.setMethodName}(${field.javaType} ${field.propertyName}) {
+    public void ${field.setMethodName}(${field.shortJavaType} ${field.propertyName}) {
         this.${field.propertyName} = ${field.propertyName};
     }
 

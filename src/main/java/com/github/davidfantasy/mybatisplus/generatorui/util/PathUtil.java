@@ -28,4 +28,14 @@ public class PathUtil {
         return tmp.deleteCharAt(tmp.lastIndexOf(".")).toString();
     }
 
+    public static String getShortNameFromFullRef(String ref) {
+        if (Strings.isNullOrEmpty(ref)) {
+            return "";
+        }
+        if (ref.indexOf(".") == -1) {
+            return ref;
+        }
+        return ref.substring(ref.lastIndexOf(".")+1, ref.length());
+    }
+
 }

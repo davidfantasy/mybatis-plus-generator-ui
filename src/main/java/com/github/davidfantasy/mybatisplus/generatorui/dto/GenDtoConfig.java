@@ -1,10 +1,13 @@
 package com.github.davidfantasy.mybatisplus.generatorui.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 通过SQL语句创建DTO对象的模板参数类
@@ -15,11 +18,11 @@ public class GenDtoConfig {
     /**
      * 是否解析SQL中的动态参数部分
      */
-    private Boolean enableParseDynamicParams;
+    private boolean enableParseDynamicParams;
 
     private String fullPackage;
 
-    private Boolean enableLombok = false;
+    private boolean enableLombok;
 
     private String comment;
 
@@ -27,13 +30,27 @@ public class GenDtoConfig {
 
     private String createDate;
 
+    private String mapperMethod;
+
     private String mapperLocation;
 
     private String mapperLocationPrefix;
 
-    private List<String> importPackages = Lists.newArrayList();
+    private Boolean enableCreateDaoMethod;
 
-    private List<SelectResultField> fields;
+    private String daoMethodParamType;
+
+    private String daoMethodParamDto;
+
+    /**
+     * 是否自动创建映射查询的结果的DTO
+     */
+    private boolean autoCreatedResultDto;
+
+    private Set<String> importPackages = Sets.newHashSet();
+
+    @JsonIgnore
+    private List<DtoFieldInfo> fields;
 
     public String getPkg() {
         if (Strings.isNullOrEmpty(fullPackage)) {
@@ -67,16 +84,21 @@ public class GenDtoConfig {
         return pkg;
     }
 
-    public void addImportPackage(String pkg) {
-        if (Strings.isNullOrEmpty(pkg)) {
-            return;
+    public String getResultType() {
+        if (Strings.isNullOrEmpty(this.getFullPackage())) {
+            return "java.util.Map";
         }
-        if (importPackages == null) {
-            importPackages = Lists.newArrayList();
+        if (!autoCreatedResultDto) {
+            return this.getFullPackage();
         }
-        if (!importPackages.contains(pkg)) {
-            importPackages.add(pkg);
+        return null;
+    }
+
+    public String getResultMap() {
+        if (!Strings.isNullOrEmpty(this.getFullPackage()) && autoCreatedResultDto) {
+            return this.getDtoName() + "Map";
         }
+        return null;
     }
 
 
