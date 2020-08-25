@@ -10,7 +10,7 @@
  <dependency>
     <groupId>com.github.davidfantasy</groupId>
     <artifactId>mybatis-plus-generator-ui</artifactId>
-    <version>1.2.2</version>
+    <version>1.3.0</version>
     <scope>test</scope>
  </dependency>
 ```
@@ -22,6 +22,7 @@
 | 1.0.X                         | 3.3.1            |
 | 1.1.X                         | 3.3.2            |
 | 1.2.X                         | 3.3.2            |
+| 1.3.X                         | 3.3.2            |
 
 2.  在项目的test目录新建一个启动类，代码示例如下：
 
@@ -80,7 +81,7 @@ public class GeberatorUIServer {
 
 ![代码生成选项](https://gitee.com/davidfantasy/mybatis-plus-generator-ui/raw/master/imgs/generator-options.png)
 
-4. **SQL结果集自动生成代码**：通过输入查询SQL，自动在Mapper.xml中生成查询方法，DTO对象和ResultMap（结果集映射配置）
+4. **SQL结果集自动生成代码**：通过输入查询SQL，可自动在Mapper（Xml及Java）中生成对应的查询方法，DTO对象和ResultMap（结果集映射配置）
 
 ![SQL编辑](https://gitee.com/davidfantasy/mybatis-plus-generator-ui/raw/master/imgs/SQL-edit.png)
 
