@@ -63,6 +63,7 @@ public class MapperXmlParser {
             }
         }
         for (MapperElement ele : elements) {
+            System.out.println(ele.getContent().trim());
             Element newEle = DocumentHelper.parseText(ele.getContent().trim()).getRootElement();
             if (ele.getLocation().equals(ElementPosition.FIRST)) {
                 newNodes.add(0, newEle);

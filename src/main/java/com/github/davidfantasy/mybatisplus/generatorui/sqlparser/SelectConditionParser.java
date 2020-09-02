@@ -59,6 +59,9 @@ public class SelectConditionParser implements SelectVisitor, FromItemVisitor {
 
     @Override
     public void visit(SetOperationList setOpList) {
+        for (SelectBody sb : setOpList.getSelects()) {
+            sb.accept(this);
+        }
     }
 
     @Override

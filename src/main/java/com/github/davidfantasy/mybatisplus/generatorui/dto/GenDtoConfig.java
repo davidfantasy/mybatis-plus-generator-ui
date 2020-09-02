@@ -24,6 +24,11 @@ public class GenDtoConfig {
 
     private boolean enableLombok;
 
+    /**
+     * 是否为分页查询
+     */
+    private boolean enablePageQuery;
+
     private String comment;
 
     private String author;
@@ -88,15 +93,20 @@ public class GenDtoConfig {
         if (Strings.isNullOrEmpty(this.getFullPackage())) {
             return "java.util.Map";
         }
-        if (!autoCreatedResultDto) {
-            return this.getFullPackage();
-        }
-        return null;
+        return this.getFullPackage();
     }
 
     public String getResultMap() {
         if (!Strings.isNullOrEmpty(this.getFullPackage()) && autoCreatedResultDto) {
-            return this.getDtoName() + "Map";
+            if (this.getFields() == null) {
+                return null;
+            }
+            //判断字段名是否和属性名一致，全部一致的情况无需生成resultMap
+            for (DtoFieldInfo fieldInfo : this.getFields()) {
+                if (!fieldInfo.getPropertyName().equals(fieldInfo.getColumnName())) {
+                    return this.getDtoName() + "Map";
+                }
+            }
         }
         return null;
     }

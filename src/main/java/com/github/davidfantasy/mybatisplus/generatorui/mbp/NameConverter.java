@@ -36,14 +36,16 @@ public interface NameConverter {
         if (Strings.isNullOrEmpty(fieldName)) {
             return "";
         }
-        return StrUtil.toCamelCase(fieldName.toLowerCase());
+        if (fieldName.contains("_")) {
+            return StrUtil.toCamelCase(fieldName.toLowerCase());
+        }
+        return fieldName;
     }
 
     /**
      * 自定义Mapper.java的类名称
      */
     default String mapperNameConvert(String tableName) {
-        System.out.println("mapperNameConvert:"+tableName+","+entityNameConvert(tableName));
         return entityNameConvert(tableName) + "Mapper";
     }
 

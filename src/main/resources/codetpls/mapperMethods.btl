@@ -2,11 +2,9 @@
     <% if(config.resultMap != null){ %>
        <select id="${config.mapperElementId}" resultMap="${config.resultMap}">
     <% }%>
-    <% if(config.resultType != null){ %>
+    <% if(config.resultMap == null){ %>
        <select id="${config.mapperElementId}" resultType="${config.resultType}">
     <% }%>
-        <![CDATA[
             ${sql}
-        ]]>
-    </select>
+       </select>
 <% } %>

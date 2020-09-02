@@ -1,6 +1,7 @@
 package com.github.davidfantasy.mybatisplus.generatorui.service;
 
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
@@ -139,7 +140,7 @@ public class SqlGeneratorService {
     public String genMapperElementsFromSql(String sql, GenDtoConfig config) throws IOException, DocumentException {
         List<MapperElement> elements = Lists.newArrayList();
         //如果DTO是自动生成的，那么同时也生成结果映射集
-        if (config.isAutoCreatedResultDto()) {
+        if (config.getResultMap() != null) {
             elements.add(createResultMapElement(config));
         }
         elements.add(createMapperMethodElement(sql, config));
@@ -209,6 +210,8 @@ public class SqlGeneratorService {
      */
     public void addDaoMethod(String daoClassRef, String sql, GenDtoConfig config) throws Exception {
         Set<String> imports = Sets.newHashSet();
+        List<DtoFieldInfo> methodParams = Lists.newArrayList();
+
         String returnType = "";
         if (!Strings.isNullOrEmpty(config.getFullPackage())) {
             imports.add("java.util.List");
@@ -219,8 +222,16 @@ public class SqlGeneratorService {
             imports.add("java.util.Map");
             returnType = "List<Map<String,Object>>";
         }
+        //如果启用分页查询，则修改相关的参数和返回值
+        if (config.isEnablePageQuery()) {
+            imports.add("com.baomidou.mybatisplus.extension.plugins.pagination.Page");
+            returnType = returnType.replaceFirst("List", "Page");
+            DtoFieldInfo param = new DtoFieldInfo();
+            param.setShortJavaType(PathUtil.getShortNameFromFullRef(returnType));
+            param.setPropertyName("pageParam");
+            methodParams.add(param);
+        }
         List<DtoFieldInfo> sqlConditions = parseParamFieldsFromSql(sql);
-        List<DtoFieldInfo> methodParams = Lists.newArrayList();
         if (!sqlConditions.isEmpty()) {
             if ("map".equals(config.getDaoMethodParamType())) {
                 DtoFieldInfo param = new DtoFieldInfo();
@@ -269,7 +280,7 @@ public class SqlGeneratorService {
         for (ConditionExpr expr : conditionExprs) {
             for (String paramName : expr.getParamNames()) {
                 DtoFieldInfo field = new DtoFieldInfo();
-                field.setPropertyName(paramName);
+                field.setPropertyName(PathUtil.getShortNameFromFullRef(paramName));
                 boolean isDate = paramName.toLowerCase().endsWith("date")
                         || paramName.toLowerCase().endsWith("time");
                 if (expr.getOperator().toUpperCase().equals("IN")) {

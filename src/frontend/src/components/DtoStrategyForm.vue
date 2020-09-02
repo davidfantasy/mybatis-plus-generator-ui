@@ -48,6 +48,10 @@
     <el-form-item label="同步生成Mapper(java)的方法">
       <el-switch v-model="form.enableCreateDaoMethod"></el-switch>
     </el-form-item>
+    <el-form-item label="是否启用分页查询" v-if="form.enableCreateDaoMethod">
+      <el-switch v-model="form.enablePageQuery"></el-switch>
+      <help-tip content="启用分页查询后，Mapper方法的返回值会被包装为Page类型，同时增加相应的分页参数"></help-tip>
+    </el-form-item>
     <el-form-item v-if="form.enableCreateDaoMethod" label="Mapper(java)方法的参数类型">
       <el-radio-group v-model="form.daoMethodParamType">
         <el-radio label="map">Map（SQL动态参数作为Map的key）</el-radio>
@@ -56,7 +60,7 @@
       </el-radio-group>
     </el-form-item>
     <el-form-item
-      v-if="form.enableCreateDaoMethod&&form.daoMethodParamType=='bean'"
+      v-if="form.enableCreateDaoMethod && form.daoMethodParamType == 'bean'"
       label="Mapper(java)方法参数DTO"
     >
       <el-input
@@ -86,6 +90,7 @@ export default {
       userBasePkg: "",
       form: {
         enableLombok: false,
+        enablePageQuery: false,
         enableCreateDaoMethod: false,
         enableParseDynamicParams: true,
         author: "",
