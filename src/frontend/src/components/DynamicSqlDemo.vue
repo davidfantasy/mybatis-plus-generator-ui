@@ -14,7 +14,7 @@ import { codemirror } from "vue-codemirror";
 import "codemirror/mode/xml/xml.js";
 export default {
   components: {
-    codemirror
+    codemirror,
   },
   data() {
     return {
@@ -25,7 +25,7 @@ export default {
         lineNumbers: true,
         line: true,
         mode: "text/x-mysql",
-        theme: "solarized light"
+        theme: "solarized light",
       },
       xmlOptions: {
         readOnly: true,
@@ -34,13 +34,13 @@ export default {
         lineNumbers: true,
         line: true,
         mode: "application/xml",
-        theme: "solarized light"
+        theme: "solarized light",
       },
       sqlCode: "",
-      xmlCode: ""
+      xmlCode: "",
     };
   },
-  mounted: function() {
+  mounted: function () {
     this.sqlCode =
       "SELECT \n" +
       "    *\n" +
@@ -65,13 +65,13 @@ export default {
       "          t_order_good t1 ON t.id = t1.order_id\n" +
       "      WHERE\n" +
       "           1=1 \n" +
-      '      <if test="order_code!=null">\n' +
+      '      <if test="orderCode!=null">\n' +
       "        AND  order_code = #{orderCode}\n" +
       "      </if>\n" +
       '      <if test="city!=null">\n' +
       "       AND city like concat('%',#{city},'%')\n" +
       "      </if>\n" +
-      '      <if test="customer_id!=null">\n' +
+      '      <if test="customerIds!=null">\n' +
       "       AND customer_id in \n" +
       '       <foreach item="item" collection="#{customerIds}" open="(" separator="," close=")">\n' +
       "       #{item}\n" +
@@ -80,12 +80,12 @@ export default {
       '      <if test="creator!=null">\n' +
       "       AND creator = #{creator}\n" +
       "      </if>\n" +
-      '      <if test="confirm_time!=null">\n' +
+      '      <if test="startTime!=null">\n' +
       "       AND confirm_time between #{startTime} and #{endTime}\n" +
       "      </if>\n" +
       "    ]]>\n" +
       "  </select>";
   },
-  methods: {}
+  methods: {},
 };
 </script>
