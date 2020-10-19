@@ -35,6 +35,9 @@
         content="为每个字段生成一个静态常量，如：public static final String ID = 'test_id'"
       ></help-tip>
     </el-form-item>
+    <el-form-item label="是否启用ActiveRecord模式" placeholder>
+      <el-switch v-model="form.activeRecord"></el-switch>
+    </el-form-item>
     <el-form-item label="是否启用构建者模式" placeholder>
       <el-switch v-model="form.entityBuilderModel"></el-switch>
     </el-form-item>
@@ -75,6 +78,7 @@ export default {
         superEntityColumns: [],
         entitySerialVersionUID: false,
         entityColumnConstant: false,
+        activeRecord:false,
         entityBuilderModel: false,
         entityLombokModel: false,
         entityBooleanColumnRemoveIsPrefix: false,

@@ -27,6 +27,12 @@ public class EntityStrategy {
      * public static final String ID = "test_id";
      */
     private boolean entityColumnConstant = false;
+
+    /**
+     * 开启 ActiveRecord 模式
+     */
+    private boolean activeRecord = false;
+
     /**
      * 【实体】是否为构建者模型（默认 false）<br>
      * -----------------------------------<br>

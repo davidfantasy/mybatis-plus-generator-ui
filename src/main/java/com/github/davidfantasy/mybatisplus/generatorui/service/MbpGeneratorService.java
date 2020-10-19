@@ -12,7 +12,6 @@ import com.github.davidfantasy.mybatisplus.generatorui.dto.UserConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.BeetlTemplateEngine;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.NameConverter;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.TableInjectionConfig;
-import com.github.davidfantasy.mybatisplus.generatorui.strategy.ControllerStrategy;
 import com.github.davidfantasy.mybatisplus.generatorui.strategy.EntityStrategy;
 import com.github.davidfantasy.mybatisplus.generatorui.util.PathUtil;
 import com.google.common.base.Strings;
@@ -22,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
