@@ -41,9 +41,9 @@
     <el-form-item label="是否启用构建者模式" placeholder>
       <el-switch v-model="form.entityBuilderModel"></el-switch>
     </el-form-item>
-    <el-form-item label="是否启用Lombok注解" placeholder>
+    <el-form-item label=" 是否启用Lombok注解" placeholder>
       <el-switch v-model="form.entityLombokModel"></el-switch>
-    </el-form-item>
+     </el-form-item>
     <el-form-item label="是否移除字段的is前缀" placeholder>
       <el-switch v-model="form.entityBooleanColumnRemoveIsPrefix"></el-switch>
       <help-tip
