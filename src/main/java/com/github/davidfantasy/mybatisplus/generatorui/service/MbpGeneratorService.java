@@ -104,7 +104,8 @@ public class MbpGeneratorService {
             mpg.getGlobalConfig().setServiceName(nameConverter.serviceNameConvert(table));
             mpg.getGlobalConfig().setServiceImplName(nameConverter.serviceImplNameConvert(table));
             mpg.getGlobalConfig().setControllerName(nameConverter.controllerNameConvert(table));
-
+            mpg.getGlobalConfig().setBaseResultMap(userConfig.getMapperXmlStrategy().isBaseResultMap());
+            mpg.getGlobalConfig().setEnableCache(userConfig.getMapperXmlStrategy().isEnableCache());
             genCode(mpg, genSetting, userConfig, table);
         }
     }
