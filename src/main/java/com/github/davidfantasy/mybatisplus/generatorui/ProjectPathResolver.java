@@ -29,18 +29,25 @@ public class ProjectPathResolver {
 
     public ProjectPathResolver(String basePackage) {
         this.basePackage = basePackage;
-        String curentThreadPath = Thread.currentThread().getContextClassLoader().getResource(".").getPath();
-        curentThreadPath = getUTF8String(curentThreadPath);
-        String[] paths = curentThreadPath.split("/");
-        StringBuilder temp = new StringBuilder();
-        for (int i = 0; i < paths.length; i++) {
-            String path = paths[i];
-            if (i < paths.length - 2) {
-                temp.append(path);
-                temp.append("/");
+        ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
+        String projectDir = System.getProperty("user.dir");
+        if (contextLoader.getResource(".") != null) {
+            projectDir = contextLoader.getResource(".").getPath();
+            projectDir = getUTF8String(projectDir);
+            String[] paths = projectDir.split("/");
+            StringBuilder temp = new StringBuilder();
+            for (int i = 0; i < paths.length; i++) {
+                String path = paths[i];
+                if (i < paths.length - 2) {
+                    temp.append(path);
+                    temp.append("/");
+                }
             }
+            baseProjectPath = temp.toString();
+        } else {
+            projectDir = getUTF8String(projectDir).replace("\\", "/") + "/";
+            baseProjectPath = projectDir;
         }
-        baseProjectPath = temp.toString();
         sourcePath = new File(baseProjectPath + "src/main/java").toString();
         resourcePath = new File(baseProjectPath + "src/main/resources").toString();
     }
