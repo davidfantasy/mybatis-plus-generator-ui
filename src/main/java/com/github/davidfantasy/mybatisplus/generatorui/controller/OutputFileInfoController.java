@@ -1,5 +1,6 @@
 package com.github.davidfantasy.mybatisplus.generatorui.controller;
 
+import com.github.davidfantasy.mybatisplus.generatorui.ProjectPathResolver;
 import com.github.davidfantasy.mybatisplus.generatorui.common.Result;
 import com.github.davidfantasy.mybatisplus.generatorui.common.ResultGenerator;
 import com.github.davidfantasy.mybatisplus.generatorui.dto.OutputFileInfo;
@@ -21,14 +22,21 @@ public class OutputFileInfoController {
     @Autowired
     private UserConfigStore userConfigStore;
 
+    @Autowired
+    private ProjectPathResolver projectPathResolver;
+
     @GetMapping("/user-config")
     public Result getUserConfig() {
         return ResultGenerator.genSuccessResult(userConfigStore.getDefaultUserConfig());
     }
 
+    @GetMapping("/project-root-path")
+    public Result getRootPath() {
+        return ResultGenerator.genSuccessResult(projectPathResolver.getBaseProjectPath());
+    }
+
     @PostMapping("/delete")
     public Result deleteOutputInfos(@RequestBody OutputFileInfo outputFileInfo) throws IOException {
-
         outputFileInfoService.deleteOutputFileInfo(outputFileInfo);
         return ResultGenerator.genSuccessResult();
     }

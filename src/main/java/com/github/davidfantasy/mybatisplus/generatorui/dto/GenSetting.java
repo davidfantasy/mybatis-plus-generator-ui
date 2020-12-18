@@ -36,4 +36,9 @@ public class GenSetting {
      */
     private List<String> choosedControllerMethods;
 
+    /**
+     * 目标项目根目录
+     */
+    private String rootPath;
+
 }

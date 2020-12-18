@@ -1,11 +1,13 @@
 package com.github.davidfantasy.mybatisplus.generatorui.service;
 
+import cn.hutool.core.io.FileUtil;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.github.davidfantasy.mybatisplus.generatorui.GeneratorConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.ProjectPathResolver;
+import com.github.davidfantasy.mybatisplus.generatorui.common.ServiceException;
 import com.github.davidfantasy.mybatisplus.generatorui.dto.GenSetting;
 import com.github.davidfantasy.mybatisplus.generatorui.dto.OutputFileInfo;
 import com.github.davidfantasy.mybatisplus.generatorui.dto.UserConfig;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +69,8 @@ public class MbpGeneratorService {
     }
 
     public void genCodeBatch(GenSetting genSetting, List<String> tables) {
+        checkGenSetting(genSetting);
+        projectPathResolver.refreshBaseProjectPath(genSetting.getRootPath());
         //自定义参数配置
         mpg.setCfg(new TableInjectionConfig(generatorConfig, genSetting));
         //生成策略配置
@@ -149,6 +154,20 @@ public class MbpGeneratorService {
         BeanUtils.copyProperties(userConfig.getServiceImplStrategy(), strategy);
         BeanUtils.copyProperties(userConfig.getServiceStrategy(), strategy);
         return strategy;
+    }
+
+
+    private void checkGenSetting(GenSetting genSetting) {
+        if (Strings.isNullOrEmpty(genSetting.getRootPath())) {
+            throw new ServiceException("目标项目根目录不能为空");
+        }
+        genSetting.setRootPath(projectPathResolver.getUTF8String(genSetting.getRootPath()));
+        if (!FileUtil.isDirectory(genSetting.getRootPath())) {
+            throw new ServiceException("目标项目根目录错误，请确认目录有效且存在：" + genSetting.getRootPath());
+        }
+        if (!genSetting.getRootPath().endsWith(File.separator)) {
+            genSetting.setRootPath(genSetting.getRootPath() + File.separator);
+        }
     }
 
 

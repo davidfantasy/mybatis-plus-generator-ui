@@ -30,26 +30,28 @@ public class ProjectPathResolver {
     public ProjectPathResolver(String basePackage) {
         this.basePackage = basePackage;
         ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
-        String projectDir = System.getProperty("user.dir");
+        String rootPath = "";
         if (contextLoader.getResource(".") != null) {
-            projectDir = contextLoader.getResource(".").getPath();
+            String projectDir = contextLoader.getResource(".").getPath();
             projectDir = getUTF8String(projectDir);
             String[] paths = projectDir.split("/");
             StringBuilder temp = new StringBuilder();
+            //去掉目录的最后两个子目录，通常是/target/classes
             for (int i = 0; i < paths.length; i++) {
                 String path = paths[i];
+                if (Strings.isNullOrEmpty(path)) {
+                    continue;
+                }
                 if (i < paths.length - 2) {
                     temp.append(path);
-                    temp.append("/");
+                    temp.append(File.separator);
                 }
             }
-            baseProjectPath = temp.toString();
+            rootPath = temp.toString();
         } else {
-            projectDir = getUTF8String(projectDir).replace("\\", "/") + "/";
-            baseProjectPath = projectDir;
+            rootPath = getUTF8String(System.getProperty("user.dir")) + File.separator;
         }
-        sourcePath = new File(baseProjectPath + "src/main/java").toString();
-        resourcePath = new File(baseProjectPath + "src/main/resources").toString();
+        refreshBaseProjectPath(rootPath);
     }
 
     /**
@@ -58,7 +60,7 @@ public class ProjectPathResolver {
      * @param basePath
      * @return
      */
-    private String getUTF8String(String basePath) {
+    public String getUTF8String(String basePath) {
         try {
             basePath = URLDecoder.decode(basePath, "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -133,6 +135,14 @@ public class ProjectPathResolver {
 
     public String resolveMapperXmlPackage() {
         return PACKAGE_RESOURCES_PREFIX + "mapper";
+    }
+
+    public synchronized void refreshBaseProjectPath(String rootPath) {
+        if (baseProjectPath == null || !baseProjectPath.equals(rootPath)) {
+            this.baseProjectPath = rootPath;
+            sourcePath = new File(baseProjectPath + "src/main/java".replace("/", File.separator)).toString();
+            resourcePath = new File(baseProjectPath + "src/main/resources".replace("/", File.separator)).toString();
+        }
     }
 
 }
