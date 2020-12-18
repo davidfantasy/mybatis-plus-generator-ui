@@ -57,6 +57,7 @@ public class GeberatorUIServer {
 
 3.  运行该启动类，启动一个Generator Server。然后访问 [http://localhost:8068](http://localhost:8068/) （端口是可配置的）即可进入到管理界面。
 
+#### 更新
 **1.4.0**版本之后，可支持将GeberatorUIServer独立部署为一个单独的spring boot项目，通过页面指定目标项目根目录的方式为多个项目提供源码生成服务。
 
 ## 主要功能
