@@ -9,7 +9,7 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "dependencies": {
-    "axios": "^0.19.1",
+    "axios": "~0.21.1",
     "element-ui": "~2.13.0",
     "file-saver": "^2.0.2",
     "js-base64": "^2.5.2",
