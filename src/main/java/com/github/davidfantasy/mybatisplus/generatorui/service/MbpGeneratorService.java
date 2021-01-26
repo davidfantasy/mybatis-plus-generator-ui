@@ -1,9 +1,11 @@
 package com.github.davidfantasy.mybatisplus.generatorui.service;
 
 import cn.hutool.core.io.FileUtil;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableField;
+import com.baomidou.mybatisplus.generator.config.po.TableFill;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.github.davidfantasy.mybatisplus.generatorui.GeneratorConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.ProjectPathResolver;
@@ -17,6 +19,7 @@ import com.github.davidfantasy.mybatisplus.generatorui.mbp.TableInjectionConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.strategy.EntityStrategy;
 import com.github.davidfantasy.mybatisplus.generatorui.util.PathUtil;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,8 +150,18 @@ public class MbpGeneratorService {
         if (!Strings.isNullOrEmpty(entityStrategy.getSuperEntityClass())) {
             strategy.setSuperEntityClass(entityStrategy.getSuperEntityClass());
         }
+        if (entityStrategy.getTableFills() != null
+                && !entityStrategy.getTableFills().isEmpty()) {
+            List<TableFill> tableFills = Lists.newArrayList();
+            for (String tableFillStr : entityStrategy.getTableFills()) {
+                String[] tmp = tableFillStr.split(":");
+                TableFill tableFill = new TableFill(tmp[0], FieldFill.valueOf(tmp[1].toUpperCase()));
+                tableFills.add(tableFill);
+            }
+            strategy.setTableFillList(tableFills);
+        }
         BeanUtils.copyProperties(userConfig.getControllerStrategy(), strategy);
-        BeanUtils.copyProperties(entityStrategy, strategy, "superEntityClass");
+        BeanUtils.copyProperties(entityStrategy, strategy, "superEntityClass", "tableFills");
         BeanUtils.copyProperties(userConfig.getMapperStrategy(), strategy);
         BeanUtils.copyProperties(userConfig.getMapperXmlStrategy(), strategy);
         BeanUtils.copyProperties(userConfig.getServiceImplStrategy(), strategy);

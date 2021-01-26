@@ -18,6 +18,11 @@ public class EntityStrategy {
     private List<String> superEntityColumns;
 
     /**
+     * 需要自动填充的字段，格式为 字段名:填充时机 例如：col:update
+     */
+    private List<String> tableFills;
+
+    /**
      * 实体是否生成 serialVersionUID
      */
     private boolean entitySerialVersionUID = true;
