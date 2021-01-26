@@ -1,6 +1,7 @@
 package com.github.davidfantasy.mybatisplus.generatorui;
 
 import com.github.davidfantasy.mybatisplus.generatorui.common.ServiceException;
+import com.github.davidfantasy.mybatisplus.generatorui.util.OSUtil;
 import com.github.davidfantasy.mybatisplus.generatorui.util.PathUtil;
 import com.google.common.base.Strings;
 import lombok.Getter;
@@ -50,6 +51,10 @@ public class ProjectPathResolver {
             rootPath = temp.toString();
         } else {
             rootPath = getUTF8String(System.getProperty("user.dir")) + File.separator;
+        }
+        //linux环境下识别项目根目录缺少“/”的问题
+        if (!OSUtil.isWindows() && !rootPath.startsWith("/")) {
+            rootPath = "/" + rootPath;
         }
         refreshBaseProjectPath(rootPath);
     }
