@@ -41,6 +41,7 @@ public class ApplicationConfigure {
         dataSourceConfig.setUsername(config.getUserName());
         dataSourceConfig.setPassword(config.getPassword());
         dataSourceConfig.setSchemaName(config.getSchemaName());
+        dataSourceConfig.setTypeConvert(config.getTypeConvert());
         return dataSourceConfig;
     }
 
