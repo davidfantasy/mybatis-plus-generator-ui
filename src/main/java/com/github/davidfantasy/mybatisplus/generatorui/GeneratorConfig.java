@@ -1,5 +1,6 @@
 package com.github.davidfantasy.mybatisplus.generatorui;
 
+import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.NameConverter;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.TemplateVaribleInjecter;
@@ -70,6 +71,11 @@ public class GeneratorConfig {
      * 自定义名称转换规则
      */
     private NameConverter nameConverter;
+
+    /**
+     * 自定义数据字段类型和实体类型映射
+     */
+    private ITypeConvert typeConvert;
 
     public NameConverter getAvailableNameConverter() {
         if (nameConverter == null) {
