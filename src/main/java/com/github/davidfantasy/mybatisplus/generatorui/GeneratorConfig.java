@@ -1,5 +1,6 @@
 package com.github.davidfantasy.mybatisplus.generatorui;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.NameConverter;
@@ -76,6 +77,11 @@ public class GeneratorConfig {
      * 自定义数据字段类型和实体类型映射
      */
     private ITypeConvert typeConvert;
+
+    /**
+     * 全局指定数据表中ID的生成模式，影响自动生成的Entity中ID字段的注解
+     */
+    private IdType idType;
 
     public NameConverter getAvailableNameConverter() {
         if (nameConverter == null) {

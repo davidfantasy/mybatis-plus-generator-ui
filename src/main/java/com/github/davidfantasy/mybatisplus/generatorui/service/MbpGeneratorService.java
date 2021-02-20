@@ -81,6 +81,7 @@ public class MbpGeneratorService {
         BeanUtils.copyProperties(userConfig.getEntityStrategy(), mpg.getGlobalConfig());
         mpg.getGlobalConfig().setAuthor(genSetting.getAuthor());
         mpg.getGlobalConfig().setFileOverride(genSetting.isOverride());
+        mpg.getGlobalConfig().setIdType(generatorConfig.getIdType());
         StrategyConfig strategy = getCurrentStrategy(userConfig);
         NameConverter nameConverter = generatorConfig.getAvailableNameConverter();
         strategy.setNameConvert(new INameConvert() {
