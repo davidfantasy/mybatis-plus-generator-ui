@@ -83,5 +83,36 @@ public class OutputFileInfoController {
         return ResultGenerator.genSuccessResult();
     }
 
+    /**
+     * 查看当前项目是否存在配置文件
+     *
+     * @return
+     */
+    @GetMapping("/check-if-new-project")
+    public Result checkIfNewProject() {
+        return ResultGenerator.genSuccessResult(!userConfigStore.checkUserConfigExisted());
+    }
+
+    /**
+     * 获取本机所有已保存配置的项目列表
+     *
+     * @return
+     */
+    @GetMapping("/all-saved-project")
+    public Result getAllSavedProject() {
+        return ResultGenerator.genSuccessResult(userConfigStore.getAllSavedProject());
+    }
+
+    /**
+     * 为当前项目导入其它项目的配置文件
+     *
+     * @return
+     */
+    @PostMapping("/import-project-config/{sourceProjectPkg}")
+    public Result importProjectConfig(@PathVariable("sourceProjectPkg") String sourceProjectPkg) throws IOException {
+        userConfigStore.importProjectConfig(sourceProjectPkg);
+        return ResultGenerator.genSuccessResult();
+    }
+
 
 }

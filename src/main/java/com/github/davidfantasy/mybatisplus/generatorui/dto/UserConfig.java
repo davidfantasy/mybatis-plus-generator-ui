@@ -3,6 +3,7 @@ package com.github.davidfantasy.mybatisplus.generatorui.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.davidfantasy.mybatisplus.generatorui.strategy.*;
+import com.google.common.base.Strings;
 import lombok.Data;
 
 import java.util.List;
@@ -74,5 +75,35 @@ public class UserConfig {
         }
         return outputFiles.stream().filter((f -> FILE_TYPE_SERVICEIMPL.equals(f.getFileType()))).findFirst().get();
     }
+
+    /**
+     * 从另一个项目配置中合并可修改的配置项
+     *
+     * @param sourceUserConfig
+     * @param sourceProjectConfigPath
+     * @param targetProjectConfigPath
+     */
+    public void merge(UserConfig sourceUserConfig, String sourceProjectConfigPath, String targetProjectConfigPath) {
+        this.controllerStrategy = sourceUserConfig.getControllerStrategy();
+        this.entityStrategy = sourceUserConfig.getEntityStrategy();
+        this.mapperStrategy = sourceUserConfig.getMapperStrategy();
+        this.mapperXmlStrategy = sourceUserConfig.getMapperXmlStrategy();
+        this.serviceStrategy = sourceUserConfig.getServiceStrategy();
+        this.serviceImplStrategy = sourceUserConfig.getServiceImplStrategy();
+        changeTplPath(sourceUserConfig.getControllerInfo(), this.getControllerInfo(), sourceProjectConfigPath, targetProjectConfigPath);
+        changeTplPath(sourceUserConfig.getEntityInfo(), this.getEntityInfo(), sourceProjectConfigPath, targetProjectConfigPath);
+        changeTplPath(sourceUserConfig.getMapperInfo(), this.getMapperInfo(), sourceProjectConfigPath, targetProjectConfigPath);
+        changeTplPath(sourceUserConfig.getMapperXmlInfo(), this.getMapperXmlInfo(), sourceProjectConfigPath, targetProjectConfigPath);
+        changeTplPath(sourceUserConfig.getServiceInfo(), this.getServiceInfo(), sourceProjectConfigPath, targetProjectConfigPath);
+        changeTplPath(sourceUserConfig.getServiceImplInfo(), this.getServiceImplInfo(), sourceProjectConfigPath, targetProjectConfigPath);
+    }
+
+    private void changeTplPath(OutputFileInfo source, OutputFileInfo dist, String sourceProjectConfigPath, String targetProjectConfigPath) {
+        if (source == null || Strings.isNullOrEmpty(source.getTemplatePath())) {
+            return;
+        }
+        dist.setTemplatePath(source.getTemplatePath().replace(sourceProjectConfigPath, targetProjectConfigPath));
+    }
+
 
 }

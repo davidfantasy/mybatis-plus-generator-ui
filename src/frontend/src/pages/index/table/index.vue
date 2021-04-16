@@ -12,6 +12,14 @@
             v-model="searchKey"
           ></el-input>
           <el-button type="primary" @click="openGenSetting">代码生成</el-button>
+          <span style="color: #e6a23c; font-size: 14px" v-if="isNewProject"
+            >当前项目还没保存自定义配置，将使用默认配置。您也可以<a
+              href="#"
+              @click="openImportProjectView"
+              >导入</a
+            >其它项目的配置，或者自定义
+            <router-link to="/config">配置</router-link>
+          </span>
         </div>
         <el-table
           ref="tableList"
@@ -90,6 +98,30 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <el-dialog
+      :visible.sync="showSavedProjectsDialog"
+      title="项目配置导入"
+      width="50%"
+      top="5vh"
+    >
+      <el-table :data="savedProjects" height="300px">
+        <el-table-column label="项目包路径">
+          <template slot-scope="scope">
+            {{ scope.row }}
+          </template>
+        </el-table-column>
+        <el-table-column label="导入">
+          <template slot-scope="scope">
+            <el-button
+              type="info"
+              size="mini"
+              @click="importProjectConfig(scope.row)"
+              >导入</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -118,6 +150,9 @@ export default {
       },
       userConfig: {},
       outputFileInfos: [],
+      isNewProject: false,
+      showSavedProjectsDialog: false,
+      savedProjects: [],
     };
   },
   computed: {
@@ -148,6 +183,9 @@ export default {
   mounted: function () {
     this.getAllTables();
     this.getUserConfig();
+    axios.get("/api/output-file-info/check-if-new-project").then((res) => {
+      this.isNewProject = res;
+    });
   },
   methods: {
     handleTableSelection(val) {
@@ -219,6 +257,29 @@ export default {
             aLoading.close();
           });
       });
+    },
+    openImportProjectView() {
+      this.showSavedProjectsDialog = true;
+      axios.get("/api/output-file-info/all-saved-project").then((res) => {
+        this.savedProjects = res;
+      });
+    },
+    importProjectConfig(sourceProjectPkg) {
+      this.$confirm("确定导入" + sourceProjectPkg + "的配置吗？")
+        .then(() => {
+          axios
+            .post(
+              "/api/output-file-info/import-project-config/" + sourceProjectPkg
+            )
+            .then(() => {
+              this.$message.success("配置已导入");
+              this.showSavedProjectsDialog = false;
+              setTimeout(() => {
+                window.location.reload();
+              }, 2);
+            });
+        })
+        .catch(() => {});
     },
   },
 };

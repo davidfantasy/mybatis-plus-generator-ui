@@ -7,6 +7,8 @@ import com.github.davidfantasy.mybatisplus.generatorui.common.ServiceException;
 import com.github.davidfantasy.mybatisplus.generatorui.dto.UserConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.util.JsonUtil;
 import com.github.davidfantasy.mybatisplus.generatorui.util.PathUtil;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.*;
 
@@ -63,8 +67,7 @@ public class UserConfigStore {
         try {
             return JsonUtil.json2obj(userConfigStr, UserConfig.class);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("读取用户配置文件发生错误：{}", e.getMessage());
+            log.error("读取用户配置文件发生错误：", e);
             return null;
         }
     }
@@ -96,6 +99,54 @@ public class UserConfigStore {
             throw new ServiceException("上传模板文件失败", e);
         }
         return RESOURCE_PREFIX_FILE + savePath;
+    }
+
+    public boolean checkUserConfigExisted() {
+        if (!FileUtil.exist(this.storeDir)) {
+            return false;
+        }
+        return true;
+    }
+
+    public void importProjectConfig(String sourcePkg) throws IOException {
+        String configHomePath = PathUtil.joinPath(System.getProperty("user.home"), CONFIG_HOME);
+        if (!FileUtil.exist(configHomePath)) {
+            throw new ServiceException("配置主目录不存在：" + configHomePath);
+        }
+        File[] files = FileUtil.ls(configHomePath);
+        boolean flag = false;
+        for (File file : files) {
+            if (file.isDirectory() && file.getName().equals(sourcePkg)) {
+                File projectConfigDir = new File(this.storeDir);
+                FileUtil.copyContent(file, projectConfigDir, true);
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            throw new ServiceException("未找到待导入的源项目配置");
+        }
+        String sourceProjectConfigPath = PathUtil.joinPath(System.getProperty("user.home"), CONFIG_HOME, sourcePkg);
+        String targetProjectConfigPath = this.storeDir;
+        UserConfig currentUserConfig = new UserConfig();
+        currentUserConfig.setOutputFiles(outputFileInfoService.getBuiltInFileInfo());
+        currentUserConfig.merge(this.getUserConfigFromFile(), sourceProjectConfigPath, targetProjectConfigPath);
+        this.saveUserConfig(currentUserConfig);
+    }
+
+    public List<String> getAllSavedProject() {
+        String configHomePath = PathUtil.joinPath(System.getProperty("user.home"), CONFIG_HOME);
+        if (!FileUtil.exist(configHomePath)) {
+            return Collections.emptyList();
+        }
+        List<String> projects = Lists.newArrayList();
+        File[] files = FileUtil.ls(configHomePath);
+        for (File file : files) {
+            if (file.isDirectory()) {
+                projects.add(file.getName());
+            }
+        }
+        return projects;
     }
 
 }

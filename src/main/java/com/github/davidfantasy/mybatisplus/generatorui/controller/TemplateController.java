@@ -54,7 +54,11 @@ public class TemplateController {
                     InputStream tplIn = templateService.getBuiltInTemplate(fileType);
                     download(res, tplIn);
                 } else {
-                    File tplFile = new File(fileInfo.getTemplatePath());
+                    String tplPath = fileInfo.getTemplatePath();
+                    if (tplPath.startsWith("file:")) {
+                        tplPath = tplPath.replaceFirst("file:", "");
+                    }
+                    File tplFile = new File(tplPath);
                     if (tplFile.exists()) {
                         download(res, new FileInputStream(tplFile));
                     } else {
