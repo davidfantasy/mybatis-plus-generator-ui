@@ -7,7 +7,7 @@
       <el-input v-model="superEntityColumn" style="width: 200px"></el-input>
       <el-button @click="addNewColumn">新增字段</el-button>
       <help-tip
-        content="公共字段默认是从超类中继承的，即使表里面存在相关字段也不会生成到Entity中"
+        content="公共字段默认是从超类中继承的，即使表里面存在相关字段也不会生成到Entity中（注意，要配置数据库原始字段名，不是超类中的属性名！！）"
       ></help-tip>
       <div style="margin-top: 5px">
         <el-tag
