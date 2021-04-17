@@ -10,7 +10,7 @@
  <dependency>
     <groupId>com.github.davidfantasy</groupId>
     <artifactId>mybatis-plus-generator-ui</artifactId>
-    <version>1.4.4</version>
+    <version>1.4.5</version>
     <scope>test</scope>
  </dependency>
 ```
