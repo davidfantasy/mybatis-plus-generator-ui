@@ -161,8 +161,11 @@ public class MbpGeneratorService {
             }
             strategy.setTableFillList(tableFills);
         }
+        if (entityStrategy.getSuperEntityColumns() != null && !entityStrategy.getSuperEntityColumns().isEmpty()) {
+            strategy.setSuperEntityColumns(entityStrategy.getSuperEntityColumns().toArray(new String[]{}));
+        }
         BeanUtils.copyProperties(userConfig.getControllerStrategy(), strategy);
-        BeanUtils.copyProperties(entityStrategy, strategy, "superEntityClass", "tableFills");
+        BeanUtils.copyProperties(entityStrategy, strategy, "superEntityClass", "tableFills", "superEntityColumns");
         BeanUtils.copyProperties(userConfig.getMapperStrategy(), strategy);
         BeanUtils.copyProperties(userConfig.getMapperXmlStrategy(), strategy);
         BeanUtils.copyProperties(userConfig.getServiceImplStrategy(), strategy);
