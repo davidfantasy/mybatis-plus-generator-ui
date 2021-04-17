@@ -131,6 +131,13 @@ public class MbpGeneratorService {
                 focList.add(new FileOutConfig(outputFileInfo.getAvailableTemplatePath()) {
                     @Override
                     public String outputFile(TableInfo tableInfo) {
+                        //避免使用了NameConverter导致entityTableFieldAnnotationEnable属性失效的问题，在此强制进行设置
+                        if (userConfig.getEntityStrategy().isEntityTableFieldAnnotationEnable()) {
+                            tableInfo.getFields().forEach(field -> {
+                                field.setConvert(true);
+                            });
+                            tableInfo.getImportPackages().add("com.baomidou.mybatisplus.annotation.TableField");
+                        }
                         return filePath;
                     }
                 });
