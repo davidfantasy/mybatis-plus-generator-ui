@@ -155,7 +155,7 @@ export default {
     },
     getAllTables() {
       axios.get("/api/db/tables").then((res) => {
-        this.tables = res;
+        this.tables = res.data;
       });
     },
     getUserConfig() {
