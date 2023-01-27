@@ -24,9 +24,9 @@ public class ProjectPathResolver {
 
     private String baseProjectPath;
 
-    private String basePackage;
+    private final String basePackage;
 
-    private Pattern packagePattern = Pattern.compile("[a-zA-Z]+[0-9a-zA-Z_]*(\\.[a-zA-Z]+[0-9a-zA-Z_]*)*");
+    private final Pattern packagePattern = Pattern.compile("[a-zA-Z]+[0-9a-zA-Z_]*(\\.[a-zA-Z]+[0-9a-zA-Z_]*)*");
 
     public ProjectPathResolver(String basePackage) {
         this.basePackage = basePackage;
@@ -87,20 +87,19 @@ public class ProjectPathResolver {
             isResourceFile = true;
         } else if (packageName.startsWith(PACKAGE_JAVA_PREFIX)) {
             packageName = packageName.replaceFirst(PACKAGE_JAVA_PREFIX, "");
-            isResourceFile = false;
         }
         if (!packagePattern.matcher(packageName).matches()) {
             throw new ServiceException("不是合法的包名：" + packageName);
         }
         String[] folders = packageName.split("\\.");
-        String path = sourcePath;
+        StringBuilder path = new StringBuilder(sourcePath);
         if (isResourceFile) {
-            path = resourcePath;
+            path = new StringBuilder(resourcePath);
         }
         for (String folder : folders) {
-            path = path + File.separator + folder;
+            path.append(File.separator).append(folder);
         }
-        return path;
+        return path.toString();
     }
 
     public String convertPathToPackage(String path) {

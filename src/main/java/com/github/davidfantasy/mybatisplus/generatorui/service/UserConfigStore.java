@@ -3,11 +3,13 @@ package com.github.davidfantasy.mybatisplus.generatorui.service;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import com.github.davidfantasy.mybatisplus.generatorui.GeneratorConfig;
+import com.github.davidfantasy.mybatisplus.generatorui.ProjectPathResolver;
 import com.github.davidfantasy.mybatisplus.generatorui.common.ServiceException;
+import com.github.davidfantasy.mybatisplus.generatorui.dto.OutputFileInfo;
 import com.github.davidfantasy.mybatisplus.generatorui.dto.UserConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.util.JsonUtil;
 import com.github.davidfantasy.mybatisplus.generatorui.util.PathUtil;
-import com.google.common.base.Strings;
+import com.github.davidfantasy.mybatisplus.generatorui.util.TemplateUtil;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +37,7 @@ public class UserConfigStore {
     private String userConfigPath;
 
     @Autowired
-    private OutputFileInfoService outputFileInfoService;
+    private ProjectPathResolver pathResolver;
 
     @Autowired
     private GeneratorConfig generatorConfig;
@@ -54,7 +56,7 @@ public class UserConfigStore {
         UserConfig userConfig = getUserConfigFromFile();
         if (userConfig == null) {
             userConfig = new UserConfig();
-            userConfig.setOutputFiles(outputFileInfoService.getBuiltInFileInfo());
+            userConfig.setOutputFiles(getBuiltInFileInfo());
         }
         return userConfig;
     }
@@ -88,6 +90,7 @@ public class UserConfigStore {
 
     public String uploadTemplate(MultipartFile file) {
         String fileName = file.getOriginalFilename();
+        assert fileName != null;
         String fileSuffix = fileName.substring(file.getOriginalFilename().lastIndexOf(".") + 1);
         String saveFileName = fileName.substring(0, fileName.lastIndexOf(fileSuffix)) + DateUtil.format(new Date(), "yyyyMMddHHmmss");
         String savePath = PathUtil.joinPath(getTemplateStoreDir(), saveFileName);
@@ -129,7 +132,7 @@ public class UserConfigStore {
         String sourceProjectConfigPath = PathUtil.joinPath(System.getProperty("user.home"), CONFIG_HOME, sourcePkg);
         String targetProjectConfigPath = this.storeDir;
         UserConfig currentUserConfig = new UserConfig();
-        currentUserConfig.setOutputFiles(outputFileInfoService.getBuiltInFileInfo());
+        currentUserConfig.setOutputFiles(getBuiltInFileInfo());
         currentUserConfig.merge(this.getUserConfigFromFile(), sourceProjectConfigPath, targetProjectConfigPath);
         this.saveUserConfig(currentUserConfig);
     }
@@ -147,6 +150,56 @@ public class UserConfigStore {
             }
         }
         return projects;
+    }
+
+    /**
+     * 默认的内置输出文件的信息
+     */
+    private List<OutputFileInfo> getBuiltInFileInfo() {
+        List<OutputFileInfo> builtInFiles = Lists.newArrayList();
+        //Entity
+        OutputFileInfo entityFile = new OutputFileInfo();
+        entityFile.setBuiltIn(true);
+        entityFile.setFileType(FILE_TYPE_ENTITY);
+        entityFile.setOutputLocation(pathResolver.resolveEntityPackage());
+        entityFile.setTemplateName(TemplateUtil.fileType2TemplateName(entityFile.getFileType()));
+        builtInFiles.add(entityFile);
+        //Mapper xml
+        OutputFileInfo mapperXmlFile = new OutputFileInfo();
+        mapperXmlFile.setBuiltIn(true);
+        mapperXmlFile.setFileType(FILE_TYPE_MAPPER_XML);
+        mapperXmlFile.setOutputLocation(pathResolver.resolveMapperXmlPackage());
+        mapperXmlFile.setTemplateName(TemplateUtil.fileType2TemplateName(mapperXmlFile.getFileType()));
+        builtInFiles.add(mapperXmlFile);
+        //Mapper
+        OutputFileInfo mapperFile = new OutputFileInfo();
+        mapperFile.setBuiltIn(true);
+        mapperFile.setFileType(FILE_TYPE_MAPPER);
+        mapperFile.setOutputLocation(pathResolver.resolveMapperPackage());
+        mapperFile.setTemplateName(TemplateUtil.fileType2TemplateName(mapperFile.getFileType()));
+        builtInFiles.add(mapperFile);
+        //Service
+        OutputFileInfo serviceFile = new OutputFileInfo();
+        serviceFile.setBuiltIn(true);
+        serviceFile.setFileType(FILE_TYPE_SERVICE);
+        serviceFile.setOutputLocation(pathResolver.resolveServicePackage());
+        serviceFile.setTemplateName(TemplateUtil.fileType2TemplateName(serviceFile.getFileType()));
+        builtInFiles.add(serviceFile);
+        //Service Impl
+        OutputFileInfo serviceImplFile = new OutputFileInfo();
+        serviceImplFile.setBuiltIn(true);
+        serviceImplFile.setFileType(FILE_TYPE_SERVICEIMPL);
+        serviceImplFile.setOutputLocation(pathResolver.resolveServiceImplPackage());
+        serviceImplFile.setTemplateName(TemplateUtil.fileType2TemplateName(serviceImplFile.getFileType()));
+        builtInFiles.add(serviceImplFile);
+        //Controller
+        OutputFileInfo controllerFile = new OutputFileInfo();
+        controllerFile.setBuiltIn(true);
+        controllerFile.setFileType(FILE_TYPE_CONTROLLER);
+        controllerFile.setOutputLocation(pathResolver.resolveControllerPackage());
+        controllerFile.setTemplateName(TemplateUtil.fileType2TemplateName(controllerFile.getFileType()));
+        builtInFiles.add(controllerFile);
+        return builtInFiles;
     }
 
 }

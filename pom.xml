@@ -35,7 +35,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <spring-boot.version>2.2.6.RELEASE</spring-boot.version>
+        <spring-boot.version>2.7.8</spring-boot.version>
     </properties>
 
     <dependencyManagement>
@@ -63,7 +63,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.1.0</version>
+            <version>5.8.11</version>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -73,18 +73,13 @@
         <dependency>
             <groupId>com.ibeetl</groupId>
             <artifactId>beetl</artifactId>
-            <version>3.0.16.RELEASE</version>
+            <version>3.13.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.16</version>
+            <version>1.18.24</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>[30.0-jre,)</version>
         </dependency>
         <dependency>
             <groupId>org.dom4j</groupId>
@@ -95,17 +90,17 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>1.1.22</version>
+            <version>1.2.15</version>
         </dependency>
         <dependency>
             <groupId>com.github.jsqlparser</groupId>
             <artifactId>jsqlparser</artifactId>
-            <version>3.2</version>
+            <version>4.5</version>
         </dependency>
         <dependency>
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-symbol-solver-core</artifactId>
-            <version>3.16.1</version>
+            <version>3.24.10</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -115,7 +110,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.19</version>
+            <version>8.0.30</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

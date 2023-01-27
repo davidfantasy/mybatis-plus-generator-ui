@@ -6,7 +6,7 @@ public class TestApplication {
 
 
     public static void main(String[] args) {
-        GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://localhost:3306/testdb")
+        GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://localhost:3306/autoapi")
                 .userName("root")
                 .password("root")
                 .port(8068)

@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.sql.DataSource;
-
 @Configuration
 public class ApplicationConfigure {
 
@@ -20,18 +18,6 @@ public class ApplicationConfigure {
         return new ProjectPathResolver(config.getBasePackage());
     }
 
-    @Bean
-    public DataSource dataSource(GeneratorConfig config) {
-        if (StrUtil.isBlank(config.getJdbcUrl())) {
-            throw new IllegalArgumentException("必须指定jdbcUrl用于创建数据源");
-        }
-        HikariDataSource ds = new HikariDataSource();
-        ds.setJdbcUrl(config.getJdbcUrl());
-        ds.setUsername(config.getUserName());
-        ds.setPassword(config.getPassword());
-        ds.setDriverClassName(config.getDriverClassName());
-        return ds;
-    }
 
     @Bean
     public DataSourceConfig dataSourceConfig(GeneratorConfig config) {
@@ -45,9 +31,20 @@ public class ApplicationConfigure {
         return dataSourceConfig;
     }
 
+    /**
+     * 用于查询数据库元数据
+     */
     @Bean
-    public JdbcTemplate dbcTemplate(DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
+    public JdbcTemplate jdbcTemplate(GeneratorConfig config) {
+        if (StrUtil.isBlank(config.getJdbcUrl())) {
+            throw new IllegalArgumentException("必须指定jdbcUrl用于创建数据源");
+        }
+        HikariDataSource ds = new HikariDataSource();
+        ds.setJdbcUrl(config.getJdbcUrl());
+        ds.setUsername(config.getUserName());
+        ds.setPassword(config.getPassword());
+        ds.setDriverClassName(config.getDriverClassName());
+        return new JdbcTemplate(ds);
     }
 
     @Bean

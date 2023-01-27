@@ -5,13 +5,11 @@ import com.github.davidfantasy.mybatisplus.generatorui.sqlparser.ConditionExpr;
 import com.github.davidfantasy.mybatisplus.generatorui.sqlparser.DynamicParamSqlEnhancer;
 import com.google.common.collect.Lists;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
-@SpringBootTest
 public class TestSqlParser {
 
 

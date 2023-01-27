@@ -6,8 +6,8 @@ import com.github.davidfantasy.mybatisplus.generatorui.common.ServiceException;
 import com.github.davidfantasy.mybatisplus.generatorui.dto.OutputFileInfo;
 import com.github.davidfantasy.mybatisplus.generatorui.dto.UserConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.service.OutputFileInfoService;
-import com.github.davidfantasy.mybatisplus.generatorui.service.TemplateService;
 import com.github.davidfantasy.mybatisplus.generatorui.service.UserConfigStore;
+import com.github.davidfantasy.mybatisplus.generatorui.util.TemplateUtil;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
@@ -28,21 +29,19 @@ public class TemplateController {
     @Autowired
     private UserConfigStore userConfigStore;
 
-    @Autowired
-    private TemplateService templateService;
 
     @Autowired
     private OutputFileInfoService outputFileInfoService;
 
     @GetMapping("/download")
-    public void download(HttpServletResponse res, @RequestParam String fileType) throws UnsupportedEncodingException, FileNotFoundException {
+    public void download(HttpServletResponse res, @RequestParam String fileType) throws IOException {
         if (Strings.isNullOrEmpty(fileType)) {
             log.error("fileType不能为空");
             return;
         }
         UserConfig userConfig = userConfigStore.getUserConfigFromFile();
         if (userConfig == null) {
-            InputStream tplIn = templateService.getBuiltInTemplate(fileType);
+            InputStream tplIn = TemplateUtil.getBuiltInTemplate(fileType);
             download(res, tplIn);
             return;
         }
@@ -51,7 +50,7 @@ public class TemplateController {
             if (fileType.equals(fileInfo.getFileType())) {
                 if (fileInfo.isBuiltIn()
                         && Strings.isNullOrEmpty(fileInfo.getTemplatePath())) {
-                    InputStream tplIn = templateService.getBuiltInTemplate(fileType);
+                    InputStream tplIn = TemplateUtil.getBuiltInTemplate(fileType);
                     download(res, tplIn);
                 } else {
                     String tplPath = fileInfo.getTemplatePath();
@@ -60,7 +59,7 @@ public class TemplateController {
                     }
                     File tplFile = new File(tplPath);
                     if (tplFile.exists()) {
-                        download(res, new FileInputStream(tplFile));
+                        download(res, Files.newInputStream(tplFile.toPath()));
                     } else {
                         throw new ServiceException("未找到模板文件：" + fileInfo.getTemplatePath());
                     }
@@ -93,11 +92,9 @@ public class TemplateController {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if (tplIn != null) {
-                    try {
-                        tplIn.close();
-                    } catch (IOException e) {
-                    }
+                try {
+                    tplIn.close();
+                } catch (IOException ignored) {
                 }
             }
         }
