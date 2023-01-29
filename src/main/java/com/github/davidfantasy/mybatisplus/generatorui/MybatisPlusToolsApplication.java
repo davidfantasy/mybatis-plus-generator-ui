@@ -42,11 +42,10 @@ public class MybatisPlusToolsApplication {
         }
         MybatisPlusToolsApplication.generatorConfig = generatorConfig;
         Map<String, Object> props = Maps.newHashMap();
-        props.put("spring.resources.static-locations", "classpath:/generator-ui/");
         new SpringApplicationBuilder()
                 .properties(props)
                 .sources(MybatisPlusToolsApplication.class)
-                .run(new String[0]);
+                .run();
     }
 
     @Bean

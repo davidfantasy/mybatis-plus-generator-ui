@@ -221,11 +221,17 @@ public class MbpGenerator {
         if (entityStrategy.isActiveRecord()) {
             entityBuilder.enableActiveRecord();
         }
-        entityBuilder.versionColumnName(entityStrategy.getVersionFieldName());
-        entityBuilder.versionPropertyName(entityStrategy.getVersionFieldName());
-        entityBuilder.logicDeleteColumnName(entityStrategy.getLogicDeleteFieldName());
-        entityBuilder.logicDeletePropertyName(entityStrategy.getLogicDeleteFieldName());
-        entityBuilder.addSuperEntityColumns(entityStrategy.getSuperEntityColumns());
+        if (!StrUtil.isEmpty(entityStrategy.getVersionFieldName())) {
+            entityBuilder.versionColumnName(entityStrategy.getVersionFieldName());
+            entityBuilder.versionPropertyName(entityStrategy.getVersionFieldName());
+        }
+        if (!StrUtil.isEmpty(entityStrategy.getLogicDeleteFieldName())) {
+            entityBuilder.logicDeleteColumnName(entityStrategy.getLogicDeleteFieldName());
+            entityBuilder.logicDeletePropertyName(entityStrategy.getLogicDeleteFieldName());
+        }
+        if (entityStrategy.getSuperEntityColumns() != null) {
+            entityBuilder.addSuperEntityColumns(entityStrategy.getSuperEntityColumns());
+        }
         if (entityStrategy.getTableFills() != null
                 && !entityStrategy.getTableFills().isEmpty()) {
             List<IFill> tableFills = new ArrayList<>();
