@@ -19,6 +19,7 @@ import com.github.davidfantasy.mybatisplus.generatorui.dto.OutputFileInfo;
 import com.github.davidfantasy.mybatisplus.generatorui.dto.UserConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.service.UserConfigStore;
 import com.github.davidfantasy.mybatisplus.generatorui.strategy.*;
+import com.github.davidfantasy.mybatisplus.generatorui.util.PathUtil;
 import com.google.common.collect.Maps;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,13 +78,13 @@ public class MbpGenerator {
                 }).templateConfig(builder -> {
                     configTemplate(builder, genSetting.getChoosedOutputFiles(), userConfig);
                 }).injectionConfig(builder -> {
-                    configInjection(builder, genSetting.getChoosedControllerMethods(), userConfig, genSetting.isOverride());
+                    configInjection(builder, userConfig, genSetting);
                 }).strategyConfig(builder -> {
                     builder.addInclude(String.join(",", tables))
                             .disableSqlFilter()
                             .enableSkipView();
                     configEntity(builder.entityBuilder(), userConfig.getEntityStrategy(), genSetting.isOverride());
-                    configMapper(builder.mapperBuilder(), userConfig.getMapperStrategy(), userConfig.getMapperXmlStrategy());
+                    configMapper(builder.mapperBuilder(), userConfig.getMapperStrategy(), userConfig.getMapperXmlStrategy(), genSetting.isOverride());
                     configService(builder.serviceBuilder(), userConfig.getServiceStrategy(), userConfig.getServiceImplStrategy());
                     configController(builder.controllerBuilder(), userConfig.getControllerStrategy());
                 }).execute();
@@ -91,18 +92,33 @@ public class MbpGenerator {
 
     private void configPackage(PackageConfig.Builder builder, String moduleName, UserConfig userConfig) {
         String mapperXmlOutputPath = getOutputPathByFileType(Constant.FILE_TYPE_MAPPER_XML, userConfig);
+        if (!StrUtil.isEmpty(moduleName)) {
+            mapperXmlOutputPath = mapperXmlOutputPath + File.separator + moduleName;
+        }
+        //这里的模块名处理方式和原版的MPG不同，是将模块名放在包名最后
+        String entityPkg = PathUtil.joinPackage(userConfig.getEntityInfo().getOutputPackage(), moduleName);
+        String mapperPkg = PathUtil.joinPackage(userConfig.getMapperInfo().getOutputPackage(), moduleName);
+        String servicePkg = PathUtil.joinPackage(userConfig.getServiceInfo().getOutputPackage(), moduleName);
+        String serviceImplPkg = PathUtil.joinPackage(userConfig.getServiceImplInfo().getOutputPackage(), moduleName);
+        String controllerPkg = PathUtil.joinPackage(userConfig.getControllerInfo().getOutputPackage(), moduleName);
         //子包名已经包含了完整路径
         builder.parent("")
-                .moduleName(moduleName)
-                .entity(userConfig.getEntityInfo().getOutputPackage())
-                .controller(userConfig.getControllerInfo().getOutputPackage())
-                .mapper(userConfig.getMapperInfo().getOutputPackage())
-                .service(userConfig.getServiceInfo().getOutputPackage())
-                .serviceImpl(userConfig.getServiceImplInfo().getOutputPackage())
+                .moduleName("")
+                .entity(entityPkg)
+                .controller(controllerPkg)
+                .mapper(mapperPkg)
+                .service(servicePkg)
+                .serviceImpl(serviceImplPkg)
                 .pathInfo(Collections.singletonMap(OutputFile.xml, mapperXmlOutputPath));
     }
 
     private void configTemplate(TemplateConfig.Builder builder, List<String> choosedFileTypes, UserConfig userConfig) {
+        builder.entity(findTemplatePath(Constant.FILE_TYPE_ENTITY, userConfig));
+        builder.mapper(findTemplatePath(Constant.FILE_TYPE_MAPPER, userConfig));
+        builder.xml(findTemplatePath(Constant.FILE_TYPE_MAPPER_XML, userConfig));
+        builder.service(findTemplatePath(Constant.FILE_TYPE_SERVICE, userConfig));
+        builder.serviceImpl(findTemplatePath(Constant.FILE_TYPE_SERVICEIMPL, userConfig));
+        builder.controller(findTemplatePath(Constant.FILE_TYPE_CONTROLLER, userConfig));
         if (!choosedFileTypes.contains(Constant.FILE_TYPE_ENTITY)) {
             builder.disable(TemplateType.ENTITY);
         }
@@ -121,15 +137,9 @@ public class MbpGenerator {
         if (!choosedFileTypes.contains(Constant.FILE_TYPE_CONTROLLER)) {
             builder.disable(TemplateType.CONTROLLER);
         }
-        builder.entity(findTemplatePath(Constant.FILE_TYPE_ENTITY, userConfig));
-        builder.mapper(findTemplatePath(Constant.FILE_TYPE_MAPPER, userConfig));
-        builder.xml(findTemplatePath(Constant.FILE_TYPE_MAPPER_XML, userConfig));
-        builder.service(findTemplatePath(Constant.FILE_TYPE_SERVICE, userConfig));
-        builder.serviceImpl(findTemplatePath(Constant.FILE_TYPE_SERVICEIMPL, userConfig));
-        builder.controller(findTemplatePath(Constant.FILE_TYPE_CONTROLLER, userConfig));
     }
 
-    private void configInjection(InjectionConfig.Builder builder, List<String> controllerMethods, UserConfig userConfig, boolean fileOverride) {
+    private void configInjection(InjectionConfig.Builder builder, UserConfig userConfig, GenSetting genSetting) {
         //自定义参数
         builder.beforeOutputFile((tableInfo, objectMap) -> {
             TemplateVaribleInjecter varibleInjecter = generatorConfig.getTemplateVaribleInjecter();
@@ -142,7 +152,7 @@ public class MbpGenerator {
             }
             //用于控制controller中对应API是否展示的自定义参数
             Map<String, Object> controllerMethodsVar = Maps.newHashMap();
-            for (String method : controllerMethods) {
+            for (String method : genSetting.getChoosedControllerMethods()) {
                 controllerMethodsVar.put(method, true);
             }
             if (controllerMethodsVar.size() > 0) {
@@ -153,13 +163,14 @@ public class MbpGenerator {
         });
         //自定义文件生成
         for (OutputFileInfo outputFileInfo : userConfig.getOutputFiles()) {
-            if (!outputFileInfo.isBuiltIn()) {
+            if (!outputFileInfo.isBuiltIn()
+                    && genSetting.getChoosedOutputFiles().contains(outputFileInfo.getFileType())) {
                 CustomFile.Builder fileBuilder = new CustomFile.Builder();
                 //注意这里传入的是fileType,配合自定义的TemplateEngine.outputCustomFile生成自定义文件
                 fileBuilder.fileName(outputFileInfo.getFileType());
                 fileBuilder.templatePath(outputFileInfo.getTemplatePath());
                 fileBuilder.packageName(outputFileInfo.getOutputPackage());
-                if (fileOverride) {
+                if (genSetting.isOverride()) {
                     fileBuilder.enableFileOverride();
                 }
                 builder.customFile(fileBuilder.build());
@@ -250,7 +261,7 @@ public class MbpGenerator {
     /**
      * 配置mapper和mapper-xml
      */
-    private void configMapper(Mapper.Builder mapperBuilder, MapperStrategy mapperStrategy, MapperXmlStrategy mapperXmlStrategy) {
+    private void configMapper(Mapper.Builder mapperBuilder, MapperStrategy mapperStrategy, MapperXmlStrategy mapperXmlStrategy, boolean fileOverride) {
         NameConverter nameConverter = generatorConfig.getAvailableNameConverter();
         if (mapperStrategy.getSuperMapperClass() != null) {
             mapperBuilder.superClass(mapperStrategy.getSuperMapperClass());
@@ -262,6 +273,9 @@ public class MbpGenerator {
         }
         mapperBuilder.convertMapperFileName(nameConverter::mapperNameConvert);
         mapperBuilder.convertXmlFileName(nameConverter::mapperXmlNameConvert);
+        if (fileOverride) {
+            mapperBuilder.enableFileOverride();
+        }
     }
 
     /**
