@@ -91,7 +91,8 @@ public class MbpGenerator {
 
     private void configPackage(PackageConfig.Builder builder, String moduleName, UserConfig userConfig) {
         String mapperXmlOutputPath = getOutputPathByFileType(Constant.FILE_TYPE_MAPPER_XML, userConfig);
-        builder.parent(generatorConfig.getBasePackage())
+        //子包名已经包含了完整路径
+        builder.parent("")
                 .moduleName(moduleName)
                 .entity(userConfig.getEntityInfo().getOutputPackage())
                 .controller(userConfig.getControllerInfo().getOutputPackage())
