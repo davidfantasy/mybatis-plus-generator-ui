@@ -311,7 +311,7 @@ public class MbpGenerator {
     }
 
     private String findTemplatePath(String fileType, UserConfig userConfig) {
-        return Objects.requireNonNull(findFileConfigByType(fileType, userConfig)).getTemplatePath();
+        return Objects.requireNonNull(findFileConfigByType(fileType, userConfig)).getAvailableTemplatePath();
     }
 
 }

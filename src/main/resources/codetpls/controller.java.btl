@@ -7,10 +7,10 @@ import org.springframework.stereotype.Controller;
 <% if(isNotEmpty(superControllerClassPackage)){ %>
 import ${superControllerClassPackage};
 <% } %>
-<% if(isNotEmpty(cfg.controllerMethods.list)){  %>
+<% if(isNotEmpty(controllerMethods.list)){  %>
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 <% } %>
-<% if(isNotEmpty(cfg.controllerMethods.hasMethod)){  %>
+<% if(isNotEmpty(controllerMethods.hasMethod)){  %>
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ${package.Service}.${table.serviceName};
@@ -45,12 +45,12 @@ public class ${table.controllerName} {
        var serviceInstanceName = @cn.hutool.core.util.StrUtil.lowerFirst(table.serviceName);
     %>
 
-    <% if(isNotEmpty(cfg.controllerMethods.hasMethod)){  %>
+    <% if(isNotEmpty(controllerMethods.hasMethod)){  %>
     @Autowired
     private ${table.serviceName} ${serviceInstanceName};
     <% } %>
 
-    <% if(isNotEmpty(cfg.controllerMethods.list)){  %>
+    <% if(isNotEmpty(controllerMethods.list)){  %>
     @GetMapping(value = "/")
     public ResponseEntity<Page<${table.entityName}>> list(@RequestParam(required = false) Integer current, @RequestParam(required = false) Integer pageSize) {
         if (current == null) {
@@ -64,14 +64,14 @@ public class ${table.controllerName} {
     }
     <% } %>
 
-    <% if(isNotEmpty(cfg.controllerMethods.getById)){ %>
+    <% if(isNotEmpty(controllerMethods.getById)){ %>
     @GetMapping(value = "/{id}")
     public ResponseEntity<${table.entityName}> getById(@PathVariable("id") String id) {
         return new ResponseEntity<>(${serviceInstanceName}.getById(id), HttpStatus.OK);
     }
     <% } %>
 
-    <% if(isNotEmpty(cfg.controllerMethods.create)){ %>
+    <% if(isNotEmpty(controllerMethods.create)){ %>
     @PostMapping(value = "/create")
     public ResponseEntity<Object> create(@RequestBody ${table.entityName} params) {
         ${serviceInstanceName}.save(params);
@@ -79,7 +79,7 @@ public class ${table.controllerName} {
     }
     <% } %>
 
-    <% if(isNotEmpty(cfg.controllerMethods.delete)){ %>
+    <% if(isNotEmpty(controllerMethods.delete)){ %>
     @PostMapping(value = "/delete/{id}")
     public ResponseEntity<Object> delete(@PathVariable("id") String id) {
         ${serviceInstanceName}.removeById(id);
@@ -87,7 +87,7 @@ public class ${table.controllerName} {
     }
     <% } %>
 
-    <% if(isNotEmpty(cfg.controllerMethods.update)){ %>
+    <% if(isNotEmpty(controllerMethods.update)){ %>
     @PostMapping(value = "/update")
     public ResponseEntity<Object> delete(@RequestBody ${table.entityName} params) {
         ${serviceInstanceName}.updateById(params);
