@@ -16,10 +16,10 @@ import java.util.regex.Pattern;
 @Slf4j
 public class DynamicParamSqlEnhancer {
 
-    private DataSourceConfig dataSourceConfig;
+    private DbType dbType;
 
-    public DynamicParamSqlEnhancer(DataSourceConfig dataSourceConfig) {
-        this.dataSourceConfig = dataSourceConfig;
+    public DynamicParamSqlEnhancer(DbType dbType) {
+        this.dbType = dbType;
     }
 
     /**
@@ -123,13 +123,13 @@ public class DynamicParamSqlEnhancer {
     }
 
     private String getLikeConcatSql(String colExpr) {
-        if (DbType.MYSQL == dataSourceConfig.getDbType()) {
+        if (DbType.MYSQL == dbType) {
             return "concat('%'," + colExpr + ",'%')";
-        } else if (DbType.POSTGRE_SQL == dataSourceConfig.getDbType()) {
+        } else if (DbType.POSTGRE_SQL == dbType) {
             return "concat('%'," + colExpr + ",'%')";
-        } else if (DbType.ORACLE == dataSourceConfig.getDbType()) {
+        } else if (DbType.ORACLE == dbType) {
             return "'%' || " + colExpr + " ||'%'";
-        } else if (DbType.SQL_SERVER == dataSourceConfig.getDbType()) {
+        } else if (DbType.SQL_SERVER == dbType) {
             return "concat('%'," + colExpr + ",'%')";
         }
         return "concat('%'," + colExpr + ",'%')";

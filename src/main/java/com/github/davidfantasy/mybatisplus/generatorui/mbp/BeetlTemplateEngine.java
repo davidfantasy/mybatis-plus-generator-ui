@@ -1,6 +1,12 @@
 package com.github.davidfantasy.mybatisplus.generatorui.mbp;
 
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.generator.config.OutputFile;
+import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
+import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
+import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
+import lombok.extern.slf4j.Slf4j;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
@@ -9,9 +15,12 @@ import org.beetl.core.resource.CompositeResourceLoader;
 import org.beetl.core.resource.FileResourceLoader;
 import org.beetl.core.resource.StartsWithMatcher;
 
+import javax.annotation.Nonnull;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.RESOURCE_PREFIX_CLASSPATH;
@@ -20,16 +29,20 @@ import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.RESOU
 /**
  * 对原模板引擎进行改造，使其支持file和classpath两类加载模式
  */
+@Slf4j
 public class BeetlTemplateEngine extends AbstractTemplateEngine {
 
     private GroupTemplate groupTemplate;
 
-    private String templateStoreDir;
+    private final String templateStoreDir;
 
-    public BeetlTemplateEngine(String templateStoreDir) {
+    private final NameConverter nameConverter;
+
+    public BeetlTemplateEngine(NameConverter nameConverter, String templateStoreDir) {
         this.templateStoreDir = templateStoreDir;
+        this.nameConverter = nameConverter;
         try {
-            logger.info("模板根目录为：" + templateStoreDir);
+            log.info("模板根目录为：" + templateStoreDir);
             ClasspathResourceLoader classpathResourceLoader = new ClasspathResourceLoader(this.getClass().getClassLoader());
             FileResourceLoader fileResourceLoader = new FileResourceLoader(templateStoreDir);
             CompositeResourceLoader loader = new CompositeResourceLoader();
@@ -38,26 +51,34 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
             Configuration cfg = Configuration.defaultConfiguration();
             groupTemplate = new GroupTemplate(loader, cfg);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 
     @Override
-    public void writer(Map<String, Object> objectMap, String templatePath, String outputFile) throws Exception {
+    public void writer(@Nonnull Map<String, Object> objectMap, String templatePath, @Nonnull File outputFile) throws Exception {
         if (templatePath.startsWith(RESOURCE_PREFIX_FILE)) {
             templatePath = templatePath.replace(templateStoreDir, "");
         }
-        logger.info("templatePath:" + templatePath);
+        log.info("templatePath:" + templatePath);
         Template template = groupTemplate.getTemplate(templatePath);
         try (FileOutputStream fileOutputStream = new FileOutputStream(outputFile)) {
             template.binding(objectMap);
             template.renderTo(fileOutputStream);
         }
-        logger.info("已生成文件:" + outputFile);
+        log.info("已生成文件:" + outputFile.getPath());
     }
 
     @Override
-    public String templateFilePath(String filePath) {
+    @Nonnull
+    public AbstractTemplateEngine init(@Nonnull ConfigBuilder configBuilder) {
+        return this;
+    }
+
+
+    @Override
+    @Nonnull
+    public String templateFilePath(@Nonnull String filePath) {
         return filePath;
     }
 
@@ -74,6 +95,21 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
             e.printStackTrace();
             return "";
         }
+    }
+
+    @Override
+    protected void outputCustomFile(List<CustomFile> customFiles, TableInfo tableInfo, @Nonnull Map<String, Object> objectMap) {
+        String entityName = tableInfo.getEntityName();
+        String parentPath = getPathInfo(OutputFile.parent);
+        customFiles.forEach(file -> {
+            String filePath = StrUtil.isNotBlank(file.getFilePath()) ? file.getFilePath() : parentPath;
+            if (StrUtil.isNotBlank(file.getPackageName())) {
+                filePath = filePath + File.separator + file.getPackageName();
+                filePath = filePath.replaceAll("\\.", "\\" + File.separator);
+            }
+            String fileName = filePath + File.separator + nameConverter.customFileNameConvert(file.getFileName(), entityName);
+            outputFile(new File(fileName), objectMap, file.getTemplatePath(), file.isFileOverride());
+        });
     }
 
 }

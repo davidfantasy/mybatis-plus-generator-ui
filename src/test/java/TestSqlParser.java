@@ -40,9 +40,9 @@ public class TestSqlParser {
 
     @Test
     public void testConditionParse() {
-        DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setDbType(DbType.MYSQL);
-        DynamicParamSqlEnhancer enhancer = new DynamicParamSqlEnhancer(dsc);
+        DataSourceConfig dsc = new DataSourceConfig.Builder("jdbc:mysql://localhost:3306/test", "", "")
+                .build();
+        DynamicParamSqlEnhancer enhancer = new DynamicParamSqlEnhancer(dsc.getDbType());
         String sql = "SELECT \n" +
                 "    *\n" +
                 "FROM\n" +
@@ -68,9 +68,9 @@ public class TestSqlParser {
     @Test
     public void testSqlParser2() {
         String sql = "SELECT * FROM (SELECT pay_time AS actionTime, total_fee AS totalFee, 1 AS isPay, pay_type AS actionType, status FROM t_payment WHERE payer_openid = '#{params.openid}' AND pay_time BETWEEN '#{params.startDate}' AND '#{params.endDate}' UNION ALL SELECT refund_time AS actionTime, refund_fee AS totalFee, 0 AS isPay, refund_type AS actionType, status FROM t_refund WHERE openid = '#{params.openid}' AND create_time BETWEEN '#{params.startDate}' AND '#{params.endDate}' ) t1 order by t1.actionTime desc";
-        DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setDbType(DbType.MYSQL);
-        DynamicParamSqlEnhancer enhancer = new DynamicParamSqlEnhancer(dsc);
+        DataSourceConfig dsc = new DataSourceConfig.Builder("jdbc:mysql://localhost:3306/test", "", "")
+                .build();
+        DynamicParamSqlEnhancer enhancer = new DynamicParamSqlEnhancer(dsc.getDbType());
         List<ConditionExpr> conditions = enhancer.parseSqlDynamicConditions(sql);
         conditions.forEach((condition) -> {
             String dynamicSql = enhancer.toDynamicSql(condition).trim();

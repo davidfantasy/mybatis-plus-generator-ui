@@ -1,7 +1,6 @@
 package com.github.davidfantasy.mybatisplus.generatorui.service;
 
 import cn.hutool.core.date.DateUtil;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
@@ -112,14 +111,14 @@ public class SqlGeneratorService {
         SqlRowSetMetaData metaData = rowSet.getMetaData();
         int columnCount = metaData.getColumnCount();
         List<DtoFieldInfo> fields = Lists.newArrayList();
-        GlobalConfig mbpConfig = new GlobalConfig();
-        mbpConfig.setDateType(generatorConfig.getDateType());
+        GlobalConfig.Builder gb = new GlobalConfig.Builder();
+        GlobalConfig gc = gb.dateType(generatorConfig.getDateType()).build();
         for (int i = 1; i <= columnCount; i++) {
             DtoFieldInfo resultField = new DtoFieldInfo();
             resultField.setColumnName(metaData.getColumnLabel(i));
             //将数据库类型转换为java类型
             String colType = metaData.getColumnTypeName(i);
-            IColumnType columnType = dataSourceConfig.getTypeConvert().processTypeConvert(mbpConfig, metaData.getColumnTypeName(i));
+            IColumnType columnType = dataSourceConfig.getTypeConvert().processTypeConvert(gc, metaData.getColumnTypeName(i));
             resultField.setShortJavaType(columnType.getType());
             if (!Strings.isNullOrEmpty(columnType.getPkg())) {
                 config.getImportPackages().add(columnType.getPkg());
@@ -317,7 +316,7 @@ public class SqlGeneratorService {
             file.getParentFile().mkdirs();
             file.createNewFile();
         }
-        beetlTemplateEngine.writer(tplParams, "classpath:codetpls/dto.btl", outputPath);
+        beetlTemplateEngine.writer(tplParams, "classpath:codetpls/dto.btl", new File(outputPath));
         log.info("DTO已成功生成，输出位置为:" + outputPath);
     }
 
@@ -330,8 +329,9 @@ public class SqlGeneratorService {
                 return DbColumnType.DATE_SQL;
             case TIME_PACK:
                 return DbColumnType.LOCAL_DATE;
+            default:
+                return null;
         }
-        return null;
     }
 
 

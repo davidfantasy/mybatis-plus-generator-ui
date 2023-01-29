@@ -2,6 +2,9 @@ package ${package.Mapper};
 
 import ${package.Entity}.${entity};
 import ${superMapperClassPackage};
+<% if(mapperAnnotationClass!=null){ %>
+import ${mapperAnnotationClass.name};
+<% } %>
 
 /**
  * <p>
@@ -11,6 +14,9 @@ import ${superMapperClassPackage};
  * @author ${author}
  * @since ${date}
  */
+<% if(mapperAnnotationClass!=null){ %>
+@${mapperAnnotationClass.simpleName}
+<% } %>
 <% if(kotlin){ %>
 interface ${table.mapperName} : ${superMapperClass}<${entity}>
 <% }else{ %>

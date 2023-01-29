@@ -4,7 +4,7 @@
 
 <% if(enableCache){ %>
     <!-- 开启二级缓存 -->
-    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+    <cache type="${cacheClassName}"/>
 
 <% } %>
 <% if(baseResultMap){ %>

@@ -19,16 +19,16 @@ public class ApplicationConfigure {
     }
 
 
+    /**
+     * 这里的DataSourceConfig仅用于获取tablesql，查询数据库元数据，和代码生成无关
+     * 代码生成的数据库配置参考MbpGenerator.initGenerator
+     */
     @Bean
-    public DataSourceConfig dataSourceConfig(GeneratorConfig config) {
-        DataSourceConfig dataSourceConfig = new DataSourceConfig();
-        dataSourceConfig.setUrl(config.getJdbcUrl());
-        dataSourceConfig.setDriverName(config.getDriverClassName());
-        dataSourceConfig.setUsername(config.getUserName());
-        dataSourceConfig.setPassword(config.getPassword());
-        dataSourceConfig.setSchemaName(config.getSchemaName());
-        dataSourceConfig.setTypeConvert(config.getTypeConvert());
-        return dataSourceConfig;
+    public DataSourceConfig mbpDsConfig(GeneratorConfig config) {
+        return new DataSourceConfig.Builder(config.getJdbcUrl(), config.getUserName(), config.getPassword())
+                .schema(config.getSchemaName())
+                .typeConvert(config.getTypeConvert())
+                .build();
     }
 
     /**
@@ -48,12 +48,12 @@ public class ApplicationConfigure {
     }
 
     @Bean
-    public BeetlTemplateEngine beetlTemplateEngine(UserConfigStore userConfigStore) {
-        return new BeetlTemplateEngine(userConfigStore.getTemplateStoreDir());
+    public BeetlTemplateEngine beetlTemplateEngine(GeneratorConfig config, UserConfigStore userConfigStore) {
+        return new BeetlTemplateEngine(config.getNameConverter(), userConfigStore.getTemplateStoreDir());
     }
 
     @Bean
     public DynamicParamSqlEnhancer dynamicParamSqlEnhancer(DataSourceConfig dsc) {
-        return new DynamicParamSqlEnhancer(dsc);
+        return new DynamicParamSqlEnhancer(dsc.getDbType());
     }
 }
