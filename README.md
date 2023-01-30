@@ -132,3 +132,6 @@ public Map<String, Object> getCustomTemplateVaribles(TableInfo tableInfo){
 
 所有的用户保存的配置是按照basePackage分组保存到user.home目录的.mybatis-plus-generator-ui中的，不同项目的配置不会互相影响。
 
+**Q:启动报错问题排查**
+
+大部分的启动问题都是由于依赖冲突导致的，因为mybatis-plus-generator-ui也依赖于springboot和mybatis-plus，请先检查依赖包版本是否相差过大；1.X的版本仅支持最高mp的3.4.X版本，在高版本的springboot(大于2.4)上启动也会有问题，2.0.0版本已经解决了相关的兼容性问题；
