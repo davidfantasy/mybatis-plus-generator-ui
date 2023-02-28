@@ -160,8 +160,8 @@ public class MbpGenerator {
                 controllerMethodsVar.put("hasMethod", true);
             }
             vars.put("controllerMethods", controllerMethodsVar);
-            if(!StrUtil.isEmpty(generatorConfig.getSchemaName())){
-                vars.put("schemaName", generatorConfig.getSchemaName()+".");
+            if (!StrUtil.isEmpty(generatorConfig.getSchemaName())) {
+                vars.put("schemaName", generatorConfig.getSchemaName() + ".");
             }
             objectMap.putAll(vars);
         });
@@ -252,9 +252,11 @@ public class MbpGenerator {
                 && !entityStrategy.getTableFills().isEmpty()) {
             List<IFill> tableFills = new ArrayList<>();
             for (String tableFillStr : entityStrategy.getTableFills()) {
-                String[] tmp = tableFillStr.split(":");
-                IFill tableFill = new Column(tmp[0], FieldFill.valueOf(tmp[1]));
-                tableFills.add(tableFill);
+                if (!StrUtil.isEmpty(tableFillStr)) {
+                    String[] tmp = tableFillStr.split(":");
+                    IFill tableFill = new Column(tmp[0], FieldFill.valueOf(tmp[1].toUpperCase()));
+                    tableFills.add(tableFill);
+                }
             }
             entityBuilder.addTableFills(tableFills);
         }
