@@ -27,7 +27,7 @@ public class GeberatorUIServer {
                 .userName("root")
                 .password("root")
                 .driverClassName("com.mysql.cj.jdbc.Driver")
-                //数据库schema，POSTGRE_SQL,ORACLE,DB2类型的数据库需要指定
+                //数据库schema，MSSQL,PGSQL,ORACLE,DB2类型的数据库需要指定
                 .schemaName("myBusiness")
                 //如果需要修改entity及其属性的命名规则，以及自定义各类生成文件的命名规则，可自定义一个NameConverter实例，覆盖相应的名称转换方法，详细可查看该接口的说明：                
                 .nameConverter(new NameConverter() {
