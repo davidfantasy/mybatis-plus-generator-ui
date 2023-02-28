@@ -139,6 +139,7 @@ public class MbpGenerator {
         }
     }
 
+    //自定义模板参数配置
     private void configInjection(InjectionConfig.Builder builder, UserConfig userConfig, GenSetting genSetting) {
         //自定义参数
         builder.beforeOutputFile((tableInfo, objectMap) -> {
@@ -159,6 +160,9 @@ public class MbpGenerator {
                 controllerMethodsVar.put("hasMethod", true);
             }
             vars.put("controllerMethods", controllerMethodsVar);
+            if(!StrUtil.isEmpty(generatorConfig.getSchemaName())){
+                vars.put("schemaName", generatorConfig.getSchemaName()+".");
+            }
             objectMap.putAll(vars);
         });
         //自定义文件生成

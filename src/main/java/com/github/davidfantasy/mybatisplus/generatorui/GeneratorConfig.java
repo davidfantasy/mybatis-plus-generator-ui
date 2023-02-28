@@ -1,5 +1,6 @@
 package com.github.davidfantasy.mybatisplus.generatorui;
 
+import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
@@ -7,6 +8,8 @@ import com.github.davidfantasy.mybatisplus.generatorui.mbp.NameConverter;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.TemplateVaribleInjecter;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.Objects;
 
 @Builder
 @Data
@@ -28,7 +31,7 @@ public class GeneratorConfig {
     private String jdbcUrl;
 
     /**
-     * 数据库schema,POSTGRE_SQL,ORACLE,DB2类型的数据库需要指定
+     * 数据库schema,POSTGRE_SQL,ORACLE,DB2，MSSQL类型的数据库需要指定
      */
     private String schemaName;
 
@@ -48,19 +51,9 @@ public class GeneratorConfig {
     private String driverClassName = "com.mysql.cj.jdbc.Driver";
 
     /**
-     * PostgreSQL的schema name
-     */
-    private String postgreSQLschema;
-
-    /**
      * 数据库时间类型与java class的对应策略
      */
     private DateType dateType;
-
-    /**
-     * 开启 ActiveRecord 模式
-     */
-    private boolean activeRecord = false;
 
     /**
      * 注入自定义模板参数
@@ -97,6 +90,5 @@ public class GeneratorConfig {
         }
         return dateType;
     }
-
 
 }

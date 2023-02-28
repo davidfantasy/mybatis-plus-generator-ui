@@ -3,6 +3,7 @@ package com.github.davidfantasy.mybatisplus.generatorui.service;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.IDbQuery;
+import com.github.davidfantasy.mybatisplus.generatorui.dbquery.DbQueryHolder;
 import com.github.davidfantasy.mybatisplus.generatorui.dto.TableInfo;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,11 @@ public class DatabaseService {
     @Autowired
     private DataSourceConfig dataSourceConfig;
 
+    @Autowired
+    private DbQueryHolder dbQueryHolder;
+
     public List<TableInfo> getTablesFromDb() {
-        IDbQuery dbQuery = dataSourceConfig.getDbQuery();
+        IDbQuery dbQuery = dbQueryHolder.getDbQuery(dataSourceConfig.getDbType());
         List<Map<String, Object>> results = jdbcTemplate.queryForList(getTableSql());
         List<TableInfo> tableInfos = Lists.newArrayList();
         for (Map<String, Object> table : results) {
@@ -36,7 +40,7 @@ public class DatabaseService {
     }
 
     public String getTableSql() {
-        String tablesSql = dataSourceConfig.getDbQuery().tablesSql();
+        String tablesSql = dbQueryHolder.getDbQuery(dataSourceConfig.getDbType()).tablesSql();
         String schema = dataSourceConfig.getSchemaName();
         if (schema == null) {
             schema = getDefaultSchema();
@@ -61,6 +65,9 @@ public class DatabaseService {
         } else if (DbType.ORACLE == dbType) {
             //oracle 默认 schema=username
             schema = Objects.requireNonNull(dataSourceConfig.getUsername()).toUpperCase();
+        } else if (DbType.SQL_SERVER == dbType) {
+            //SQL_SERVER 2005以上 默认 schema=dbo
+            schema = "dbo";
         }
         return schema;
     }
