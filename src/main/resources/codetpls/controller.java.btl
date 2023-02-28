@@ -89,7 +89,7 @@ public class ${table.controllerName} {
 
     <% if(isNotEmpty(controllerMethods.update)){ %>
     @PostMapping(value = "/update")
-    public ResponseEntity<Object> delete(@RequestBody ${table.entityName} params) {
+    public ResponseEntity<Object> update(@RequestBody ${table.entityName} params) {
         ${serviceInstanceName}.updateById(params);
         return new ResponseEntity<>("updated successfully", HttpStatus.OK);
     }
