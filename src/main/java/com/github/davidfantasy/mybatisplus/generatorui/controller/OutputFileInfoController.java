@@ -78,8 +78,8 @@ public class OutputFileInfoController {
     }
 
     @PostMapping("/save-service-impl-strategy")
-    public Result saveServiceImplStrategy(@RequestBody MapperXmlStrategy ServiceImplStrategy) throws IOException {
-        outputFileInfoService.saveMapperXmlStrategy(ServiceImplStrategy);
+    public Result saveServiceImplStrategy(@RequestBody ServiceImplStrategy ServiceImplStrategy) throws IOException {
+        outputFileInfoService.saveServiceImplStrategy(ServiceImplStrategy);
         return ResultGenerator.genSuccessResult();
     }
 
