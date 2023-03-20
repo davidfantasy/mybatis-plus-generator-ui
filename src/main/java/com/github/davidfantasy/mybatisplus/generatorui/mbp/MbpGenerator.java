@@ -86,6 +86,9 @@ public class MbpGenerator {
                     configEntity(builder.entityBuilder(), userConfig.getEntityStrategy(), genSetting.isOverride());
                     configMapper(builder.mapperBuilder(), userConfig.getMapperStrategy(), userConfig.getMapperXmlStrategy(), genSetting.isOverride());
                     configService(builder.serviceBuilder(), userConfig.getServiceStrategy(), userConfig.getServiceImplStrategy());
+                    if (genSetting.isOverride()){
+                        configController(builder.controllerBuilder().enableFileOverride(), userConfig.getControllerStrategy());
+                    }
                     configController(builder.controllerBuilder(), userConfig.getControllerStrategy());
                 }).execute();
     }
