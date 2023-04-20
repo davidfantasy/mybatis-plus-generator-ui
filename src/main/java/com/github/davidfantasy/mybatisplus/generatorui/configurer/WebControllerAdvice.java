@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * 用于全局异常处理
@@ -21,14 +20,15 @@ public class WebControllerAdvice {
 
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
-    public Result exceptionHandler(HttpServletRequest request, Exception e) {
+    public Result exceptionHandler(Exception e) {
         Result result = new Result();
         log.info("未捕获的异常：" + e.getMessage(), e);
         if (e instanceof ServiceException) {
             result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
         } else if (e instanceof NoHandlerFoundException) {
-            result.setCode(ResultCode.NOT_FOUND).setMessage("接口 [" + request.getRequestURI() + "] 不存在");
-        } else if (e instanceof ServletException) {
+            NoHandlerFoundException ex = (NoHandlerFoundException) e;
+            result.setCode(ResultCode.NOT_FOUND).setMessage("接口 [" + ex.getRequestURL() + "] 不存在");
+        } else if (e instanceof RuntimeException) {
             result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
         } else {
             result.setCode(ResultCode.INTERNAL_SERVER_ERROR).setMessage("系统发生内部错误，请联系管理员");
