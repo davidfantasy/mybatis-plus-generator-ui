@@ -18,11 +18,13 @@ public interface NameConverter {
      * @param tableName 表名称
      * @return 转换后的实体类名称
      */
-    default String entityNameConvert(String tableName) {
+    default String entityNameConvert(String tableName, String tablePrefix) {
         if (Strings.isNullOrEmpty(tableName)) {
             return "";
         }
-        tableName = tableName.substring(tableName.indexOf(StrUtil.UNDERLINE) + 1, tableName.length());
+        if (!StrUtil.isBlank(tablePrefix)) {
+            tableName = tableName.substring(tablePrefix.length());
+        }
         return StrUtil.upperFirst(StrUtil.toCamelCase(tableName.toLowerCase()));
     }
 

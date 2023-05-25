@@ -62,6 +62,12 @@ public class GeneratorConfig {
 
 
     /**
+     * 表前缀，如果设置后会在生成entity名称时去掉该后缀
+     */
+    private String tablePrefix;
+
+
+    /**
      * 自定义名称转换规则
      */
     private NameConverter nameConverter;
