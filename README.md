@@ -12,7 +12,7 @@
 <dependency>
     <groupId>com.github.davidfantasy</groupId>
     <artifactId>mybatis-plus-generator-ui</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -29,22 +29,24 @@ public class GeberatorUIServer {
                 .driverClassName("com.mysql.cj.jdbc.Driver")
                 //数据库schema，MSSQL,PGSQL,ORACLE,DB2类型的数据库需要指定
                 .schemaName("myBusiness")
+                //数据库表前缀，生成entity名称时会去掉
+                .tablePrefix("t_")
                 //如果需要修改entity及其属性的命名规则，以及自定义各类生成文件的命名规则，可自定义一个NameConverter实例，覆盖相应的名称转换方法，详细可查看该接口的说明：                
                 .nameConverter(new NameConverter() {
                     /**
-                     * 自定义Service类文件的名称规则
+                     * 自定义Service类文件的名称规则，entityName是NameConverter.entityNameConvert处理表名后的返回结果，如有特别的需求可以自定义实现
                      */
                     @Override
-                    public String serviceNameConvert(String tableName) {
-                        return this.entityNameConvert(tableName) + "Service";
+                    public String serviceNameConvert(String entityName) {
+                        return entityName + "Service";
                     }
 
                     /**
                      * 自定义Controller类文件的名称规则
                      */
                     @Override
-                    public String controllerNameConvert(String tableName) {
-                        return this.entityNameConvert(tableName) + "Action";
+                    public String controllerNameConvert(String entityName) {
+                        return entityName + "Action";
                     }
                 })
                 //所有生成的java文件的父包名，后续也可单独在界面上设置
@@ -57,7 +59,9 @@ public class GeberatorUIServer {
 }
 ```
 
-**GeneratorConfig**还包含一些基本的配置参数以及各个可扩展的接口，比如自定义模板参数，具体的说明可查看源码注释。
+**GeneratorConfig**还包含一些基本的配置参数以及各个可扩展的接口，比如自定义模板参数，数据库日期类型与Java类型的映射关系等，具体的说明可查看源码注释。
+
+**重要提示**：如果需要自定义entity,servie这些生成文件的类名，只需要自己实现NameConverter中对应的方法即可，可参考com.github.davidfantasy.mybatisplus.generatorui.mbp.NameConverter中默认方法的实现！！
 
 3. 运行该启动类，启动一个Generator Server。然后访问[http://localhost:8068](http://localhost:8068/)（端口是可配置的）即可进入到管理界面。
 
