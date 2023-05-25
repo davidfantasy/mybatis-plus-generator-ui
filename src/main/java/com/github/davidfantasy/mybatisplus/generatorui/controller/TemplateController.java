@@ -1,5 +1,6 @@
 package com.github.davidfantasy.mybatisplus.generatorui.controller;
 
+import cn.hutool.core.io.IoUtil;
 import com.github.davidfantasy.mybatisplus.generatorui.common.Result;
 import com.github.davidfantasy.mybatisplus.generatorui.common.ResultGenerator;
 import com.github.davidfantasy.mybatisplus.generatorui.common.ServiceException;
@@ -12,11 +13,14 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
@@ -34,16 +38,15 @@ public class TemplateController {
     private OutputFileInfoService outputFileInfoService;
 
     @GetMapping("/download")
-    public void download(HttpServletResponse res, @RequestParam String fileType) throws IOException {
+    public ResponseEntity<byte[]> download(@RequestParam String fileType) throws IOException {
         if (Strings.isNullOrEmpty(fileType)) {
             log.error("fileType不能为空");
-            return;
+            return ResponseEntity.badRequest().build();
         }
         UserConfig userConfig = userConfigStore.getUserConfigFromFile();
         if (userConfig == null) {
             InputStream tplIn = TemplateUtil.getBuiltInTemplate(fileType);
-            download(res, tplIn);
-            return;
+            return toDownloadEntity(tplIn);
         }
         List<OutputFileInfo> fileInfos = userConfig.getOutputFiles();
         for (OutputFileInfo fileInfo : fileInfos) {
@@ -51,7 +54,7 @@ public class TemplateController {
                 if (fileInfo.isBuiltIn()
                         && Strings.isNullOrEmpty(fileInfo.getTemplatePath())) {
                     InputStream tplIn = TemplateUtil.getBuiltInTemplate(fileType);
-                    download(res, tplIn);
+                    return toDownloadEntity(tplIn);
                 } else {
                     String tplPath = fileInfo.getTemplatePath();
                     if (tplPath.startsWith("file:")) {
@@ -59,15 +62,16 @@ public class TemplateController {
                     }
                     File tplFile = new File(tplPath);
                     if (tplFile.exists()) {
-                        download(res, Files.newInputStream(tplFile.toPath()));
+                        return toDownloadEntity(Files.newInputStream(tplFile.toPath()));
                     } else {
                         throw new ServiceException("未找到模板文件：" + fileInfo.getTemplatePath());
                     }
                 }
-                break;
             }
         }
+        return ResponseEntity.notFound().build();
     }
+
 
     @PostMapping("/upload")
     public Result upload(@RequestParam("file") MultipartFile file, @RequestParam("fileType") String fileType) {
@@ -78,27 +82,17 @@ public class TemplateController {
         return ResultGenerator.genSuccessResult(params);
     }
 
-    private void download(HttpServletResponse res, InputStream tplIn) throws UnsupportedEncodingException {
-        if (tplIn != null) {
-            res.setCharacterEncoding("utf-8");
-            res.setContentType("multipart/form-data;charset=UTF-8");
-            try {
-                OutputStream os = res.getOutputStream();
-                byte[] b = new byte[2048];
-                int length;
-                while ((length = tplIn.read(b)) > 0) {
-                    os.write(b, 0, length);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    tplIn.close();
-                } catch (IOException ignored) {
-                }
-            }
+    /**
+     * 从输入流构建http响应
+     * @param tplIn 流
+     * @return http响应
+     */
+    private ResponseEntity<byte[]> toDownloadEntity(InputStream tplIn) {
+        if (tplIn == null) {
+            return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok().contentType(MediaType.MULTIPART_FORM_DATA).body(IoUtil.readBytes(tplIn));
+
+
     }
-
-
 }
