@@ -22,7 +22,7 @@ public interface NameConverter {
         if (Strings.isNullOrEmpty(tableName)) {
             return "";
         }
-        if (!StrUtil.isBlank(tablePrefix)) {
+        if (!StrUtil.isBlank(tablePrefix) && tableName.startsWith(tablePrefix)) {
             tableName = tableName.substring(tablePrefix.length());
         }
         return StrUtil.upperFirst(StrUtil.toCamelCase(tableName.toLowerCase()));
