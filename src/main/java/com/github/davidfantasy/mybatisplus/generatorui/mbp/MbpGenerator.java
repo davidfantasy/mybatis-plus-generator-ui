@@ -85,8 +85,8 @@ public class MbpGenerator {
                             .enableSkipView();
                     configEntity(builder.entityBuilder(), userConfig.getEntityStrategy(), genSetting.isOverride());
                     configMapper(builder.mapperBuilder(), userConfig.getMapperStrategy(), userConfig.getMapperXmlStrategy(), genSetting.isOverride());
-                    configService(builder.serviceBuilder(), userConfig.getServiceStrategy(), userConfig.getServiceImplStrategy());
-                    configController(builder.controllerBuilder(), userConfig.getControllerStrategy());
+                    configService(builder.serviceBuilder(), userConfig.getServiceStrategy(), userConfig.getServiceImplStrategy(), genSetting.isOverride());
+                    configController(builder.controllerBuilder(), userConfig.getControllerStrategy(), genSetting.isOverride());
                 }).execute();
     }
 
@@ -206,7 +206,7 @@ public class MbpGenerator {
             @Override
             @Nonnull
             public String entityNameConvert(@Nonnull TableInfo tableInfo) {
-                return nameConverter.entityNameConvert(tableInfo.getName());
+                return nameConverter.entityNameConvert(tableInfo.getName(), generatorConfig.getTablePrefix());
             }
 
             @Override
@@ -287,8 +287,11 @@ public class MbpGenerator {
     /**
      * 配置service
      */
-    private void configService(Service.Builder serviceBuilder, ServiceStrategy serviceStrategy, ServiceImplStrategy serviceImplStrategy) {
+    private void configService(Service.Builder serviceBuilder, ServiceStrategy serviceStrategy, ServiceImplStrategy serviceImplStrategy, boolean fileOverride) {
         NameConverter nameConverter = generatorConfig.getAvailableNameConverter();
+        if (fileOverride) {
+            serviceBuilder.enableFileOverride();
+        }
         if (serviceStrategy.getSuperServiceClass() != null) {
             serviceBuilder.superServiceClass(serviceStrategy.getSuperServiceClass());
         }
@@ -302,8 +305,11 @@ public class MbpGenerator {
     /**
      * 配置Controller
      */
-    private void configController(Controller.Builder controllerBuilder, ControllerStrategy controllerStrategy) {
+    private void configController(Controller.Builder controllerBuilder, ControllerStrategy controllerStrategy, boolean fileOverride) {
         NameConverter nameConverter = generatorConfig.getAvailableNameConverter();
+        if (fileOverride) {
+            controllerBuilder.enableFileOverride();
+        }
         if (controllerStrategy.isRestControllerStyle()) {
             controllerBuilder.enableRestStyle();
         }
