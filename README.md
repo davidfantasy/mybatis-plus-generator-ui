@@ -58,12 +58,11 @@ public class GeberatorUIServer {
 
 }
 ```
+3. 运行该启动类，启动一个Generator Server。然后访问[http://localhost:8068](http://localhost:8068/)（端口是可配置的）即可进入到管理界面。
 
 **GeneratorConfig**还包含一些基本的配置参数以及各个可扩展的接口，比如自定义模板参数，数据库日期类型与Java类型的映射关系等，具体的说明可查看源码注释。
 
 **重要提示**：如果需要自定义entity,servie这些生成文件的类名，只需要自己实现NameConverter中对应的方法即可，可参考com.github.davidfantasy.mybatisplus.generatorui.mbp.NameConverter中默认方法的实现！！
-
-3. 运行该启动类，启动一个Generator Server。然后访问[http://localhost:8068](http://localhost:8068/)（端口是可配置的）即可进入到管理界面。
 
 #### 重要更新
 
