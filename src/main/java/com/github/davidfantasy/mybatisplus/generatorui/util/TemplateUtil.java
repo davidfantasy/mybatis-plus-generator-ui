@@ -2,8 +2,7 @@ package com.github.davidfantasy.mybatisplus.generatorui.util;
 
 import java.io.InputStream;
 
-import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.FILE_TYPE_MAPPER;
-import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.FILE_TYPE_MAPPER_XML;
+import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.*;
 
 public class TemplateUtil {
 
@@ -17,6 +16,9 @@ public class TemplateUtil {
         if (fileType.equalsIgnoreCase(FILE_TYPE_MAPPER_XML)
                 || fileType.equalsIgnoreCase(FILE_TYPE_MAPPER)) {
             return fileType.toLowerCase() + ".btl";
+        }
+        if (fileType.equals(FILE_TYPE_SERVICEIMPL)) {
+            return "serviceImpl.java.btl";
         }
         return fileType.toLowerCase() + ".java.btl";
     }
