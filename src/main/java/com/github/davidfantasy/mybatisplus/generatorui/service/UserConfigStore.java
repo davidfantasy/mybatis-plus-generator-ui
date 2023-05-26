@@ -13,11 +13,11 @@ import com.github.davidfantasy.mybatisplus.generatorui.util.TemplateUtil;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +30,7 @@ import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.*;
 
 @Component
 @Slf4j
-public class UserConfigStore {
+public class UserConfigStore implements InitializingBean {
 
     private String storeDir;
 
@@ -42,8 +42,9 @@ public class UserConfigStore {
     @Autowired
     private GeneratorConfig generatorConfig;
 
-    @PostConstruct
-    public void init() {
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
         this.storeDir = PathUtil.joinPath(System.getProperty("user.home"), CONFIG_HOME, generatorConfig.getBasePackage());
         this.userConfigPath = this.storeDir + File.separator + "user-config.json";
     }
