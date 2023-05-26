@@ -26,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.*;
 
@@ -204,14 +203,12 @@ public class MbpGenerator {
         entityBuilder.idType(generatorConfig.getIdType());
         entityBuilder.nameConvert(new INameConvert() {
             @Override
-            @Nonnull
-            public String entityNameConvert(@Nonnull TableInfo tableInfo) {
+            public String entityNameConvert(TableInfo tableInfo) {
                 return nameConverter.entityNameConvert(tableInfo.getName(), generatorConfig.getTablePrefix());
             }
 
             @Override
-            @Nonnull
-            public String propertyNameConvert(@Nonnull TableField field) {
+            public String propertyNameConvert(TableField field) {
                 return nameConverter.propertyNameConvert(field.getName());
             }
         });

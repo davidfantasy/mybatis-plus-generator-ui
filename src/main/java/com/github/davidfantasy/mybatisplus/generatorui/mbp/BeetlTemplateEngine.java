@@ -15,7 +15,6 @@ import org.beetl.core.resource.CompositeResourceLoader;
 import org.beetl.core.resource.FileResourceLoader;
 import org.beetl.core.resource.StartsWithMatcher;
 
-import javax.annotation.Nonnull;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -56,7 +55,7 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public void writer(@Nonnull Map<String, Object> objectMap, String templatePath, @Nonnull File outputFile) throws Exception {
+    public void writer(Map<String, Object> objectMap, String templatePath, File outputFile) throws Exception {
         if (templatePath.startsWith(RESOURCE_PREFIX_FILE)) {
             templatePath = templatePath.replace(templateStoreDir, "");
         }
@@ -70,15 +69,13 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    @Nonnull
-    public AbstractTemplateEngine init(@Nonnull ConfigBuilder configBuilder) {
+    public AbstractTemplateEngine init(ConfigBuilder configBuilder) {
         return this;
     }
 
 
     @Override
-    @Nonnull
-    public String templateFilePath(@Nonnull String filePath) {
+    public String templateFilePath(String filePath) {
         return filePath;
     }
 
@@ -98,7 +95,7 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    protected void outputCustomFile(List<CustomFile> customFiles, TableInfo tableInfo, @Nonnull Map<String, Object> objectMap) {
+    protected void outputCustomFile(List<CustomFile> customFiles, TableInfo tableInfo, Map<String, Object> objectMap) {
         String entityName = tableInfo.getEntityName();
         String parentPath = getPathInfo(OutputFile.parent);
         customFiles.forEach(file -> {
