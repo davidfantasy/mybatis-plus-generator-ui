@@ -12,7 +12,8 @@
 <dependency>
     <groupId>com.github.davidfantasy</groupId>
     <artifactId>mybatis-plus-generator-ui</artifactId>
-    <version>2.0.2</version>
+   <!--具体版本信息请参考release-->
+    <version>${latest.version}</version>
     <scope>test</scope>
 </dependency>
 ```
