@@ -25,6 +25,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.util.*;
@@ -68,7 +69,7 @@ public class MbpGenerator {
                     builder.dateType(generatorConfig.getDateType());
                     //指定所有生成文件的根目录
                     builder.outputDir(projectPathResolver.getSourcePath());
-                    builder.author(genSetting.getAuthor());
+                    builder.author(StringUtils.hasText(genSetting.getAuthor()) ? genSetting.getAuthor():   System.getProperty("user.name"));
                     if (userConfig.getEntityStrategy().isSwagger2()) {
                         builder.enableSwagger();
                     }
