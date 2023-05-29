@@ -59,6 +59,9 @@ public class UserConfigStore implements InitializingBean {
             userConfig = new UserConfig();
             userConfig.setOutputFiles(getBuiltInFileInfo());
         }
+        if(generatorConfig.getEntityStrategy()!=null){
+            userConfig.setEntityStrategy(generatorConfig.getEntityStrategy());
+        }
         return userConfig;
     }
 

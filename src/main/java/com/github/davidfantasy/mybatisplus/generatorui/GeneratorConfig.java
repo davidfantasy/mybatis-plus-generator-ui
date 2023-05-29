@@ -1,15 +1,13 @@
 package com.github.davidfantasy.mybatisplus.generatorui;
 
-import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.NameConverter;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.TemplateVaribleInjecter;
+import com.github.davidfantasy.mybatisplus.generatorui.strategy.EntityStrategy;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.Objects;
 
 @Builder
 @Data
@@ -81,6 +79,8 @@ public class GeneratorConfig {
      * 全局指定数据表中ID的生成模式，影响自动生成的Entity中ID字段的注解
      */
     private IdType idType;
+
+    private  EntityStrategy entityStrategy;
 
     public NameConverter getAvailableNameConverter() {
         if (nameConverter == null) {
