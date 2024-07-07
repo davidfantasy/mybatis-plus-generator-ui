@@ -139,5 +139,6 @@ public Map<String, Object> getCustomTemplateVaribles(TableInfo tableInfo){
 
 大部分的启动问题都是由于依赖冲突导致的，因为mybatis-plus-generator-ui也依赖于springboot和mybatis-plus，请先检查依赖包版本是否相差过大；1.X的版本仅支持最高mp的3.4.X版本，在高版本的springboot(大于2.4)上启动也会有问题，2.0.0版本已经解决了相关的兼容性问题；
 
-欢迎大家关注我的公众号，我会在上面定期分享一些关于技术的经验和感悟~
-![](https://github.com/davidfantasy/mybatis-plus-generator-ui/blob/master/imgs/wechat.jpg)
+欢迎大家关注我的公众号（飞空之羽的技术手札），我会在上面定期分享一些关于技术的经验和感悟~
+
+![二维码](https://github.com/davidfantasy/mybatis-plus-generator-ui/blob/master/imgs/wechat.jpg)
