@@ -92,7 +92,7 @@ public class TestSqlParser {
 
     @Test
     public void testSqlParser3() throws JSQLParserException {
-        String sqlStr = "  SELECT *\n" +
+        String sqlStr = "(  SELECT *\n" +
                 "    FROM (  SELECT 1 )\n" +
                 "    UNION ALL\n" +
                 "    SELECT *\n" +
