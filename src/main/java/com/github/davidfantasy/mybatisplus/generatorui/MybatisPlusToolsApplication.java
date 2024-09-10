@@ -40,7 +40,10 @@ public class MybatisPlusToolsApplication {
         if (Strings.isNullOrEmpty(generatorConfig.getJdbcUrl())) {
             throw new IllegalArgumentException("jdbcUrl必须要设置");
         }
+        //本项目的综合配置
         MybatisPlusToolsApplication.generatorConfig = generatorConfig;
+
+        //启动MyBatis
         Map<String, Object> props = Maps.newHashMap();
         new SpringApplicationBuilder()
                 .properties(props)
@@ -48,6 +51,11 @@ public class MybatisPlusToolsApplication {
                 .run();
     }
 
+    /**
+     * 通过注入一个WebServerFactoryCustomizer来达到修改服务器端口的目的
+     * @param config
+     * @return
+     */
     @Bean
     public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> containerConfig(GeneratorConfig config) {
         return factory -> {
@@ -60,6 +68,10 @@ public class MybatisPlusToolsApplication {
         };
     }
 
+    /**
+     * 注入项目配置
+     * @return 项目配置的对象
+     */
     @Bean
     public GeneratorConfig generatorConfig() {
         return MybatisPlusToolsApplication.generatorConfig;

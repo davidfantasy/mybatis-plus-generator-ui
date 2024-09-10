@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +29,7 @@ public class DatabaseService {
 
     public List<TableInfo> getTablesFromDb() {
         IDbQuery dbQuery = dbQueryHolder.getDbQuery(dataSourceConfig.getDbType());
+        //利用jdbcTemplate来查询数据库表信息，然后组装信息
         List<Map<String, Object>> results = jdbcTemplate.queryForList(getTableSql());
         List<TableInfo> tableInfos = Lists.newArrayList();
         for (Map<String, Object> table : results) {
@@ -36,6 +38,7 @@ public class DatabaseService {
             tableInfo.setComment((String) table.get(dbQuery.tableComment()));
             tableInfos.add(tableInfo);
         }
+        tableInfos.sort(Comparator.comparing(TableInfo::getName));
         return tableInfos;
     }
 
