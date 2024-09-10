@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static com.github.davidfantasy.mybatisplus.generatorui.dto.Constant.DOT_JAVA;
@@ -75,7 +76,7 @@ public class SqlGeneratorService {
         if (Strings.isNullOrEmpty(params.getSql())) {
             throw new ServiceException("数据源SQL不能为空");
         }
-        String decodedSql = new String(decoder.decode(params.getSql()), "UTF-8");
+        String decodedSql = new String(decoder.decode(params.getSql()), StandardCharsets.UTF_8);
         if (!decodedSql.trim().toLowerCase().startsWith("select")) {
             throw new ServiceException("只能通过查询语句生成DTO对象，请检查SQL");
         }

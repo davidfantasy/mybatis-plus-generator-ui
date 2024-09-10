@@ -6,9 +6,14 @@ import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.common.ServiceException;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jsqlparser.expression.LongValue;
+import net.sf.jsqlparser.expression.operators.relational.ComparisonOperator;
+import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import net.sf.jsqlparser.parser.CCJSqlParser;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.Statement;
-import net.sf.jsqlparser.statement.select.Select;
+import net.sf.jsqlparser.statement.select.*;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -16,7 +21,7 @@ import java.util.regex.Pattern;
 @Slf4j
 public class DynamicParamSqlEnhancer {
 
-    private DbType dbType;
+    private final DbType dbType;
 
     public DynamicParamSqlEnhancer(DbType dbType) {
         this.dbType = dbType;
@@ -35,10 +40,10 @@ public class DynamicParamSqlEnhancer {
         try {
             CCJSqlParser ccjSqlParser = new CCJSqlParser(sql);
             Statement statement = ccjSqlParser.Statement();
-            if (statement instanceof Select) {
+            if (statement instanceof PlainSelect) {
                 SelectConditionParser parser = new SelectConditionParser();
-                Select select = (Select) statement;
-                select.getSelectBody().accept(parser);
+                PlainSelect select = (PlainSelect) statement;
+                select.accept(parser);
                 return parser.getParsedConditions();
             } else {
                 throw new ServiceException("只能处理SQL查询语句");

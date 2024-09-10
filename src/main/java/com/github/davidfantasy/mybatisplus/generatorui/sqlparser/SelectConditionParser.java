@@ -1,18 +1,19 @@
 package com.github.davidfantasy.mybatisplus.generatorui.sqlparser;
 
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.select.*;
-import net.sf.jsqlparser.statement.values.ValuesStatement;
 
 import java.util.List;
 
 /**
  * 解析子查询以及自身的where条件部分
  */
+@Slf4j
 public class SelectConditionParser implements SelectVisitor, FromItemVisitor {
 
-    private WhereParser whereConditionParser = new WhereParser();
+    private final WhereParser whereConditionParser = new WhereParser();
 
     public List<ConditionExpr> getParsedConditions() {
         return whereConditionParser.getConditions();
@@ -23,21 +24,7 @@ public class SelectConditionParser implements SelectVisitor, FromItemVisitor {
     }
 
     @Override
-    public void visit(SubSelect subSelect) {
-        subSelect.getSelectBody().accept(this);
-    }
-
-    @Override
-    public void visit(SubJoin subjoin) {
-        subjoin.getLeft().accept(this);
-    }
-
-    @Override
-    public void visit(LateralSubSelect lateralSubSelect) {
-    }
-
-    @Override
-    public void visit(ValuesList valuesList) {
+    public void visit(ParenthesedSelect parenthesedSelect) {
     }
 
     @Override
@@ -45,7 +32,8 @@ public class SelectConditionParser implements SelectVisitor, FromItemVisitor {
     }
 
     @Override
-    public void visit(ParenthesisFromItem aThis) {
+    public void visit(ParenthesedFromItem parenthesedFromItem) {
+        parenthesedFromItem.accept(this);
     }
 
     @Override
@@ -59,7 +47,7 @@ public class SelectConditionParser implements SelectVisitor, FromItemVisitor {
 
     @Override
     public void visit(SetOperationList setOpList) {
-        for (SelectBody sb : setOpList.getSelects()) {
+        for (Select sb : setOpList.getSelects()) {
             sb.accept(this);
         }
     }
@@ -69,6 +57,15 @@ public class SelectConditionParser implements SelectVisitor, FromItemVisitor {
     }
 
     @Override
-    public void visit(ValuesStatement aThis) {
+    public void visit(Values values) {
+    }
+
+    @Override
+    public void visit(LateralSubSelect lateralSubSelect) {
+        lateralSubSelect.accept((SelectVisitor) this);
+    }
+
+    @Override
+    public void visit(TableStatement tableStatement) {
     }
 }

@@ -1,15 +1,12 @@
 package com.github.davidfantasy.mybatisplus.generatorui.sqlparser;
 
 import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.BinaryExpression;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
 import net.sf.jsqlparser.expression.operators.relational.*;
-import net.sf.jsqlparser.statement.select.PlainSelect;
-import net.sf.jsqlparser.statement.select.SubSelect;
 
 import java.util.List;
 
@@ -24,7 +21,7 @@ public class WhereParser extends ExpressionVisitorAdapter {
     /**
      * 所有解析到的符合规则的where条件，用于进一步匹配
      */
-    private List<ConditionExpr> conditions = Lists.newArrayList();
+    private final List<ConditionExpr> conditions = Lists.newArrayList();
 
     public List<ConditionExpr> getConditions() {
         return conditions;
@@ -32,7 +29,6 @@ public class WhereParser extends ExpressionVisitorAdapter {
 
     @Override
     public void visit(AndExpression expr) {
-
         parseLogicOperator(expr, "AND");
     }
 
@@ -87,14 +83,8 @@ public class WhereParser extends ExpressionVisitorAdapter {
             parseCommonOperator(expr.getLeftExpression(), expr.getRightExpression(), "in");
         } else {
             currentLogicOp = "";
-            expr.getRightItemsList().accept(this);
+            expr.getRightExpression().accept(this);
         }
-    }
-
-    @Override
-    public void visit(SubSelect subSelect) {
-        PlainSelect ps = (PlainSelect) subSelect.getSelectBody();
-        ps.getWhere().accept(this);
     }
 
     private void parseLogicOperator(BinaryExpression binaryExpression, String operator) {

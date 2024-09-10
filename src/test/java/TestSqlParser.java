@@ -1,10 +1,19 @@
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ReUtil;
-import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.sqlparser.ConditionExpr;
 import com.github.davidfantasy.mybatisplus.generatorui.sqlparser.DynamicParamSqlEnhancer;
 import com.google.common.collect.Lists;
-import org.assertj.core.api.Assertions;
+import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.expression.LongValue;
+import net.sf.jsqlparser.expression.operators.relational.ComparisonOperator;
+import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.schema.Column;
+import net.sf.jsqlparser.schema.Table;
+import net.sf.jsqlparser.statement.select.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -53,16 +62,19 @@ public class TestSqlParser {
                 "        AND confirm_time BETWEEN '#{startTime}' AND  '#{endTime}'";
         System.out.println(sql);
         List<ConditionExpr> conditions = enhancer.parseSqlDynamicConditions(sql);
-        Assertions.assertThat(conditions.size()).isEqualTo(5);
+        Assertions.assertEquals(conditions.size(), 5);
         List<String> dParams = Lists.newArrayList();
         conditions.forEach((condition) -> {
             String dynamicSql = enhancer.toDynamicSql(condition).trim();
             System.out.println(dynamicSql);
             dParams.addAll(condition.getParamNames());
-            Assertions.assertThat(getCorrectDsql().contains(dynamicSql)).isTrue();
-            Assertions.assertThat(ReUtil.contains(Pattern.compile(condition.getFindPattern(), Pattern.CASE_INSENSITIVE), sql)).isTrue();
+            Assertions.assertTrue(getCorrectDsql().contains(dynamicSql));
+            Assertions.assertTrue(ReUtil.contains(Pattern.compile(condition.getFindPattern(), Pattern.CASE_INSENSITIVE), sql));
         });
-        Assertions.assertThat(dParams).contains("orderCode", "city", "customerIds", "creator", "startTime", "endTime");
+        Assertions.assertTrue(
+                CollUtil.containsAll(
+                        dParams,
+                        CollectionUtil.newArrayList("orderCode", "city", "customerIds", "creator", "startTime", "endTime")));
     }
 
     @Test
@@ -76,6 +88,55 @@ public class TestSqlParser {
             String dynamicSql = enhancer.toDynamicSql(condition).trim();
             System.out.println(dynamicSql);
         });
+    }
+
+    @Test
+    public void testSqlParser3() throws JSQLParserException {
+        String sqlStr = "  SELECT *\n" +
+                "    FROM (  SELECT 1 )\n" +
+                "    UNION ALL\n" +
+                "    SELECT *\n" +
+                "    FROM ( VALUES 1, 2, 3 )\n" +
+                "    UNION ALL\n" +
+                "    VALUES ( 1, 2, 3 ) )";
+        ParenthesedSelect parenthesedSelect = (ParenthesedSelect) CCJSqlParserUtil.parse(sqlStr);
+        SetOperationList setOperationList = parenthesedSelect.getSetOperationList();
+
+        PlainSelect select1 = (PlainSelect) setOperationList.getSelect(0);
+        PlainSelect subSelect1 = ((ParenthesedSelect) select1.getFromItem()).getPlainSelect();
+        org.junit.jupiter.api.Assertions.assertEquals(1L, subSelect1.getSelectItem(0).getExpression(LongValue.class).getValue());
+
+        Values values = (Values) setOperationList.getSelect(2);
+        Assertions.assertEquals(3, values.getExpressions().size());
+
+    }
+
+    @Test
+    public void testSqlParser4() {
+        String sqlStr = "select 1 from dual where a=b";
+
+        PlainSelect select = null;
+        try {
+            select = (PlainSelect) CCJSqlParserUtil.parse(sqlStr);
+        } catch (JSQLParserException e) {
+            e.printStackTrace();
+        }
+
+        SelectItem selectItem =
+                select.getSelectItems().get(0);
+        Assertions.assertEquals(
+                new LongValue(1)
+                , selectItem.getExpression());
+
+        Table table = (Table) select.getFromItem();
+        Assertions.assertEquals("dual", table.getName());
+
+        ComparisonOperator equalsTo = (ComparisonOperator) select.getWhere();
+        Column a = (Column) equalsTo.getLeftExpression();
+        Column b = (Column) equalsTo.getRightExpression();
+        Assertions.assertEquals("a", a.getColumnName());
+        Assertions.assertEquals("b", b.getColumnName());
+
     }
 
 
