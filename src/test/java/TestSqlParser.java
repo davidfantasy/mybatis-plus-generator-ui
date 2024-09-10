@@ -84,6 +84,7 @@ public class TestSqlParser {
                 .build();
         DynamicParamSqlEnhancer enhancer = new DynamicParamSqlEnhancer(dsc.getDbType());
         List<ConditionExpr> conditions = enhancer.parseSqlDynamicConditions(sql);
+        Assertions.assertEquals(conditions.size(), 4);
         conditions.forEach((condition) -> {
             String dynamicSql = enhancer.toDynamicSql(condition).trim();
             System.out.println(dynamicSql);

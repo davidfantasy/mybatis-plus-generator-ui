@@ -25,6 +25,7 @@ public class SelectConditionParser implements SelectVisitor, FromItemVisitor {
 
     @Override
     public void visit(ParenthesedSelect parenthesedSelect) {
+       parenthesedSelect.getSetOperationList().accept((SelectVisitor) this);
     }
 
     @Override
