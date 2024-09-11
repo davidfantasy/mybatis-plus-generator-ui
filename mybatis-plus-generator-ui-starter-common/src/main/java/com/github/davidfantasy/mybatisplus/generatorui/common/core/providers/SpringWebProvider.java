@@ -1,6 +1,6 @@
 package com.github.davidfantasy.mybatisplus.generatorui.common.core.providers;
 
-import com.github.davidfantasy.mybatisplus.generatorui.common.core.configuration.SpringDocConfigProperties;
+import com.github.davidfantasy.mybatisplus.generatorui.common.core.properties.SpringDocConfigProperties;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

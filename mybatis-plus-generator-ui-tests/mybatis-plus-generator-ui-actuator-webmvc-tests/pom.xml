@@ -11,7 +11,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.davidfantasy</groupId>
-            <artifactId>mybatis-plus-generator-ui-starter-webmvc-api</artifactId>
+            <artifactId>mybatis-plus-generator-ui-starter-webmvc-ui</artifactId>
             <version>${project.version}</version>
             <!--            <scope>test</scope>-->
         </dependency>

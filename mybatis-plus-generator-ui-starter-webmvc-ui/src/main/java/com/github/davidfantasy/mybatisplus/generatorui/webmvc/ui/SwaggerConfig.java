@@ -49,7 +49,7 @@ public class SwaggerConfig {
     @ConditionalOnMissingBean
     @ConditionalOnProperty(name = SPRINGDOC_USE_ROOT_PATH, havingValue = "true")
     @Lazy(false)
-    SwaggerUiHome swaggerUiHome() {
-        return new SwaggerUiHome();
+    UiHome swaggerUiHome() {
+        return new UiHome();
     }
 }

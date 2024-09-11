@@ -221,14 +221,14 @@ public final class Constants {
 	public static final String APPLICATION_OPENAPI_YAML = "application/vnd.oai.openapi";
 
 	/**
-	 * The constant DEFAULT_SWAGGER_UI_PATH.
+	 * The constant DEFAULT_MYBATIS_GENERATOR_UI_PATH.
 	 */
-	public static final String DEFAULT_SWAGGER_UI_PATH = DEFAULT_PATH_SEPARATOR + "swagger-ui.html";
+	public static final String DEFAULT_MYBATIS_GENERATOR_UI_PATH = DEFAULT_PATH_SEPARATOR + "index.html";
 
 	/**
 	 * The constant SWAGGER_UI_PATH.
 	 */
-	public static final String SWAGGER_UI_PATH = "${springdoc.swagger-ui.path:#{T(com.github.davidfantasy.mybatisplus.generatorui.common.core.utils.Constants).DEFAULT_SWAGGER_UI_PATH}}";
+	public static final String MYBATIS_GENERATOR_UI_PATH = "${springdoc.swagger-ui.path:#{T(com.github.davidfantasy.mybatisplus.generatorui.common.core.utils.Constants).DEFAULT_MYBATIS_GENERATOR_UI_PATH}}";
 
 	/**
 	 * The constant DEFAULT_GROUP_NAME.

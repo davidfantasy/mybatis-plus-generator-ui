@@ -31,18 +31,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import static com.github.davidfantasy.mybatisplus.generatorui.common.core.utils.Constants.MVC_SERVLET_PATH;
-import static com.github.davidfantasy.mybatisplus.generatorui.common.core.utils.Constants.SWAGGER_UI_PATH;
+import static com.github.davidfantasy.mybatisplus.generatorui.common.core.utils.Constants.MYBATIS_GENERATOR_UI_PATH;
 import static org.springframework.util.AntPathMatcher.DEFAULT_PATH_SEPARATOR;
-import static org.springframework.web.servlet.view.UrlBasedViewResolver.REDIRECT_URL_PREFIX;
+import static org.springframework.web.servlet.view.UrlBasedViewResolver.FORWARD_URL_PREFIX;
 
 /**
  * Home redirection to swagger api documentation
  */
 @Controller
-public class SwaggerUiHome {
+public class UiHome {
 
-    @Value(SWAGGER_UI_PATH)
-    private String swaggerUiPath;
+    @Value(MYBATIS_GENERATOR_UI_PATH)
+    private String mybatisGeneratorUiPath;
 
     @Value(MVC_SERVLET_PATH)
     private String mvcServletPath;
@@ -59,6 +59,6 @@ public class SwaggerUiHome {
 			uiRootPath.append(mvcServletPath);
 		}
 
-        return REDIRECT_URL_PREFIX + uiRootPath + swaggerUiPath;
+        return FORWARD_URL_PREFIX + uiRootPath + mybatisGeneratorUiPath;
     }
 }

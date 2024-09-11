@@ -22,7 +22,7 @@
 package com.github.davidfantasy.mybatisplus.generatorui.webmvc.api.core;
 
 import cn.hutool.core.util.StrUtil;
-import com.github.davidfantasy.mybatisplus.generatorui.common.core.configuration.SpringDocConfigProperties;
+import com.github.davidfantasy.mybatisplus.generatorui.common.core.properties.SpringDocConfigProperties;
 import com.github.davidfantasy.mybatisplus.generatorui.common.core.providers.SpringWebProvider;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.method.HandlerMethod;

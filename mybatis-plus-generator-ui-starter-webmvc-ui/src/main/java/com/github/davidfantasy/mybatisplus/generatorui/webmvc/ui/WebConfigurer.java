@@ -1,11 +1,10 @@
-package com.github.davidfantasy.mybatisplus.generatorui.common.configurer;
+package com.github.davidfantasy.mybatisplus.generatorui.webmvc.ui;
 
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.ErrorPageRegistrar;
 import org.springframework.boot.web.server.ErrorPageRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -18,10 +17,9 @@ public class WebConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("forward:/index.html");
-        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        // registry.addViewController("/").setViewName("forward:/index.html");
+        // registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }
-
 
     @Bean
     public ErrorPageRegistrar errorPageRegistrar() {

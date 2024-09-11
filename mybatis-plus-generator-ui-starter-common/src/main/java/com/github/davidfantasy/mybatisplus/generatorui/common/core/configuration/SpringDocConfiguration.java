@@ -2,9 +2,11 @@ package com.github.davidfantasy.mybatisplus.generatorui.common.core.configuratio
 
 import com.github.davidfantasy.mybatisplus.generatorui.common.ApplicationConfigure;
 import com.github.davidfantasy.mybatisplus.generatorui.common.api.Result;
+import com.github.davidfantasy.mybatisplus.generatorui.common.api.ResultCode;
 import com.github.davidfantasy.mybatisplus.generatorui.common.api.ResultGenerator;
 import com.github.davidfantasy.mybatisplus.generatorui.common.api.ServiceException;
 import com.github.davidfantasy.mybatisplus.generatorui.common.core.utils.Constants;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
@@ -14,9 +16,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 @Lazy(false)
 @Configuration(proxyBeanMethods = false)
@@ -60,5 +61,33 @@ public class SpringDocConfiguration {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(ResultGenerator.genFailResult(e.getMessage()));
         }
+    }
+
+    /**
+     * 用于全局异常处理
+     */
+    @ControllerAdvice
+    @Slf4j
+    public class WebControllerAdvice {
+
+        @ExceptionHandler(value = Exception.class)
+        @ResponseBody
+        public Result exceptionHandler(Exception e) {
+            Result result = new Result();
+            log.info("未捕获的异常：" + e.getMessage(), e);
+            if (e instanceof ServiceException) {
+                result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
+            } else if (e instanceof NoHandlerFoundException) {
+                NoHandlerFoundException ex = (NoHandlerFoundException) e;
+                result.setCode(ResultCode.NOT_FOUND).setMessage("接口 [" + ex.getRequestURL() + "] 不存在");
+            } else if (e instanceof RuntimeException) {
+                result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
+            } else {
+                result.setCode(ResultCode.INTERNAL_SERVER_ERROR).setMessage("系统发生内部错误，请联系管理员");
+                log.error("系统发生内部错误，请查看控制台日志了解详情", e);
+            }
+            return result;
+        }
+
     }
 }
