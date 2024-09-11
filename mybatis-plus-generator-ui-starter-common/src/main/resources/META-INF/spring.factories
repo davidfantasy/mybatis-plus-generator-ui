@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.github.davidfantasy.mybatisplus.generatorui.common.core.configuration.SpringDocConfiguration,\
+com.github.davidfantasy.mybatisplus.generatorui.common.core.configuration.SpringDocConfigProperties

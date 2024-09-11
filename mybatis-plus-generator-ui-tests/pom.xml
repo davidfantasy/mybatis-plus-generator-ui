@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.github.davidfantasy</groupId>
+        <artifactId>mybatis-plus-generator-ui</artifactId>
+        <version>2.0.5</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.github.davidfantasy.mybatisplus.generatorui</groupId>
+    <artifactId>mybatis-plus-generator-ui-tests</artifactId>
+    <name>mybatis-plus-generator-ui-tests</name>
+    <description>mybatis-plus-generator-ui-tests</description>
+    <packaging>pom</packaging>
+    <modules>
+        <module>mybatis-plus-generator-ui-actuator-webmvc-tests</module>
+    </modules>
+</project>
