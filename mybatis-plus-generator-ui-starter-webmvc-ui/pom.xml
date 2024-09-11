@@ -6,6 +6,9 @@
 		<version>2.0.5</version>
 	</parent>
 	<artifactId>mybatis-plus-generator-ui-starter-webmvc-ui</artifactId>
+	<description>
+		将UI分离出来，方便用户自己开发相对应的界面
+	</description>
 	<dependencies>
 		<!-- springdoc-core -->
 		<dependency>

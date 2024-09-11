@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.github.davidfantasy.mybatisplus.generatorui.common.core.utils.Constants.API_DOCS_URL;
+import static com.github.davidfantasy.mybatisplus.generatorui.common.util.Constants.API_DOCS_URL;
 
 /**
  * The type Open api resource.

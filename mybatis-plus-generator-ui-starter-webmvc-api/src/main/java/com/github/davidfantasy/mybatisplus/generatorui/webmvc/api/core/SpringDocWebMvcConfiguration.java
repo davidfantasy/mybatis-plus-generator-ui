@@ -1,14 +1,13 @@
 package com.github.davidfantasy.mybatisplus.generatorui.webmvc.api.core;
 
-import com.github.davidfantasy.mybatisplus.generatorui.common.core.configuration.SpringDocConfiguration;
-import com.github.davidfantasy.mybatisplus.generatorui.common.core.providers.SpringWebProvider;
+import com.github.davidfantasy.mybatisplus.generatorui.common.core.configuration.MybatisplusGeneratoruiAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.servlet.function.RouterFunction;
 
-import static com.github.davidfantasy.mybatisplus.generatorui.common.core.utils.Constants.SPRINGDOC_ENABLED;
+import static com.github.davidfantasy.mybatisplus.generatorui.common.util.Constants.MYBATISPLUS_GENETATORUI_ENABLED;
 
 /**
  * The type Spring doc web mvc configuration.
@@ -18,23 +17,11 @@ import static com.github.davidfantasy.mybatisplus.generatorui.common.core.utils.
 @Lazy(false)
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-@ConditionalOnProperty(name = SPRINGDOC_ENABLED, matchIfMissing = true)
-@ConditionalOnBean(SpringDocConfiguration.class)
+@ConditionalOnProperty(name = MYBATISPLUS_GENETATORUI_ENABLED, matchIfMissing = true)
+@ConditionalOnBean(MybatisplusGeneratoruiAutoConfiguration.class)
 public class SpringDocWebMvcConfiguration {
 
     static {
-    }
-
-    /**
-     * Spring web provider spring web provider.
-     *
-     * @return the spring web provider
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    @Lazy(false)
-    SpringWebProvider springWebProvider() {
-        return new SpringWebMvcProvider();
     }
 
     /**

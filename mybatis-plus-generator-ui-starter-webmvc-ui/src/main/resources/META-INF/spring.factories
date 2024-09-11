@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.github.davidfantasy.mybatisplus.generatorui.webmvc.ui.SwaggerConfig
+com.github.davidfantasy.mybatisplus.generatorui.webmvc.ui.WebConfigurer

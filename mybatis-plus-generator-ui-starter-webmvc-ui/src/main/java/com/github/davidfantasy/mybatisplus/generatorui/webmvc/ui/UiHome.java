@@ -25,13 +25,13 @@
 package com.github.davidfantasy.mybatisplus.generatorui.webmvc.ui;
 
 
-import com.github.davidfantasy.mybatisplus.generatorui.common.core.utils.SpringDocUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import static com.github.davidfantasy.mybatisplus.generatorui.common.core.utils.Constants.MVC_SERVLET_PATH;
-import static com.github.davidfantasy.mybatisplus.generatorui.common.core.utils.Constants.MYBATIS_GENERATOR_UI_PATH;
+import static com.github.davidfantasy.mybatisplus.generatorui.common.util.Constants.MVC_SERVLET_PATH;
+import static com.github.davidfantasy.mybatisplus.generatorui.common.util.Constants.MYBATISPLUS_GENERATORUI_PATH;
 import static org.springframework.util.AntPathMatcher.DEFAULT_PATH_SEPARATOR;
 import static org.springframework.web.servlet.view.UrlBasedViewResolver.FORWARD_URL_PREFIX;
 
@@ -41,11 +41,21 @@ import static org.springframework.web.servlet.view.UrlBasedViewResolver.FORWARD_
 @Controller
 public class UiHome {
 
-    @Value(MYBATIS_GENERATOR_UI_PATH)
+    @Value(MYBATISPLUS_GENERATORUI_PATH)
     private String mybatisGeneratorUiPath;
 
     @Value(MVC_SERVLET_PATH)
     private String mvcServletPath;
+
+    /**
+     * Is valid path boolean.
+     *
+     * @param path the path
+     * @return the boolean
+     */
+    public static boolean isValidPath(String path) {
+        return StringUtils.isNotBlank(path) && !path.equals("/");
+    }
 
     /**
      * Index string.
@@ -55,9 +65,9 @@ public class UiHome {
     @GetMapping(DEFAULT_PATH_SEPARATOR)
     public String index() {
         StringBuilder uiRootPath = new StringBuilder();
-		if (SpringDocUtils.isValidPath(mvcServletPath)) {
-			uiRootPath.append(mvcServletPath);
-		}
+        if (isValidPath(mvcServletPath)) {
+            uiRootPath.append(mvcServletPath);
+        }
 
         return FORWARD_URL_PREFIX + uiRootPath + mybatisGeneratorUiPath;
     }

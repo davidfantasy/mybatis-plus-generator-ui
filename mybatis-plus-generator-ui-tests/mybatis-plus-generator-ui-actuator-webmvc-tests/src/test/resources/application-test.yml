@@ -1,0 +1,21 @@
+debug: true
+logging:
+    level:
+        root: debug
+    pattern:
+        console: '%m%n'
+spring:
+    main:
+        banner-mode: 'off'
+        lazy-initialization: true
+
+mybatisplus-genetatorui:
+    port: 18068
+    jdbc-url: jdbc:mysql://192.168.0.101:32888/test?allowMultiQueries=true&useUnicode=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true&nullCatalogMeansCurrent=true&&allowPublicKeyRetrieval=true
+    user-name: root
+    password: admin
+    driverClassName: com.mysql.cj.jdbc.Driver
+    dateType: TIME_PACK
+    tablePrefix: t_
+    idType: ASSIGN_ID
+    basePackeage: com.github.davidfantasy.mybatisplus.generatorui.example

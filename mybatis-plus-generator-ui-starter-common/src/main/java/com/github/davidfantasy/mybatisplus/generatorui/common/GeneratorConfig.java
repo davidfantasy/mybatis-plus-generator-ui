@@ -5,11 +5,15 @@ import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.github.davidfantasy.mybatisplus.generatorui.common.mbp.NameConverter;
 import com.github.davidfantasy.mybatisplus.generatorui.common.mbp.TemplateVaribleInjecter;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class GeneratorConfig {
 
     /**

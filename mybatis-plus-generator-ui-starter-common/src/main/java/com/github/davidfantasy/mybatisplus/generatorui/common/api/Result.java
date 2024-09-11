@@ -1,5 +1,6 @@
 package com.github.davidfantasy.mybatisplus.generatorui.common.api;
-import com.github.davidfantasy.mybatisplus.generatorui.common.core.utils.JsonUtil;
+
+import com.github.davidfantasy.mybatisplus.generatorui.common.util.JsonUtil;
 
 /**
  * 统一API响应结果封装
@@ -21,13 +22,13 @@ public class Result {
      */
     private Object data;
 
+    public int getCode() {
+        return code;
+    }
+
     public Result setCode(ResultCode resultCode) {
         this.code = resultCode.code;
         return this;
-    }
-
-    public int getCode() {
-        return code;
     }
 
     public Result setCode(int code) {
@@ -57,5 +58,5 @@ public class Result {
     public String toString() {
         return JsonUtil.obj2json(this);
     }
-    
+
 }

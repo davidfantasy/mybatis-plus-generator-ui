@@ -1,7 +1,7 @@
 package com.github.davidfantasy.mybatisplus.generatorui.common;
 
 import com.github.davidfantasy.mybatisplus.generatorui.common.api.ServiceException;
-import com.github.davidfantasy.mybatisplus.generatorui.common.core.utils.OSUtil;
+import com.github.davidfantasy.mybatisplus.generatorui.common.util.OSUtil;
 import com.github.davidfantasy.mybatisplus.generatorui.common.util.PathUtil;
 import com.google.common.base.Strings;
 import lombok.Getter;

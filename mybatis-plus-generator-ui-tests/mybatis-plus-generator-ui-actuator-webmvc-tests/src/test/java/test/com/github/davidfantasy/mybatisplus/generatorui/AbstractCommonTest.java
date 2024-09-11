@@ -1,4 +1,4 @@
-package com.github.davidfantasy.mybatisplus.generatorui;
+package test.com.github.davidfantasy.mybatisplus.generatorui;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

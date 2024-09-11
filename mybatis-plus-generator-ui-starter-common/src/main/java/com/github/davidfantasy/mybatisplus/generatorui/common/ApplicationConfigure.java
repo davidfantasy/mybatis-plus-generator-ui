@@ -8,6 +8,8 @@ import com.github.davidfantasy.mybatisplus.generatorui.common.sqlparser.DynamicP
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +18,23 @@ import javax.sql.DataSource;
 
 @Configuration
 public class ApplicationConfigure {
+    /**
+     * 通过注入一个WebServerFactoryCustomizer来达到修改服务器端口的目的
+     *
+     * @param config
+     * @return
+     */
+    @Bean
+    public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> containerConfig(GeneratorConfig config) {
+        return factory -> {
+            if (config.getPort() != null) {
+                factory.setPort(config.getPort());
+            } else {
+                factory.setPort(8080);
+            }
+            factory.setContextPath("");
+        };
+    }
 
     @Bean
     public ProjectPathResolver projectPathResolver(GeneratorConfig config) {

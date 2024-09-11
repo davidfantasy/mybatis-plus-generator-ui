@@ -1,6 +1,5 @@
-package com.github.davidfantasy.mybatisplus.generatorui;
+package com.github.davidfantasy.mybatisplus.generatorui.common;
 
-import com.github.davidfantasy.mybatisplus.generatorui.common.GeneratorConfig;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +10,7 @@ import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConf
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -51,42 +51,27 @@ public class MybatisPlusToolsApplication {
         props.put("spring.datasource.driver-class-name", generatorConfig.getDriverClassName());
         props.put("spring.datasource.username", generatorConfig.getUserName());
         props.put("spring.datasource.password", generatorConfig.getPassword());
-        new SpringApplicationBuilder()
+        ConfigurableApplicationContext run = new SpringApplicationBuilder()
                 .properties(props)
                 .sources(clazz)
                 .run(args);
+
     }
 
-    @Configuration
+/*    @Configuration
     public static class MainConfigutration {
-        /**
-         * 通过注入一个WebServerFactoryCustomizer来达到修改服务器端口的目的
-         *
-         * @param config
-         * @return
-         */
-        @Bean
-        public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> containerConfig(GeneratorConfig config) {
-            return factory -> {
-                if (config.getPort() != null) {
-                    factory.setPort(MybatisPlusToolsApplication.generatorConfig.getPort());
-                } else {
-                    factory.setPort(8080);
-                }
-                factory.setContextPath("");
-            };
-        }
 
-        /**
+
+        *//**
          * 注入项目配置
          *
          * @return 项目配置的对象
-         */
+         *//*
         @Bean
         public GeneratorConfig generatorConfig() {
             return MybatisPlusToolsApplication.generatorConfig;
         }
 
-    }
+    }*/
 }
 

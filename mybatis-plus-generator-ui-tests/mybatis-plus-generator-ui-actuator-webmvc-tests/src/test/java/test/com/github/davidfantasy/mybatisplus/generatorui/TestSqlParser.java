@@ -1,4 +1,4 @@
-package com.github.davidfantasy.mybatisplus.generatorui;
+package test.com.github.davidfantasy.mybatisplus.generatorui;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;

@@ -16,9 +16,9 @@
  *
  */
 
-package com.github.davidfantasy.mybatisplus.generatorui.app3;
+package test.com.github.davidfantasy.mybatisplus.generatorui.app3;
 
-import com.github.davidfantasy.mybatisplus.generatorui.AbstractSpringDocTest;
+import test.com.github.davidfantasy.mybatisplus.generatorui.AbstractSpringDocTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
