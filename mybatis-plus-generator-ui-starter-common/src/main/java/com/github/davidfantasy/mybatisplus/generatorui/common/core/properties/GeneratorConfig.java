@@ -1,4 +1,4 @@
-package com.github.davidfantasy.mybatisplus.generatorui.common;
+package com.github.davidfantasy.mybatisplus.generatorui.common.core.properties;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
@@ -24,7 +24,7 @@ public class GeneratorConfig {
     /**
      * 生成的文件所保存的包路径
      */
-    private String basePackage = "generatorui.default";
+    private String basePackage = "generatorui.mydefault";
 
     /**
      * 数据库地址

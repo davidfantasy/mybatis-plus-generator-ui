@@ -1,5 +1,6 @@
 package com.github.davidfantasy.mybatisplus.generatorui.common;
 
+import com.github.davidfantasy.mybatisplus.generatorui.common.core.properties.GeneratorConfig;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -8,12 +9,8 @@ import org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConf
 import org.springframework.boot.autoconfigure.web.servlet.*;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import java.util.Map;
@@ -36,14 +33,10 @@ import java.util.Map;
 @Slf4j
 public class MybatisPlusToolsApplication {
 
-    private static GeneratorConfig generatorConfig;
-
     public static void run(Class<?> clazz, String[] args, GeneratorConfig generatorConfig) {
         if (Strings.isNullOrEmpty(generatorConfig.getJdbcUrl())) {
             throw new IllegalArgumentException("jdbcUrl必须要设置");
         }
-        //本项目的综合配置
-        MybatisPlusToolsApplication.generatorConfig = generatorConfig;
 
         //启动MyBatis
         Map<String, Object> props = Maps.newHashMap();
@@ -57,21 +50,5 @@ public class MybatisPlusToolsApplication {
                 .run(args);
 
     }
-
-/*    @Configuration
-    public static class MainConfigutration {
-
-
-        *//**
-         * 注入项目配置
-         *
-         * @return 项目配置的对象
-         *//*
-        @Bean
-        public GeneratorConfig generatorConfig() {
-            return MybatisPlusToolsApplication.generatorConfig;
-        }
-
-    }*/
 }
 

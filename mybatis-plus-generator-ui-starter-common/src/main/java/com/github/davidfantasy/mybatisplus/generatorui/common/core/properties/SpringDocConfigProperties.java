@@ -48,7 +48,7 @@ public class SpringDocConfigProperties {
     /**
      * 生成的文件所保存的包路径
      */
-    private String basePackage = "generatorui.default";
+    private String basePackage = "generatorui.mydefault";
 
     /**
      * 数据库地址

@@ -1,7 +1,9 @@
-package com.github.davidfantasy.mybatisplus.generatorui.common;
+package com.github.davidfantasy.mybatisplus.generatorui.common.core.configuration;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
+import com.github.davidfantasy.mybatisplus.generatorui.common.core.properties.GeneratorConfig;
+import com.github.davidfantasy.mybatisplus.generatorui.common.ProjectPathResolver;
 import com.github.davidfantasy.mybatisplus.generatorui.common.mbp.BeetlTemplateEngine;
 import com.github.davidfantasy.mybatisplus.generatorui.common.service.UserConfigStore;
 import com.github.davidfantasy.mybatisplus.generatorui.common.sqlparser.DynamicParamSqlEnhancer;

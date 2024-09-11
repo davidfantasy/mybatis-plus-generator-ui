@@ -10,9 +10,9 @@ import com.baomidou.mybatisplus.generator.config.builder.*;
 import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.fill.Column;
-import com.github.davidfantasy.mybatisplus.generatorui.common.GeneratorConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.common.ProjectPathResolver;
 import com.github.davidfantasy.mybatisplus.generatorui.common.api.ServiceException;
+import com.github.davidfantasy.mybatisplus.generatorui.common.core.properties.GeneratorConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.common.dto.Constant;
 import com.github.davidfantasy.mybatisplus.generatorui.common.dto.GenSetting;
 import com.github.davidfantasy.mybatisplus.generatorui.common.dto.OutputFileInfo;
@@ -29,6 +29,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.util.*;
+import java.util.function.Consumer;
 
 @Component
 @Slf4j
@@ -69,15 +70,20 @@ public class MbpGenerator {
                     builder.dateType(generatorConfig.getDateType());
                     //指定所有生成文件的根目录
                     builder.outputDir(projectPathResolver.getSourcePath());
-                    builder.author(StringUtils.hasText(genSetting.getAuthor()) ? genSetting.getAuthor():   System.getProperty("user.name"));
+                    builder.author(StringUtils.hasText(genSetting.getAuthor()) ? genSetting.getAuthor() : System.getProperty("user.name"));
                     if (userConfig.getEntityStrategy().isSwagger2()) {
                         builder.enableSwagger();
                     }
                 }).templateEngine(beetlTemplateEngine).packageConfig(builder -> {
                     configPackage(builder, genSetting.getModuleName(), userConfig);
-                }).templateConfig(builder -> {
-                    configTemplate(builder, genSetting.getChoosedOutputFiles(), userConfig);
-                }).injectionConfig(builder -> {
+                })
+                .strategyConfig(new Consumer<StrategyConfig.Builder>() {
+                    @Override
+                    public void accept(StrategyConfig.Builder builder) {
+                        configTemplateNew(builder, genSetting.getChoosedOutputFiles(), userConfig);
+                    }
+                })
+                .injectionConfig(builder -> {
                     configInjection(builder, userConfig, genSetting);
                 }).strategyConfig(builder -> {
                     builder.addInclude(String.join(",", tables))
@@ -112,30 +118,30 @@ public class MbpGenerator {
                 .pathInfo(Collections.singletonMap(OutputFile.xml, mapperXmlOutputPath));
     }
 
-    private void configTemplate(TemplateConfig.Builder builder, List<String> choosedFileTypes, UserConfig userConfig) {
-        builder.entity(findTemplatePath(Constant.FILE_TYPE_ENTITY, userConfig));
-        builder.mapper(findTemplatePath(Constant.FILE_TYPE_MAPPER, userConfig));
-        builder.xml(findTemplatePath(Constant.FILE_TYPE_MAPPER_XML, userConfig));
-        builder.service(findTemplatePath(Constant.FILE_TYPE_SERVICE, userConfig));
-        builder.serviceImpl(findTemplatePath(Constant.FILE_TYPE_SERVICEIMPL, userConfig));
-        builder.controller(findTemplatePath(Constant.FILE_TYPE_CONTROLLER, userConfig));
+    private void configTemplateNew(StrategyConfig.Builder builder, List<String> choosedFileTypes, UserConfig userConfig) {
+        builder.entityBuilder().javaTemplate(findTemplatePath(Constant.FILE_TYPE_ENTITY, userConfig));
+        builder.mapperBuilder().mapperTemplate(findTemplatePath(Constant.FILE_TYPE_MAPPER, userConfig));
+        builder.mapperBuilder().mapperXmlTemplate(findTemplatePath(Constant.FILE_TYPE_MAPPER_XML, userConfig));
+        builder.serviceBuilder().serviceTemplate(findTemplatePath(Constant.FILE_TYPE_SERVICE, userConfig));
+        builder.serviceBuilder().serviceImplTemplate(findTemplatePath(Constant.FILE_TYPE_SERVICEIMPL, userConfig));
+        builder.controllerBuilder().template(findTemplatePath(Constant.FILE_TYPE_CONTROLLER, userConfig));
         if (!choosedFileTypes.contains(Constant.FILE_TYPE_ENTITY)) {
-            builder.disable(TemplateType.ENTITY);
+            builder.entityBuilder().disable();
         }
         if (!choosedFileTypes.contains(Constant.FILE_TYPE_MAPPER)) {
-            builder.disable(TemplateType.MAPPER);
+            builder.mapperBuilder().disableMapper();
         }
         if (!choosedFileTypes.contains(Constant.FILE_TYPE_MAPPER_XML)) {
-            builder.disable(TemplateType.XML);
+            builder.mapperBuilder().disableMapperXml();
         }
         if (!choosedFileTypes.contains(Constant.FILE_TYPE_SERVICE)) {
-            builder.disable(TemplateType.SERVICE);
+            builder.serviceBuilder().disableService();
         }
         if (!choosedFileTypes.contains(Constant.FILE_TYPE_SERVICEIMPL)) {
-            builder.disable(TemplateType.SERVICE_IMPL);
+            builder.serviceBuilder().disableServiceImpl();
         }
         if (!choosedFileTypes.contains(Constant.FILE_TYPE_CONTROLLER)) {
-            builder.disable(TemplateType.CONTROLLER);
+            builder.controllerBuilder().disable();
         }
     }
 

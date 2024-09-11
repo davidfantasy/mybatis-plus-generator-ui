@@ -25,4 +25,4 @@ mybatisplus-genetatorui:
   dateType: TIME_PACK
   tablePrefix: t_
   idType: ASSIGN_ID
-  basePackeage: com.github.davidfantasy.mybatisplus.generatorui.example
+  basePackage: com.github.davidfantasy.mybatisplus.generatorui.example

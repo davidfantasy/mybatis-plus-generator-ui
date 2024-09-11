@@ -1,7 +1,7 @@
 package test.com.github.davidfantasy.mybatisplus.generatorui;
 
 import com.github.davidfantasy.mybatisplus.generatorui.common.MybatisPlusToolsApplication;
-import com.github.davidfantasy.mybatisplus.generatorui.common.GeneratorConfig;
+import com.github.davidfantasy.mybatisplus.generatorui.common.core.properties.GeneratorConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.common.mbp.NameConverter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;

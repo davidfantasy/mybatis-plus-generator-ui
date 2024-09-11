@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
-import com.github.davidfantasy.mybatisplus.generatorui.common.GeneratorConfig;
+import com.github.davidfantasy.mybatisplus.generatorui.common.core.properties.GeneratorConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.common.ProjectPathResolver;
 import com.github.davidfantasy.mybatisplus.generatorui.common.api.ServiceException;
 import com.github.davidfantasy.mybatisplus.generatorui.common.dto.*;

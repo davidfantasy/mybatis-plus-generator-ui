@@ -1,8 +1,7 @@
 package com.github.davidfantasy.mybatisplus.generatorui.common.core.configuration;
 
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
-import com.github.davidfantasy.mybatisplus.generatorui.common.ApplicationConfigure;
-import com.github.davidfantasy.mybatisplus.generatorui.common.GeneratorConfig;
+import com.github.davidfantasy.mybatisplus.generatorui.common.core.properties.GeneratorConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.common.core.properties.SpringDocConfigProperties;
 import com.github.davidfantasy.mybatisplus.generatorui.common.util.Constants;
 import com.github.davidfantasy.mybatisplus.generatorui.common.mbp.NameConverter;

@@ -1,12 +1,11 @@
 package com.github.davidfantasy.mybatisplus.generatorui.webmvc.api.api;
 
-import com.github.davidfantasy.mybatisplus.generatorui.common.GeneratorConfig;
+import com.github.davidfantasy.mybatisplus.generatorui.common.core.properties.GeneratorConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.common.api.Result;
 import com.github.davidfantasy.mybatisplus.generatorui.common.api.ResultGenerator;
 import com.github.davidfantasy.mybatisplus.generatorui.common.dto.GenDtoFromSqlReq;
 import com.github.davidfantasy.mybatisplus.generatorui.common.service.SqlGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

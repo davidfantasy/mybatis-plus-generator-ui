@@ -2,7 +2,7 @@ package com.github.davidfantasy.mybatisplus.generatorui.common.service;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
-import com.github.davidfantasy.mybatisplus.generatorui.common.GeneratorConfig;
+import com.github.davidfantasy.mybatisplus.generatorui.common.core.properties.GeneratorConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.common.ProjectPathResolver;
 import com.github.davidfantasy.mybatisplus.generatorui.common.api.ServiceException;
 import com.github.davidfantasy.mybatisplus.generatorui.common.dto.OutputFileInfo;
