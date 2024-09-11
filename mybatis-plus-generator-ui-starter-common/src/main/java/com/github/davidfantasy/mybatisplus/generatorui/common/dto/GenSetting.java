@@ -13,6 +13,12 @@ public class GenSetting {
 
     /**
      * 需要生成的文件类型
+     * @see Constant.FILE_TYPE_ENTITY
+     * @see Constant.FILE_TYPE_MAPPER
+     * @see Constant.FILE_TYPE_MAPPER_XML
+     * @see Constant.FILE_TYPE_CONTROLLER
+     * @see Constant.FILE_TYPE_SERVICE
+     * @see Constant.FILE_TYPE_SERVICEIMPL
      */
     private List<String> choosedOutputFiles;
 

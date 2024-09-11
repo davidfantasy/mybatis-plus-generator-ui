@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -66,7 +67,7 @@ public class UserConfigStore implements InitializingBean {
         if (!FileUtil.exist(this.userConfigPath)) {
             return null;
         }
-        String userConfigStr = FileUtil.readString(userConfigPath, Charset.forName("utf-8"));
+        String userConfigStr = FileUtil.readString(userConfigPath, StandardCharsets.UTF_8);
         try {
             return JsonUtil.json2obj(userConfigStr, UserConfig.class);
         } catch (Exception e) {
@@ -86,7 +87,7 @@ public class UserConfigStore implements InitializingBean {
         }
         Files.createParentDirs(userConfigFile);
         userConfigFile.createNewFile();
-        FileUtil.writeFromStream(new ByteArrayInputStream(configStr.getBytes(Charset.forName("utf-8"))), userConfigFile);
+        FileUtil.writeFromStream(new ByteArrayInputStream(configStr.getBytes(StandardCharsets.UTF_8)), userConfigFile);
     }
 
     public String uploadTemplate(MultipartFile file) {

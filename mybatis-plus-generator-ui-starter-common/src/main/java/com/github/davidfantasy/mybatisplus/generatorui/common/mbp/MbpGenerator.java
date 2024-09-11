@@ -29,7 +29,6 @@ import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.util.*;
-import java.util.function.Consumer;
 
 @Component
 @Slf4j
@@ -77,15 +76,11 @@ public class MbpGenerator {
                 }).templateEngine(beetlTemplateEngine).packageConfig(builder -> {
                     configPackage(builder, genSetting.getModuleName(), userConfig);
                 })
-                .strategyConfig(new Consumer<StrategyConfig.Builder>() {
-                    @Override
-                    public void accept(StrategyConfig.Builder builder) {
-                        configTemplateNew(builder, genSetting.getChoosedOutputFiles(), userConfig);
-                    }
-                })
                 .injectionConfig(builder -> {
                     configInjection(builder, userConfig, genSetting);
                 }).strategyConfig(builder -> {
+                    //设置模版移到这个里面来了
+                    configTemplate(builder, genSetting.getChoosedOutputFiles(), userConfig);
                     builder.addInclude(String.join(",", tables))
                             .disableSqlFilter()
                             .enableSkipView();
@@ -118,7 +113,7 @@ public class MbpGenerator {
                 .pathInfo(Collections.singletonMap(OutputFile.xml, mapperXmlOutputPath));
     }
 
-    private void configTemplateNew(StrategyConfig.Builder builder, List<String> choosedFileTypes, UserConfig userConfig) {
+    private void configTemplate(StrategyConfig.Builder builder, List<String> choosedFileTypes, UserConfig userConfig) {
         builder.entityBuilder().javaTemplate(findTemplatePath(Constant.FILE_TYPE_ENTITY, userConfig));
         builder.mapperBuilder().mapperTemplate(findTemplatePath(Constant.FILE_TYPE_MAPPER, userConfig));
         builder.mapperBuilder().mapperXmlTemplate(findTemplatePath(Constant.FILE_TYPE_MAPPER_XML, userConfig));
