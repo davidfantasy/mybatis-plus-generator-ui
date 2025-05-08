@@ -1,10 +1,10 @@
+## 注意：
+该项目目前已经进入维护期，不会再增加新的特性。推荐使用 [resource2code](https://github.com/davidfantasy/resource2code) 项目。该项目通过 AI 模型辅助生成代码，并支持自定义各类代码生成规则，灵活引用数据库等外部资源，帮助开发者高效完成代码构建任务。
+
 ## mybatis-plus-generator-ui
 
 提供交互式的Web UI用于生成兼容mybatis-plus框架的相关功能代码，包括Entity,Mapper,Mapper.xml,Service,Controller等
 ，可以自定义模板以及各类输出参数，也可通过SQL查询语句直接生成代码。
-
-<span style="color:red;font-weight:bold;">注意</span>：
-该项目目前已经进入维护期，不会再增加新的特性。推荐使用 [resource2code](https://github.com/davidfantasy/resource2code) 项目。该项目通过 AI 模型辅助生成代码，并支持自定义各类代码生成规则，灵活引用数据库等外部资源，帮助开发者高效完成代码构建任务。
 
 ## 使用方法
 
