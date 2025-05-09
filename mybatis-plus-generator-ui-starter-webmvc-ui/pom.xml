@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.github.davidfantasy</groupId>
+		<artifactId>mybatis-plus-generator-ui</artifactId>
+		<version>2.0.5</version>
+	</parent>
+	<artifactId>mybatis-plus-generator-ui-starter-webmvc-ui</artifactId>
+	<description>
+		将UI分离出来，方便用户自己开发相对应的界面
+	</description>
+	<dependencies>
+		<!-- springdoc-core -->
+		<dependency>
+			<groupId>com.github.davidfantasy</groupId>
+			<artifactId>mybatis-plus-generator-ui-starter-webmvc-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Actuator dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+			<optional>true</optional>
+        </dependency>
+    </dependencies>
+</project>

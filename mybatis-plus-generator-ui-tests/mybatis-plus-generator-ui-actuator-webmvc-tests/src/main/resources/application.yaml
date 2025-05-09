@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: yudao-server
+  # Jackson 配置项
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true # 设置 Date 的格式，使用时间戳
+      write-date-timestamps-as-nanoseconds: false # 设置不使用 nanoseconds 的格式。例如说 1611460870.401，而是直接 1611460870401
+      write-durations-as-timestamps: true # 设置 Duration 的格式，使用时间戳
+      fail-on-empty-beans: false # 允许序列化无属性的 Bean
+
+debug: false
+logging:
+  level:
+    root: info
+server:
+  port: 12454
+
+mybatisplus-genetatorui:
+  port: 18068
+  jdbc-url: jdbc:mysql://192.168.0.101:32888/test?allowMultiQueries=true&useUnicode=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true&nullCatalogMeansCurrent=true&&allowPublicKeyRetrieval=true
+  user-name: root
+  password: admin
+  driverClassName: com.mysql.cj.jdbc.Driver
+  dateType: TIME_PACK
+  tablePrefix: t_
+  idType: ASSIGN_ID
+  basePackage: com.github.davidfantasy.mybatisplus.generatorui.example
