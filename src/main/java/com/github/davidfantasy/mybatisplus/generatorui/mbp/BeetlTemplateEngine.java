@@ -79,6 +79,11 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
         return filePath;
     }
 
+    @Override
+    public String writer(Map<String, Object> objectMap, String templateName, String templateString) throws Exception {
+        return write2String(objectMap, templateString);
+    }
+
     public String write2String(Map<String, Object> objectMap, String templatePath) {
         if (templatePath.startsWith(RESOURCE_PREFIX_FILE)) {
             templatePath = templatePath.replace(templateStoreDir, "");

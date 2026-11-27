@@ -23,6 +23,7 @@ import com.github.davidfantasy.mybatisplus.generatorui.util.PathUtil;
 import com.google.common.collect.Maps;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.cache.impl.PerpetualCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -64,6 +65,10 @@ public class MbpGenerator {
                         builder -> {
                             builder.schema(generatorConfig.getSchemaName());
                             builder.typeConvert(generatorConfig.getTypeConvert());
+                            if (generatorConfig.getTypeConvert() != null) {
+                                builder.typeConvertHandler((globalConfig, typeRegistry, metaInfo) ->
+                                        generatorConfig.getTypeConvert().processTypeConvert(globalConfig, metaInfo.getTypeName()));
+                            }
                         }
                 ).globalConfig(builder -> {
                     builder.dateType(generatorConfig.getDateType());
@@ -75,18 +80,16 @@ public class MbpGenerator {
                     }
                 }).templateEngine(beetlTemplateEngine).packageConfig(builder -> {
                     configPackage(builder, genSetting.getModuleName(), userConfig);
-                }).templateConfig(builder -> {
-                    configTemplate(builder, genSetting.getChoosedOutputFiles(), userConfig);
                 }).injectionConfig(builder -> {
                     configInjection(builder, userConfig, genSetting);
                 }).strategyConfig(builder -> {
                     builder.addInclude(String.join(",", tables))
                             .disableSqlFilter()
                             .enableSkipView();
-                    configEntity(builder.entityBuilder(), userConfig.getEntityStrategy(), genSetting.isOverride());
-                    configMapper(builder.mapperBuilder(), userConfig.getMapperStrategy(), userConfig.getMapperXmlStrategy(), genSetting.isOverride());
-                    configService(builder.serviceBuilder(), userConfig.getServiceStrategy(), userConfig.getServiceImplStrategy(), genSetting.isOverride());
-                    configController(builder.controllerBuilder(), userConfig.getControllerStrategy(), genSetting.isOverride());
+                    configEntity(builder.entityBuilder(), userConfig, genSetting);
+                    configMapper(builder.mapperBuilder(), userConfig, genSetting);
+                    configService(builder.serviceBuilder(), userConfig, genSetting);
+                    configController(builder.controllerBuilder(), userConfig, genSetting);
                 }).execute();
     }
 
@@ -110,33 +113,6 @@ public class MbpGenerator {
                 .service(servicePkg)
                 .serviceImpl(serviceImplPkg)
                 .pathInfo(Collections.singletonMap(OutputFile.xml, mapperXmlOutputPath));
-    }
-
-    private void configTemplate(TemplateConfig.Builder builder, List<String> choosedFileTypes, UserConfig userConfig) {
-        builder.entity(findTemplatePath(Constant.FILE_TYPE_ENTITY, userConfig));
-        builder.mapper(findTemplatePath(Constant.FILE_TYPE_MAPPER, userConfig));
-        builder.xml(findTemplatePath(Constant.FILE_TYPE_MAPPER_XML, userConfig));
-        builder.service(findTemplatePath(Constant.FILE_TYPE_SERVICE, userConfig));
-        builder.serviceImpl(findTemplatePath(Constant.FILE_TYPE_SERVICEIMPL, userConfig));
-        builder.controller(findTemplatePath(Constant.FILE_TYPE_CONTROLLER, userConfig));
-        if (!choosedFileTypes.contains(Constant.FILE_TYPE_ENTITY)) {
-            builder.disable(TemplateType.ENTITY);
-        }
-        if (!choosedFileTypes.contains(Constant.FILE_TYPE_MAPPER)) {
-            builder.disable(TemplateType.MAPPER);
-        }
-        if (!choosedFileTypes.contains(Constant.FILE_TYPE_MAPPER_XML)) {
-            builder.disable(TemplateType.XML);
-        }
-        if (!choosedFileTypes.contains(Constant.FILE_TYPE_SERVICE)) {
-            builder.disable(TemplateType.SERVICE);
-        }
-        if (!choosedFileTypes.contains(Constant.FILE_TYPE_SERVICEIMPL)) {
-            builder.disable(TemplateType.SERVICE_IMPL);
-        }
-        if (!choosedFileTypes.contains(Constant.FILE_TYPE_CONTROLLER)) {
-            builder.disable(TemplateType.CONTROLLER);
-        }
     }
 
     //自定义模板参数配置
@@ -199,7 +175,13 @@ public class MbpGenerator {
     /**
      * 配置entity的生成信息
      */
-    private void configEntity(Entity.Builder entityBuilder, EntityStrategy entityStrategy, boolean fileOverride) {
+    private void configEntity(Entity.Builder entityBuilder, UserConfig userConfig, GenSetting genSetting) {
+        EntityStrategy entityStrategy = userConfig.getEntityStrategy();
+        boolean fileOverride = genSetting.isOverride();
+        entityBuilder.javaTemplate(findTemplatePath(Constant.FILE_TYPE_ENTITY, userConfig));
+        if (!genSetting.getChoosedOutputFiles().contains(Constant.FILE_TYPE_ENTITY)) {
+            entityBuilder.disable();
+        }
         NameConverter nameConverter = generatorConfig.getAvailableNameConverter();
         entityBuilder.idType(generatorConfig.getIdType());
         entityBuilder.nameConvert(new INameConvert() {
@@ -231,6 +213,9 @@ public class MbpGenerator {
         }
         if (entityStrategy.isEntityTableFieldAnnotationEnable()) {
             entityBuilder.enableTableFieldAnnotation();
+        }
+        if (entityStrategy.isEntityColumnConstant()) {
+            entityBuilder.enableColumnConstant();
         }
         if (entityStrategy.isActiveRecord()) {
             entityBuilder.enableActiveRecord();
@@ -265,15 +250,30 @@ public class MbpGenerator {
     /**
      * 配置mapper和mapper-xml
      */
-    private void configMapper(Mapper.Builder mapperBuilder, MapperStrategy mapperStrategy, MapperXmlStrategy mapperXmlStrategy, boolean fileOverride) {
+    private void configMapper(Mapper.Builder mapperBuilder, UserConfig userConfig, GenSetting genSetting) {
+        MapperStrategy mapperStrategy = userConfig.getMapperStrategy();
+        MapperXmlStrategy mapperXmlStrategy = userConfig.getMapperXmlStrategy();
+        boolean fileOverride = genSetting.isOverride();
+        mapperBuilder.mapperTemplate(findTemplatePath(Constant.FILE_TYPE_MAPPER, userConfig));
+        mapperBuilder.mapperXmlTemplate(findTemplatePath(Constant.FILE_TYPE_MAPPER_XML, userConfig));
+        if (!genSetting.getChoosedOutputFiles().contains(Constant.FILE_TYPE_MAPPER)) {
+            mapperBuilder.disableMapper();
+        }
+        if (!genSetting.getChoosedOutputFiles().contains(Constant.FILE_TYPE_MAPPER_XML)) {
+            mapperBuilder.disableMapperXml();
+        }
         NameConverter nameConverter = generatorConfig.getAvailableNameConverter();
         if (mapperStrategy.getSuperMapperClass() != null) {
             mapperBuilder.superClass(mapperStrategy.getSuperMapperClass());
         }
         if (mapperXmlStrategy.isBaseResultMap()) {
             mapperBuilder.enableBaseResultMap();
-            //TODO:enableBaseColumnList，cache目前没有页面配置
+            // enableBaseColumnList 目前没有单独的页面配置
             mapperBuilder.enableBaseColumnList();
+        }
+        if (mapperXmlStrategy.isEnableCache()) {
+            // <cache type="..."> 要求缓存实现提供 String 构造器，LoggingCache 不满足该要求
+            mapperBuilder.cache(PerpetualCache.class);
         }
         mapperBuilder.convertMapperFileName(nameConverter::mapperNameConvert);
         mapperBuilder.convertXmlFileName(nameConverter::mapperXmlNameConvert);
@@ -285,7 +285,18 @@ public class MbpGenerator {
     /**
      * 配置service
      */
-    private void configService(Service.Builder serviceBuilder, ServiceStrategy serviceStrategy, ServiceImplStrategy serviceImplStrategy, boolean fileOverride) {
+    private void configService(Service.Builder serviceBuilder, UserConfig userConfig, GenSetting genSetting) {
+        ServiceStrategy serviceStrategy = userConfig.getServiceStrategy();
+        ServiceImplStrategy serviceImplStrategy = userConfig.getServiceImplStrategy();
+        boolean fileOverride = genSetting.isOverride();
+        serviceBuilder.serviceTemplate(findTemplatePath(Constant.FILE_TYPE_SERVICE, userConfig));
+        serviceBuilder.serviceImplTemplate(findTemplatePath(Constant.FILE_TYPE_SERVICEIMPL, userConfig));
+        if (!genSetting.getChoosedOutputFiles().contains(Constant.FILE_TYPE_SERVICE)) {
+            serviceBuilder.disableService();
+        }
+        if (!genSetting.getChoosedOutputFiles().contains(Constant.FILE_TYPE_SERVICEIMPL)) {
+            serviceBuilder.disableServiceImpl();
+        }
         NameConverter nameConverter = generatorConfig.getAvailableNameConverter();
         if (fileOverride) {
             serviceBuilder.enableFileOverride();
@@ -303,7 +314,13 @@ public class MbpGenerator {
     /**
      * 配置Controller
      */
-    private void configController(Controller.Builder controllerBuilder, ControllerStrategy controllerStrategy, boolean fileOverride) {
+    private void configController(Controller.Builder controllerBuilder, UserConfig userConfig, GenSetting genSetting) {
+        ControllerStrategy controllerStrategy = userConfig.getControllerStrategy();
+        boolean fileOverride = genSetting.isOverride();
+        controllerBuilder.template(findTemplatePath(Constant.FILE_TYPE_CONTROLLER, userConfig));
+        if (!genSetting.getChoosedOutputFiles().contains(Constant.FILE_TYPE_CONTROLLER)) {
+            controllerBuilder.disable();
+        }
         NameConverter nameConverter = generatorConfig.getAvailableNameConverter();
         if (fileOverride) {
             controllerBuilder.enableFileOverride();

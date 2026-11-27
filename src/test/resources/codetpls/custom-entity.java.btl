@@ -1,0 +1,5 @@
+// CUSTOM_ENTITY_TEMPLATE_MARKER
+package ${package.Entity};
+
+public class ${entity} {
+}

@@ -38,7 +38,7 @@ public class TemplateController {
     private OutputFileInfoService outputFileInfoService;
 
     @GetMapping("/download")
-    public ResponseEntity<byte[]> download(@RequestParam String fileType) throws IOException {
+    public ResponseEntity<byte[]> download(@RequestParam("fileType") String fileType) throws IOException {
         if (Strings.isNullOrEmpty(fileType)) {
             log.error("fileType不能为空");
             return ResponseEntity.badRequest().build();

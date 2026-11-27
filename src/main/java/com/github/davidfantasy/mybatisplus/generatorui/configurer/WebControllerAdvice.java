@@ -18,10 +18,19 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @Slf4j
 public class WebControllerAdvice {
 
+    /**
+     * Spring Framework 6.1+ 在静态资源不存在时抛出的异常，项目本身编译在 Spring 5.3 上，不能直接引用该类
+     */
+    private static final String NO_RESOURCE_FOUND_EXCEPTION = "org.springframework.web.servlet.resource.NoResourceFoundException";
+
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public Result exceptionHandler(Exception e) {
         Result result = new Result();
+        if (NO_RESOURCE_FOUND_EXCEPTION.equals(e.getClass().getName())) {
+            result.setCode(ResultCode.NOT_FOUND).setMessage("资源不存在");
+            return result;
+        }
         log.info("未捕获的异常：" + e.getMessage(), e);
         if (e instanceof ServiceException) {
             result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
