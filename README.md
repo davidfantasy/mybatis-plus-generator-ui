@@ -15,7 +15,7 @@
 <dependency>
     <groupId>com.github.davidfantasy</groupId>
     <artifactId>mybatis-plus-generator-ui</artifactId>
-    <version>2.0.5</version>
+    <version>2.1.0</version>
     <scope>test</scope>
 </dependency>
 ```
